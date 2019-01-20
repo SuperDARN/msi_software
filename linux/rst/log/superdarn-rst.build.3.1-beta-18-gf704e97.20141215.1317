@@ -1,0 +1,847 @@
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/base/src.lib
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+1.Located Library:/home/radar_user/rst/codebase/base/src.lib/graphic/fbuffer.1.17
+2.Located Library:/home/radar_user/rst/codebase/base/src.lib/graphic/fontdb.1.8
+3.Located Library:/home/radar_user/rst/codebase/base/src.lib/graphic/imagedb.1.3
+4.Located Library:/home/radar_user/rst/codebase/base/src.lib/graphic/iplotlib.1.3
+5.Located Library:/home/radar_user/rst/codebase/base/src.lib/graphic/ps.1.8
+6.Located Library:/home/radar_user/rst/codebase/base/src.lib/graphic/splotlib.1.2
+7.Located Library:/home/radar_user/rst/codebase/base/src.lib/graphic/xwin.1.4
+8.Located Library:/home/radar_user/rst/codebase/base/src.lib/httpd/cgi.1.5
+9.Located Library:/home/radar_user/rst/codebase/base/src.lib/httpd/rscript.1.5
+10.Located Library:/home/radar_user/rst/codebase/base/src.lib/math/rmath.1.7
+11.Located Library:/home/radar_user/rst/codebase/base/src.lib/memory/shmem.1.1
+12.Located Library:/home/radar_user/rst/codebase/base/src.lib/task/convert.1.8
+13.Located Library:/home/radar_user/rst/codebase/base/src.lib/task/option.1.6
+14.Located Library:/home/radar_user/rst/codebase/base/src.lib/task/rtypes.1.3
+15.Located Library:/home/radar_user/rst/codebase/base/src.lib/tcpip/cnx.1.15
+16.Located Library:/home/radar_user/rst/codebase/base/src.lib/xml/tagdb.1.6
+17.Located Library:/home/radar_user/rst/codebase/base/src.lib/xml/xml.1.7
+18.Located Library:/home/radar_user/rst/codebase/base/src.lib/xml/xmldb.1.5
+19.Located Library:/home/radar_user/rst/codebase/base/src.lib/xml/xmldoclib.1.4
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/base/src.lib/graphic/fbuffer.1.17
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/base/src.lib/graphic/fbuffer.1.17/src/../include /home/radar_user/rst/include/base 
+/home/radar_user/rst/codebase/base/src.lib/graphic/fbuffer.1.17/src/../include/rfbuffer.h
+‘/home/radar_user/rst/codebase/base/src.lib/graphic/fbuffer.1.17/src/../include/rfbuffer.h’ -> ‘/home/radar_user/rst/include/base/rfbuffer.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/base/src.lib/graphic/fontdb.1.8
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/base/src.lib/graphic/fontdb.1.8/src/../include /home/radar_user/rst/include/base 
+/home/radar_user/rst/codebase/base/src.lib/graphic/fontdb.1.8/src/../include/fontdb.h
+‘/home/radar_user/rst/codebase/base/src.lib/graphic/fontdb.1.8/src/../include/fontdb.h’ -> ‘/home/radar_user/rst/include/base/fontdb.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/base/src.lib/graphic/imagedb.1.3
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/base/src.lib/graphic/imagedb.1.3/src/../include /home/radar_user/rst/include/base 
+/home/radar_user/rst/codebase/base/src.lib/graphic/imagedb.1.3/src/../include/imagedb.h
+‘/home/radar_user/rst/codebase/base/src.lib/graphic/imagedb.1.3/src/../include/imagedb.h’ -> ‘/home/radar_user/rst/include/base/imagedb.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/base/src.lib/graphic/iplotlib.1.3
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/base/src.lib/graphic/iplotlib.1.3/src/../include /home/radar_user/rst/include/base 
+/home/radar_user/rst/codebase/base/src.lib/graphic/iplotlib.1.3/src/../include/iplot.h
+‘/home/radar_user/rst/codebase/base/src.lib/graphic/iplotlib.1.3/src/../include/iplot.h’ -> ‘/home/radar_user/rst/include/base/iplot.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/base/src.lib/graphic/ps.1.8
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/base/src.lib/graphic/ps.1.8/src/../include /home/radar_user/rst/include/base 
+/home/radar_user/rst/codebase/base/src.lib/graphic/ps.1.8/src/../include/rps.h
+‘/home/radar_user/rst/codebase/base/src.lib/graphic/ps.1.8/src/../include/rps.h’ -> ‘/home/radar_user/rst/include/base/rps.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/base/src.lib/graphic/splotlib.1.2
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/base/src.lib/graphic/splotlib.1.2/src/../include /home/radar_user/rst/include/base 
+/home/radar_user/rst/codebase/base/src.lib/graphic/splotlib.1.2/src/../include/splot.h
+‘/home/radar_user/rst/codebase/base/src.lib/graphic/splotlib.1.2/src/../include/splot.h’ -> ‘/home/radar_user/rst/include/base/splot.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/base/src.lib/graphic/xwin.1.4
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/base/src.lib/graphic/xwin.1.4/src/../include /home/radar_user/rst/include/base 
+/home/radar_user/rst/codebase/base/src.lib/graphic/xwin.1.4/src/../include/xwin.h
+‘/home/radar_user/rst/codebase/base/src.lib/graphic/xwin.1.4/src/../include/xwin.h’ -> ‘/home/radar_user/rst/include/base/xwin.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/base/src.lib/httpd/cgi.1.5
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/base/src.lib/httpd/cgi.1.5/src/../include /home/radar_user/rst/include/base 
+/home/radar_user/rst/codebase/base/src.lib/httpd/cgi.1.5/src/../include/rcgi.h
+‘/home/radar_user/rst/codebase/base/src.lib/httpd/cgi.1.5/src/../include/rcgi.h’ -> ‘/home/radar_user/rst/include/base/rcgi.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/base/src.lib/httpd/rscript.1.5
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/base/src.lib/httpd/rscript.1.5/src/../include /home/radar_user/rst/include/base 
+/home/radar_user/rst/codebase/base/src.lib/httpd/rscript.1.5/src/../include/rscript.h
+‘/home/radar_user/rst/codebase/base/src.lib/httpd/rscript.1.5/src/../include/rscript.h’ -> ‘/home/radar_user/rst/include/base/rscript.h’
+/home/radar_user/rst/codebase/base/src.lib/httpd/rscript.1.5/src/../include/rscriptHTML.h
+‘/home/radar_user/rst/codebase/base/src.lib/httpd/rscript.1.5/src/../include/rscriptHTML.h’ -> ‘/home/radar_user/rst/include/base/rscriptHTML.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/base/src.lib/math/rmath.1.7
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/base/src.lib/math/rmath.1.7/src/../include /home/radar_user/rst/include/base 
+/home/radar_user/rst/codebase/base/src.lib/math/rmath.1.7/src/../include/fft.h
+‘/home/radar_user/rst/codebase/base/src.lib/math/rmath.1.7/src/../include/fft.h’ -> ‘/home/radar_user/rst/include/base/fft.h’
+/home/radar_user/rst/codebase/base/src.lib/math/rmath.1.7/src/../include/nrfit.h
+‘/home/radar_user/rst/codebase/base/src.lib/math/rmath.1.7/src/../include/nrfit.h’ -> ‘/home/radar_user/rst/include/base/nrfit.h’
+/home/radar_user/rst/codebase/base/src.lib/math/rmath.1.7/src/../include/rmath.h
+‘/home/radar_user/rst/codebase/base/src.lib/math/rmath.1.7/src/../include/rmath.h’ -> ‘/home/radar_user/rst/include/base/rmath.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/base/src.lib/memory/shmem.1.1
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/base/src.lib/memory/shmem.1.1/src/../include /home/radar_user/rst/include/base 
+/home/radar_user/rst/codebase/base/src.lib/memory/shmem.1.1/src/../include/shmem.h
+‘/home/radar_user/rst/codebase/base/src.lib/memory/shmem.1.1/src/../include/shmem.h’ -> ‘/home/radar_user/rst/include/base/shmem.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/base/src.lib/task/convert.1.8
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/base/src.lib/task/convert.1.8/src/../include /home/radar_user/rst/include/base 
+/home/radar_user/rst/codebase/base/src.lib/task/convert.1.8/src/../include/rconvert.h
+‘/home/radar_user/rst/codebase/base/src.lib/task/convert.1.8/src/../include/rconvert.h’ -> ‘/home/radar_user/rst/include/base/rconvert.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/base/src.lib/task/option.1.6
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/base/src.lib/task/option.1.6/src/../include /home/radar_user/rst/include/base 
+/home/radar_user/rst/codebase/base/src.lib/task/option.1.6/src/../include/option.h
+‘/home/radar_user/rst/codebase/base/src.lib/task/option.1.6/src/../include/option.h’ -> ‘/home/radar_user/rst/include/base/option.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/base/src.lib/task/rtypes.1.3
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/base/src.lib/task/rtypes.1.3/src/../include /home/radar_user/rst/include/base 
+/home/radar_user/rst/codebase/base/src.lib/task/rtypes.1.3/src/../include/rtypes.h
+‘/home/radar_user/rst/codebase/base/src.lib/task/rtypes.1.3/src/../include/rtypes.h’ -> ‘/home/radar_user/rst/include/base/rtypes.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/base/src.lib/tcpip/cnx.1.15
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/base/src.lib/tcpip/cnx.1.15/src/../include /home/radar_user/rst/include/base 
+/home/radar_user/rst/codebase/base/src.lib/tcpip/cnx.1.15/src/../include/connex.h
+‘/home/radar_user/rst/codebase/base/src.lib/tcpip/cnx.1.15/src/../include/connex.h’ -> ‘/home/radar_user/rst/include/base/connex.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/base/src.lib/xml/tagdb.1.6
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/base/src.lib/xml/tagdb.1.6/src/../include /home/radar_user/rst/include/base 
+/home/radar_user/rst/codebase/base/src.lib/xml/tagdb.1.6/src/../include/tagdb.h
+‘/home/radar_user/rst/codebase/base/src.lib/xml/tagdb.1.6/src/../include/tagdb.h’ -> ‘/home/radar_user/rst/include/base/tagdb.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/base/src.lib/xml/xml.1.7
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/base/src.lib/xml/xml.1.7/src/../include /home/radar_user/rst/include/base 
+/home/radar_user/rst/codebase/base/src.lib/xml/xml.1.7/src/../include/rxml.h
+‘/home/radar_user/rst/codebase/base/src.lib/xml/xml.1.7/src/../include/rxml.h’ -> ‘/home/radar_user/rst/include/base/rxml.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/base/src.lib/xml/xmldb.1.5
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/base/src.lib/xml/xmldb.1.5/src/../include /home/radar_user/rst/include/base 
+/home/radar_user/rst/codebase/base/src.lib/xml/xmldb.1.5/src/../include/rxmldb.h
+‘/home/radar_user/rst/codebase/base/src.lib/xml/xmldb.1.5/src/../include/rxmldb.h’ -> ‘/home/radar_user/rst/include/base/rxmldb.h’
+/home/radar_user/rst/codebase/base/src.lib/xml/xmldb.1.5/src/../include/entity.h
+‘/home/radar_user/rst/codebase/base/src.lib/xml/xmldb.1.5/src/../include/entity.h’ -> ‘/home/radar_user/rst/include/base/entity.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/base/src.lib/xml/xmldoclib.1.4
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/base/src.lib/xml/xmldoclib.1.4/src/../include /home/radar_user/rst/include/base 
+/home/radar_user/rst/codebase/base/src.lib/xml/xmldoclib.1.4/src/../include/rxmldoc.h
+‘/home/radar_user/rst/codebase/base/src.lib/xml/xmldoclib.1.4/src/../include/rxmldoc.h’ -> ‘/home/radar_user/rst/include/base/rxmldoc.h’
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/general/src.lib
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+1.Located Library:/home/radar_user/rst/codebase/general/src.lib/contour.1.6
+2.Located Library:/home/radar_user/rst/codebase/general/src.lib/dmap.1.20
+3.Located Library:/home/radar_user/rst/codebase/general/src.lib/evallib.1.3
+4.Located Library:/home/radar_user/rst/codebase/general/src.lib/grplotlib.1.2
+5.Located Library:/home/radar_user/rst/codebase/general/src.lib/map.1.15
+6.Located Library:/home/radar_user/rst/codebase/general/src.lib/polygon.1.7
+7.Located Library:/home/radar_user/rst/codebase/general/src.lib/raster.1.5
+8.Located Library:/home/radar_user/rst/codebase/general/src.lib/rfile.1.8
+9.Located Library:/home/radar_user/rst/codebase/general/src.lib/stdkey.1.4
+10.Located Library:/home/radar_user/rst/codebase/general/src.lib/time.1.6
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/general/src.lib/contour.1.6
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/general/src.lib/contour.1.6/src/../include /home/radar_user/rst/include/general 
+/home/radar_user/rst/codebase/general/src.lib/contour.1.6/src/../include/contour.h
+‘/home/radar_user/rst/codebase/general/src.lib/contour.1.6/src/../include/contour.h’ -> ‘/home/radar_user/rst/include/general/contour.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/general/src.lib/dmap.1.20
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/general/src.lib/dmap.1.20/src/../include /home/radar_user/rst/include/general 
+/home/radar_user/rst/codebase/general/src.lib/dmap.1.20/src/../include/dmap.h
+‘/home/radar_user/rst/codebase/general/src.lib/dmap.1.20/src/../include/dmap.h’ -> ‘/home/radar_user/rst/include/general/dmap.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/general/src.lib/evallib.1.3
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/general/src.lib/evallib.1.3/src/../include /home/radar_user/rst/include/general 
+/home/radar_user/rst/codebase/general/src.lib/evallib.1.3/src/../include/reval.h
+‘/home/radar_user/rst/codebase/general/src.lib/evallib.1.3/src/../include/reval.h’ -> ‘/home/radar_user/rst/include/general/reval.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/general/src.lib/grplotlib.1.2
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/general/src.lib/grplotlib.1.2/src/../include /home/radar_user/rst/include/general 
+/home/radar_user/rst/codebase/general/src.lib/grplotlib.1.2/src/../include/grplotraw.h
+‘/home/radar_user/rst/codebase/general/src.lib/grplotlib.1.2/src/../include/grplotraw.h’ -> ‘/home/radar_user/rst/include/general/grplotraw.h’
+/home/radar_user/rst/codebase/general/src.lib/grplotlib.1.2/src/../include/grplot.h
+‘/home/radar_user/rst/codebase/general/src.lib/grplotlib.1.2/src/../include/grplot.h’ -> ‘/home/radar_user/rst/include/general/grplot.h’
+/home/radar_user/rst/codebase/general/src.lib/grplotlib.1.2/src/../include/grplotstd.h
+‘/home/radar_user/rst/codebase/general/src.lib/grplotlib.1.2/src/../include/grplotstd.h’ -> ‘/home/radar_user/rst/include/general/grplotstd.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/general/src.lib/map.1.15
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/general/src.lib/map.1.15/src/../include /home/radar_user/rst/include/general 
+/home/radar_user/rst/codebase/general/src.lib/map.1.15/src/../include/rmap.h
+‘/home/radar_user/rst/codebase/general/src.lib/map.1.15/src/../include/rmap.h’ -> ‘/home/radar_user/rst/include/general/rmap.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/general/src.lib/polygon.1.7
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/general/src.lib/polygon.1.7/src/../include /home/radar_user/rst/include/general 
+/home/radar_user/rst/codebase/general/src.lib/polygon.1.7/src/../include/polygon.h
+‘/home/radar_user/rst/codebase/general/src.lib/polygon.1.7/src/../include/polygon.h’ -> ‘/home/radar_user/rst/include/general/polygon.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/general/src.lib/raster.1.5
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/general/src.lib/raster.1.5/src/../include /home/radar_user/rst/include/general 
+/home/radar_user/rst/codebase/general/src.lib/raster.1.5/src/../include/raster.h
+‘/home/radar_user/rst/codebase/general/src.lib/raster.1.5/src/../include/raster.h’ -> ‘/home/radar_user/rst/include/general/raster.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/general/src.lib/rfile.1.8
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/general/src.lib/rfile.1.8/src/../include /home/radar_user/rst/include/general 
+/home/radar_user/rst/codebase/general/src.lib/rfile.1.8/src/../include/rfile.h
+‘/home/radar_user/rst/codebase/general/src.lib/rfile.1.8/src/../include/rfile.h’ -> ‘/home/radar_user/rst/include/general/rfile.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/general/src.lib/stdkey.1.4
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/general/src.lib/stdkey.1.4/src/../include /home/radar_user/rst/include/general 
+/home/radar_user/rst/codebase/general/src.lib/stdkey.1.4/src/../include/stdkey.h
+‘/home/radar_user/rst/codebase/general/src.lib/stdkey.1.4/src/../include/stdkey.h’ -> ‘/home/radar_user/rst/include/general/stdkey.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/general/src.lib/time.1.6
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/general/src.lib/time.1.6/src/../include /home/radar_user/rst/include/general 
+/home/radar_user/rst/codebase/general/src.lib/time.1.6/src/../include/rtime.h
+‘/home/radar_user/rst/codebase/general/src.lib/time.1.6/src/../include/rtime.h’ -> ‘/home/radar_user/rst/include/general/rtime.h’
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/analysis/src.lib
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+1.Located Library:/home/radar_user/rst/codebase/analysis/src.lib/aacgm/aacgm.1.14
+2.Located Library:/home/radar_user/rst/codebase/analysis/src.lib/astalg/astalg.1.2
+3.Located Library:/home/radar_user/rst/codebase/analysis/src.lib/cdf/rcdf.1.4
+4.Located Library:/home/radar_user/rst/codebase/analysis/src.lib/geopack/geopack.1.3
+5.Located Library:/home/radar_user/rst/codebase/analysis/src.lib/igrf/igrf.1.9
+6.Located Library:/home/radar_user/rst/codebase/analysis/src.lib/mlt/mlt.1.2
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/analysis/src.lib/aacgm/aacgm.1.14
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/analysis/src.lib/aacgm/aacgm.1.14/src/../include /home/radar_user/rst/include/analysis 
+/home/radar_user/rst/codebase/analysis/src.lib/aacgm/aacgm.1.14/src/../include/aacgm.h
+‘/home/radar_user/rst/codebase/analysis/src.lib/aacgm/aacgm.1.14/src/../include/aacgm.h’ -> ‘/home/radar_user/rst/include/analysis/aacgm.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/analysis/src.lib/astalg/astalg.1.2
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/analysis/src.lib/astalg/astalg.1.2/src/../include /home/radar_user/rst/include/analysis 
+/home/radar_user/rst/codebase/analysis/src.lib/astalg/astalg.1.2/src/../include/AstAlg.h
+‘/home/radar_user/rst/codebase/analysis/src.lib/astalg/astalg.1.2/src/../include/AstAlg.h’ -> ‘/home/radar_user/rst/include/analysis/AstAlg.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/analysis/src.lib/cdf/rcdf.1.4
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/analysis/src.lib/cdf/rcdf.1.4/src/../include /home/radar_user/rst/include/analysis 
+/home/radar_user/rst/codebase/analysis/src.lib/cdf/rcdf.1.4/src/../include/rcdf.h
+‘/home/radar_user/rst/codebase/analysis/src.lib/cdf/rcdf.1.4/src/../include/rcdf.h’ -> ‘/home/radar_user/rst/include/analysis/rcdf.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/analysis/src.lib/geopack/geopack.1.3
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/analysis/src.lib/geopack/geopack.1.3/src/../include /home/radar_user/rst/include/analysis 
+/home/radar_user/rst/codebase/analysis/src.lib/geopack/geopack.1.3/src/../include/geopack.h
+‘/home/radar_user/rst/codebase/analysis/src.lib/geopack/geopack.1.3/src/../include/geopack.h’ -> ‘/home/radar_user/rst/include/analysis/geopack.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/analysis/src.lib/igrf/igrf.1.9
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/analysis/src.lib/igrf/igrf.1.9/src/../include /home/radar_user/rst/include/analysis 
+/home/radar_user/rst/codebase/analysis/src.lib/igrf/igrf.1.9/src/../include/igrfcall.h
+‘/home/radar_user/rst/codebase/analysis/src.lib/igrf/igrf.1.9/src/../include/igrfcall.h’ -> ‘/home/radar_user/rst/include/analysis/igrfcall.h’
+/home/radar_user/rst/codebase/analysis/src.lib/igrf/igrf.1.9/src/../include/magcmp.h
+‘/home/radar_user/rst/codebase/analysis/src.lib/igrf/igrf.1.9/src/../include/magcmp.h’ -> ‘/home/radar_user/rst/include/analysis/magcmp.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/analysis/src.lib/mlt/mlt.1.2
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/analysis/src.lib/mlt/mlt.1.2/src/../include /home/radar_user/rst/include/analysis 
+/home/radar_user/rst/codebase/analysis/src.lib/mlt/mlt.1.2/src/../include/mlt.h
+‘/home/radar_user/rst/codebase/analysis/src.lib/mlt/mlt.1.2/src/../include/mlt.h’ -> ‘/home/radar_user/rst/include/analysis/mlt.h’
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/imagery/src.lib
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+1.Located Library:/home/radar_user/rst/codebase/imagery/src.lib/sza.1.8
+2.Located Library:/home/radar_user/rst/codebase/imagery/src.lib/szamap.1.10
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/imagery/src.lib/sza.1.8
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/imagery/src.lib/sza.1.8/src/../include /home/radar_user/rst/include/imagery 
+/home/radar_user/rst/codebase/imagery/src.lib/sza.1.8/src/../include/sza.h
+‘/home/radar_user/rst/codebase/imagery/src.lib/sza.1.8/src/../include/sza.h’ -> ‘/home/radar_user/rst/include/imagery/sza.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/imagery/src.lib/szamap.1.10
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/imagery/src.lib/szamap.1.10/src/../include /home/radar_user/rst/include/imagery 
+/home/radar_user/rst/codebase/imagery/src.lib/szamap.1.10/src/../include/szamap.h
+‘/home/radar_user/rst/codebase/imagery/src.lib/szamap.1.10/src/../include/szamap.h’ -> ‘/home/radar_user/rst/include/imagery/szamap.h’
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/superdarn/src.lib/tk
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+1.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/acf.1.14
+2.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/cfit.1.17
+3.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/cnvmap.1.15
+4.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/filter.1.7
+5.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/fit.1.33
+6.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/fitacf.2.4
+7.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/fitcnx.1.14
+8.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/grid.1.22
+9.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/gtable.1.10
+10.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/gtablewrite.1.8
+11.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/iq.1.3
+12.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldcnvmap.1.1
+13.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldfit.1.22
+14.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldfitcnx.1.8
+15.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldgrid.1.2
+16.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldgtablewrite.1.3
+17.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldraw.1.14
+18.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/radar.1.15
+19.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/raw.1.20
+20.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/rpos.1.4
+21.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/scan.1.6
+22.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/shf.1.9
+23.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/smr.1.6
+24.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/tsg.1.11
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/acf.1.14
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/tk/acf.1.14/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/acf.1.14/src/../include/acf.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/acf.1.14/src/../include/acf.h’ -> ‘/home/radar_user/rst/include/superdarn/acf.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/cfit.1.17
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/tk/cfit.1.17/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/cfit.1.17/src/../include/cfitscan.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/cfit.1.17/src/../include/cfitscan.h’ -> ‘/home/radar_user/rst/include/superdarn/cfitscan.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/cfit.1.17/src/../include/cfitdata.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/cfit.1.17/src/../include/cfitdata.h’ -> ‘/home/radar_user/rst/include/superdarn/cfitdata.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/cfit.1.17/src/../include/cfitread.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/cfit.1.17/src/../include/cfitread.h’ -> ‘/home/radar_user/rst/include/superdarn/cfitread.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/cfit.1.17/src/../include/cfitwrite.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/cfit.1.17/src/../include/cfitwrite.h’ -> ‘/home/radar_user/rst/include/superdarn/cfitwrite.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/cnvmap.1.15
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/tk/cnvmap.1.15/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/cnvmap.1.15/src/../include/cnvmapread.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/cnvmap.1.15/src/../include/cnvmapread.h’ -> ‘/home/radar_user/rst/include/superdarn/cnvmapread.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/cnvmap.1.15/src/../include/cnvmapwrite.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/cnvmap.1.15/src/../include/cnvmapwrite.h’ -> ‘/home/radar_user/rst/include/superdarn/cnvmapwrite.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/cnvmap.1.15/src/../include/cnvmapseek.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/cnvmap.1.15/src/../include/cnvmapseek.h’ -> ‘/home/radar_user/rst/include/superdarn/cnvmapseek.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/cnvmap.1.15/src/../include/cnvmapindex.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/cnvmap.1.15/src/../include/cnvmapindex.h’ -> ‘/home/radar_user/rst/include/superdarn/cnvmapindex.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/filter.1.7
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/tk/filter.1.7/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/filter.1.7/src/../include/bound.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/filter.1.7/src/../include/bound.h’ -> ‘/home/radar_user/rst/include/superdarn/bound.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/filter.1.7/src/../include/checkops.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/filter.1.7/src/../include/checkops.h’ -> ‘/home/radar_user/rst/include/superdarn/checkops.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/filter.1.7/src/../include/filter.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/filter.1.7/src/../include/filter.h’ -> ‘/home/radar_user/rst/include/superdarn/filter.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/fit.1.33
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/tk/fit.1.33/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/fit.1.33/src/../include/fitseek.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/fit.1.33/src/../include/fitseek.h’ -> ‘/home/radar_user/rst/include/superdarn/fitseek.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/fit.1.33/src/../include/fitscan.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/fit.1.33/src/../include/fitscan.h’ -> ‘/home/radar_user/rst/include/superdarn/fitscan.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/fit.1.33/src/../include/fitindex.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/fit.1.33/src/../include/fitindex.h’ -> ‘/home/radar_user/rst/include/superdarn/fitindex.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/fit.1.33/src/../include/fitwrite.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/fit.1.33/src/../include/fitwrite.h’ -> ‘/home/radar_user/rst/include/superdarn/fitwrite.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/fit.1.33/src/../include/fitdata.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/fit.1.33/src/../include/fitdata.h’ -> ‘/home/radar_user/rst/include/superdarn/fitdata.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/fit.1.33/src/../include/fitcfit.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/fit.1.33/src/../include/fitcfit.h’ -> ‘/home/radar_user/rst/include/superdarn/fitcfit.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/fit.1.33/src/../include/fitread.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/fit.1.33/src/../include/fitread.h’ -> ‘/home/radar_user/rst/include/superdarn/fitread.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/fitacf.2.4
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/tk/fitacf.2.4/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/fitacf.2.4/src/../include/dofit.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/fitacf.2.4/src/../include/dofit.h’ -> ‘/home/radar_user/rst/include/superdarn/dofit.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/fitacf.2.4/src/../include/badsmp.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/fitacf.2.4/src/../include/badsmp.h’ -> ‘/home/radar_user/rst/include/superdarn/badsmp.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/fitacf.2.4/src/../include/badlags.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/fitacf.2.4/src/../include/badlags.h’ -> ‘/home/radar_user/rst/include/superdarn/badlags.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/fitacf.2.4/src/../include/fitblk.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/fitacf.2.4/src/../include/fitblk.h’ -> ‘/home/radar_user/rst/include/superdarn/fitblk.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/fitacf.2.4/src/../include/fitacf.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/fitacf.2.4/src/../include/fitacf.h’ -> ‘/home/radar_user/rst/include/superdarn/fitacf.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/fitcnx.1.14
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/tk/fitcnx.1.14/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/fitcnx.1.14/src/../include/fitcnx.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/fitcnx.1.14/src/../include/fitcnx.h’ -> ‘/home/radar_user/rst/include/superdarn/fitcnx.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/grid.1.22
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/tk/grid.1.22/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/grid.1.22/src/../include/gridindex.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/grid.1.22/src/../include/gridindex.h’ -> ‘/home/radar_user/rst/include/superdarn/gridindex.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/grid.1.22/src/../include/gridseek.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/grid.1.22/src/../include/gridseek.h’ -> ‘/home/radar_user/rst/include/superdarn/gridseek.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/grid.1.22/src/../include/griddata.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/grid.1.22/src/../include/griddata.h’ -> ‘/home/radar_user/rst/include/superdarn/griddata.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/grid.1.22/src/../include/gridwrite.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/grid.1.22/src/../include/gridwrite.h’ -> ‘/home/radar_user/rst/include/superdarn/gridwrite.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/grid.1.22/src/../include/gridread.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/grid.1.22/src/../include/gridread.h’ -> ‘/home/radar_user/rst/include/superdarn/gridread.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/gtable.1.10
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/tk/gtable.1.10/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/gtable.1.10/src/../include/gtable.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/gtable.1.10/src/../include/gtable.h’ -> ‘/home/radar_user/rst/include/superdarn/gtable.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/gtablewrite.1.8
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/tk/gtablewrite.1.8/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/gtablewrite.1.8/src/../include/gtablewrite.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/gtablewrite.1.8/src/../include/gtablewrite.h’ -> ‘/home/radar_user/rst/include/superdarn/gtablewrite.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/iq.1.3
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/tk/iq.1.3/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/iq.1.3/src/../include/iqseek.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/iq.1.3/src/../include/iqseek.h’ -> ‘/home/radar_user/rst/include/superdarn/iqseek.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/iq.1.3/src/../include/iq.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/iq.1.3/src/../include/iq.h’ -> ‘/home/radar_user/rst/include/superdarn/iq.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/iq.1.3/src/../include/iqread.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/iq.1.3/src/../include/iqread.h’ -> ‘/home/radar_user/rst/include/superdarn/iqread.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/iq.1.3/src/../include/iqindex.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/iq.1.3/src/../include/iqindex.h’ -> ‘/home/radar_user/rst/include/superdarn/iqindex.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/iq.1.3/src/../include/iqwrite.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/iq.1.3/src/../include/iqwrite.h’ -> ‘/home/radar_user/rst/include/superdarn/iqwrite.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldcnvmap.1.1
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/tk/oldcnvmap.1.1/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldcnvmap.1.1/src/../include/oldcnvmapread.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldcnvmap.1.1/src/../include/oldcnvmapread.h’ -> ‘/home/radar_user/rst/include/superdarn/oldcnvmapread.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldcnvmap.1.1/src/../include/oldcnvmapwrite.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldcnvmap.1.1/src/../include/oldcnvmapwrite.h’ -> ‘/home/radar_user/rst/include/superdarn/oldcnvmapwrite.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldfit.1.22
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/tk/oldfit.1.22/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldfit.1.22/src/../include/oldfitread.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldfit.1.22/src/../include/oldfitread.h’ -> ‘/home/radar_user/rst/include/superdarn/oldfitread.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldfit.1.22/src/../include/oldfitwrite.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldfit.1.22/src/../include/oldfitwrite.h’ -> ‘/home/radar_user/rst/include/superdarn/oldfitwrite.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldfit.1.22/src/../include/oldfitscan.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldfit.1.22/src/../include/oldfitscan.h’ -> ‘/home/radar_user/rst/include/superdarn/oldfitscan.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldfitcnx.1.8
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/tk/oldfitcnx.1.8/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldfitcnx.1.8/src/../include/oldfitcnx.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldfitcnx.1.8/src/../include/oldfitcnx.h’ -> ‘/home/radar_user/rst/include/superdarn/oldfitcnx.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldgrid.1.2
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/tk/oldgrid.1.2/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldgrid.1.2/src/../include/oldgridwrite.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldgrid.1.2/src/../include/oldgridwrite.h’ -> ‘/home/radar_user/rst/include/superdarn/oldgridwrite.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldgrid.1.2/src/../include/oldgridread.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldgrid.1.2/src/../include/oldgridread.h’ -> ‘/home/radar_user/rst/include/superdarn/oldgridread.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldgtablewrite.1.3
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/tk/oldgtablewrite.1.3/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldgtablewrite.1.3/src/../include/oldgtablewrite.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldgtablewrite.1.3/src/../include/oldgtablewrite.h’ -> ‘/home/radar_user/rst/include/superdarn/oldgtablewrite.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldraw.1.14
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/tk/oldraw.1.14/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldraw.1.14/src/../include/oldrawwrite.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldraw.1.14/src/../include/oldrawwrite.h’ -> ‘/home/radar_user/rst/include/superdarn/oldrawwrite.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldraw.1.14/src/../include/oldrawread.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/oldraw.1.14/src/../include/oldrawread.h’ -> ‘/home/radar_user/rst/include/superdarn/oldrawread.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/radar.1.15
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/tk/radar.1.15/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/radar.1.15/src/../include/rprm.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/radar.1.15/src/../include/rprm.h’ -> ‘/home/radar_user/rst/include/superdarn/rprm.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/radar.1.15/src/../include/radar.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/radar.1.15/src/../include/radar.h’ -> ‘/home/radar_user/rst/include/superdarn/radar.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/raw.1.20
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/tk/raw.1.20/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/raw.1.20/src/../include/rawdata.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/raw.1.20/src/../include/rawdata.h’ -> ‘/home/radar_user/rst/include/superdarn/rawdata.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/raw.1.20/src/../include/rawindex.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/raw.1.20/src/../include/rawindex.h’ -> ‘/home/radar_user/rst/include/superdarn/rawindex.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/raw.1.20/src/../include/rawseek.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/raw.1.20/src/../include/rawseek.h’ -> ‘/home/radar_user/rst/include/superdarn/rawseek.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/raw.1.20/src/../include/rawread.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/raw.1.20/src/../include/rawread.h’ -> ‘/home/radar_user/rst/include/superdarn/rawread.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/raw.1.20/src/../include/rawwrite.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/raw.1.20/src/../include/rawwrite.h’ -> ‘/home/radar_user/rst/include/superdarn/rawwrite.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/rpos.1.4
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/tk/rpos.1.4/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/rpos.1.4/src/../include/calcvector.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/rpos.1.4/src/../include/calcvector.h’ -> ‘/home/radar_user/rst/include/superdarn/calcvector.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/rpos.1.4/src/../include/rpos.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/rpos.1.4/src/../include/rpos.h’ -> ‘/home/radar_user/rst/include/superdarn/rpos.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/rpos.1.4/src/../include/invmag.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/rpos.1.4/src/../include/invmag.h’ -> ‘/home/radar_user/rst/include/superdarn/invmag.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/scan.1.6
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/tk/scan.1.6/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/scan.1.6/src/../include/scandata.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/scan.1.6/src/../include/scandata.h’ -> ‘/home/radar_user/rst/include/superdarn/scandata.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/shf.1.9
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/tk/shf.1.9/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/shf.1.9/src/../include/cnvmapsolve.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/shf.1.9/src/../include/cnvmapsolve.h’ -> ‘/home/radar_user/rst/include/superdarn/cnvmapsolve.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/shf.1.9/src/../include/crdshft.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/shf.1.9/src/../include/crdshft.h’ -> ‘/home/radar_user/rst/include/superdarn/crdshft.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/shf.1.9/src/../include/fitmap.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/shf.1.9/src/../include/fitmap.h’ -> ‘/home/radar_user/rst/include/superdarn/fitmap.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/shf.1.9/src/../include/shfconst.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/shf.1.9/src/../include/shfconst.h’ -> ‘/home/radar_user/rst/include/superdarn/shfconst.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/shf.1.9/src/../include/evalvelocity.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/shf.1.9/src/../include/evalvelocity.h’ -> ‘/home/radar_user/rst/include/superdarn/evalvelocity.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/shf.1.9/src/../include/cnvgrid.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/shf.1.9/src/../include/cnvgrid.h’ -> ‘/home/radar_user/rst/include/superdarn/cnvgrid.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/shf.1.9/src/../include/cnvmap.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/shf.1.9/src/../include/cnvmap.h’ -> ‘/home/radar_user/rst/include/superdarn/cnvmap.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/shf.1.9/src/../include/evallegendre.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/shf.1.9/src/../include/evallegendre.h’ -> ‘/home/radar_user/rst/include/superdarn/evallegendre.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/shf.1.9/src/../include/evalpotential.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/shf.1.9/src/../include/evalpotential.h’ -> ‘/home/radar_user/rst/include/superdarn/evalpotential.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/shf.1.9/src/../include/evalefield.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/shf.1.9/src/../include/evalefield.h’ -> ‘/home/radar_user/rst/include/superdarn/evalefield.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/smr.1.6
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/tk/smr.1.6/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/smr.1.6/src/../include/smrread.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/smr.1.6/src/../include/smrread.h’ -> ‘/home/radar_user/rst/include/superdarn/smrread.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/smr.1.6/src/../include/smrseek.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/smr.1.6/src/../include/smrseek.h’ -> ‘/home/radar_user/rst/include/superdarn/smrseek.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/smr.1.6/src/../include/smrscan.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/smr.1.6/src/../include/smrscan.h’ -> ‘/home/radar_user/rst/include/superdarn/smrscan.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/smr.1.6/src/../include/smrwrite.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/smr.1.6/src/../include/smrwrite.h’ -> ‘/home/radar_user/rst/include/superdarn/smrwrite.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/tk/tsg.1.11
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/tk/tsg.1.11/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/tsg.1.11/src/../include/tsg.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/tsg.1.11/src/../include/tsg.h’ -> ‘/home/radar_user/rst/include/superdarn/tsg.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/tk/tsg.1.11/src/../include/maketsg.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/tk/tsg.1.11/src/../include/maketsg.h’ -> ‘/home/radar_user/rst/include/superdarn/maketsg.h’
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/superdarn/src.lib/os
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+1.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/os/errlog.1.2
+2.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/os/fio.1.2
+3.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/os/freq.1.1
+4.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/os/rmsgrcv.1.1
+5.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/os/rmsgsnd.1.1
+6.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/os/rosmsg.1.3
+7.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/os/rshell.1.1
+8.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/os/tcpipmsg.1.1
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/os/errlog.1.2
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/os/errlog.1.2/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/os/errlog.1.2/src/../include/errlog.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/os/errlog.1.2/src/../include/errlog.h’ -> ‘/home/radar_user/rst/include/superdarn/errlog.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/os/fio.1.2
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/os/fio.1.2/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/os/fio.1.2/src/../include/fio.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/os/fio.1.2/src/../include/fio.h’ -> ‘/home/radar_user/rst/include/superdarn/fio.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/os/freq.1.1
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/os/freq.1.1/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/os/freq.1.1/src/../include/freq.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/os/freq.1.1/src/../include/freq.h’ -> ‘/home/radar_user/rst/include/superdarn/freq.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/os/rmsgrcv.1.1
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/os/rmsgrcv.1.1/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/os/rmsgrcv.1.1/src/../include/rmsg.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/os/rmsgrcv.1.1/src/../include/rmsg.h’ -> ‘/home/radar_user/rst/include/superdarn/rmsg.h’
+/home/radar_user/rst/codebase/superdarn/src.lib/os/rmsgrcv.1.1/src/../include/rmsgrcv.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/os/rmsgrcv.1.1/src/../include/rmsgrcv.h’ -> ‘/home/radar_user/rst/include/superdarn/rmsgrcv.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/os/rmsgsnd.1.1
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/os/rmsgsnd.1.1/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/os/rmsgsnd.1.1/src/../include/rmsgsnd.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/os/rmsgsnd.1.1/src/../include/rmsgsnd.h’ -> ‘/home/radar_user/rst/include/superdarn/rmsgsnd.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/os/rosmsg.1.3
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/os/rosmsg.1.3/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/os/rosmsg.1.3/src/../include/rosmsg.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/os/rosmsg.1.3/src/../include/rosmsg.h’ -> ‘/home/radar_user/rst/include/superdarn/rosmsg.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/os/rshell.1.1
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/os/rshell.1.1/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/os/rshell.1.1/src/../include/radarshell.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/os/rshell.1.1/src/../include/radarshell.h’ -> ‘/home/radar_user/rst/include/superdarn/radarshell.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/os/tcpipmsg.1.1
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/os/tcpipmsg.1.1/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/os/tcpipmsg.1.1/src/../include/tcpipmsg.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/os/tcpipmsg.1.1/src/../include/tcpipmsg.h’ -> ‘/home/radar_user/rst/include/superdarn/tcpipmsg.h’
+makeall
+Package Source Directory:/home/radar_user/rst/usr/codebase/superdarn/src.lib/tk
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+1.Located Library:/home/radar_user/rst/usr/codebase/superdarn/src.lib/tk/acfex.1.2
+2.Located Library:/home/radar_user/rst/usr/codebase/superdarn/src.lib/tk/fitacfex.1.2
+================================================================================
+Compiling Library:/home/radar_user/rst/usr/codebase/superdarn/src.lib/tk/acfex.1.2
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/usr/codebase/superdarn/src.lib/tk/acfex.1.2/src/../include /home/radar_user/rst/usr/include/superdarn 
+/home/radar_user/rst/usr/codebase/superdarn/src.lib/tk/acfex.1.2/src/../include/acfex.h
+‘/home/radar_user/rst/usr/codebase/superdarn/src.lib/tk/acfex.1.2/src/../include/acfex.h’ -> ‘/home/radar_user/rst/usr/include/superdarn/acfex.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/usr/codebase/superdarn/src.lib/tk/fitacfex.1.2
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/usr/codebase/superdarn/src.lib/tk/fitacfex.1.2/src/../include /home/radar_user/rst/usr/include/superdarn 
+/home/radar_user/rst/usr/codebase/superdarn/src.lib/tk/fitacfex.1.2/src/../include/fitacfex.h
+‘/home/radar_user/rst/usr/codebase/superdarn/src.lib/tk/fitacfex.1.2/src/../include/fitacfex.h’ -> ‘/home/radar_user/rst/usr/include/superdarn/fitacfex.h’
+makeall
+Package Source Directory:/home/radar_user/rst/usr/codebase/superdarn/src.lib/os
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+1.Located Library:/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/ops.1.10
+2.Located Library:/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.1.3
+3.Located Library:/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.cve.1.10
+4.Located Library:/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.cvw.1.10
+5.Located Library:/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.fhe.1.9
+6.Located Library:/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.fhw.1.8
+7.Located Library:/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.tst.1.6
+================================================================================
+Compiling Library:/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/ops.1.10
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/usr/codebase/superdarn/src.lib/os/ops.1.10/src/../include /home/radar_user/rst/usr/include/superdarn 
+/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/ops.1.10/src/../include/sync.h
+‘/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/ops.1.10/src/../include/sync.h’ -> ‘/home/radar_user/rst/usr/include/superdarn/sync.h’
+/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/ops.1.10/src/../include/reopen.h
+‘/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/ops.1.10/src/../include/reopen.h’ -> ‘/home/radar_user/rst/usr/include/superdarn/reopen.h’
+/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/ops.1.10/src/../include/global.h
+‘/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/ops.1.10/src/../include/global.h’ -> ‘/home/radar_user/rst/usr/include/superdarn/global.h’
+/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/ops.1.10/src/../include/build.h
+‘/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/ops.1.10/src/../include/build.h’ -> ‘/home/radar_user/rst/usr/include/superdarn/build.h’
+/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/ops.1.10/src/../include/limit.h
+‘/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/ops.1.10/src/../include/limit.h’ -> ‘/home/radar_user/rst/usr/include/superdarn/limit.h’
+/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/ops.1.10/src/../include/setup.h
+‘/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/ops.1.10/src/../include/setup.h’ -> ‘/home/radar_user/rst/usr/include/superdarn/setup.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.1.3
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.1.3/src/../include /home/radar_user/rst/usr/include/superdarn 
+/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.1.3/src/../include/sitebuild.h
+‘/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.1.3/src/../include/sitebuild.h’ -> ‘/home/radar_user/rst/usr/include/superdarn/sitebuild.h’
+/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.1.3/src/../include/site.h
+‘/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.1.3/src/../include/site.h’ -> ‘/home/radar_user/rst/usr/include/superdarn/site.h’
+/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.1.3/src/../include/siteglobal.h
+‘/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.1.3/src/../include/siteglobal.h’ -> ‘/home/radar_user/rst/usr/include/superdarn/siteglobal.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.cve.1.10
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.cve.1.10/src/../include /home/radar_user/rst/usr/include/superdarn 
+/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.cve.1.10/src/../include/site.cve.h
+‘/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.cve.1.10/src/../include/site.cve.h’ -> ‘/home/radar_user/rst/usr/include/superdarn/site.cve.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.cvw.1.10
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.cvw.1.10/src/../include /home/radar_user/rst/usr/include/superdarn 
+/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.cvw.1.10/src/../include/site.cvw.h
+‘/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.cvw.1.10/src/../include/site.cvw.h’ -> ‘/home/radar_user/rst/usr/include/superdarn/site.cvw.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.fhe.1.9
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.fhe.1.9/src/../include /home/radar_user/rst/usr/include/superdarn 
+/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.fhe.1.9/src/../include/site.fhe.h
+‘/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.fhe.1.9/src/../include/site.fhe.h’ -> ‘/home/radar_user/rst/usr/include/superdarn/site.fhe.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.fhw.1.8
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.fhw.1.8/src/../include /home/radar_user/rst/usr/include/superdarn 
+/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.fhw.1.8/src/../include/site.fhw.h
+‘/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.fhw.1.8/src/../include/site.fhw.h’ -> ‘/home/radar_user/rst/usr/include/superdarn/site.fhw.h’
+================================================================================
+Compiling Library:/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.tst.1.6
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.tst.1.6/src/../include /home/radar_user/rst/usr/include/superdarn 
+/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.tst.1.6/src/../include/site.tst.h
+‘/home/radar_user/rst/usr/codebase/superdarn/src.lib/os/site.tst.1.6/src/../include/site.tst.h’ -> ‘/home/radar_user/rst/usr/include/superdarn/site.tst.h’
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/base/src.lib
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+1.Located Library:/home/radar_user/rst/codebase/base/src.lib/graphic/fbuffer.1.17
+2.Located Library:/home/radar_user/rst/codebase/base/src.lib/graphic/fontdb.1.8
+3.Located Library:/home/radar_user/rst/codebase/base/src.lib/graphic/imagedb.1.3
+4.Located Library:/home/radar_user/rst/codebase/base/src.lib/graphic/iplotlib.1.3
+5.Located Library:/home/radar_user/rst/codebase/base/src.lib/graphic/ps.1.8
+6.Located Library:/home/radar_user/rst/codebase/base/src.lib/graphic/splotlib.1.2
+7.Located Library:/home/radar_user/rst/codebase/base/src.lib/graphic/xwin.1.4
+8.Located Library:/home/radar_user/rst/codebase/base/src.lib/httpd/cgi.1.5
+9.Located Library:/home/radar_user/rst/codebase/base/src.lib/httpd/rscript.1.5
+10.Located Library:/home/radar_user/rst/codebase/base/src.lib/math/rmath.1.7
+11.Located Library:/home/radar_user/rst/codebase/base/src.lib/memory/shmem.1.1
+12.Located Library:/home/radar_user/rst/codebase/base/src.lib/task/convert.1.8
+13.Located Library:/home/radar_user/rst/codebase/base/src.lib/task/option.1.6
+14.Located Library:/home/radar_user/rst/codebase/base/src.lib/task/rtypes.1.3
+15.Located Library:/home/radar_user/rst/codebase/base/src.lib/tcpip/cnx.1.15
+16.Located Library:/home/radar_user/rst/codebase/base/src.lib/xml/tagdb.1.6
+17.Located Library:/home/radar_user/rst/codebase/base/src.lib/xml/xml.1.7
+18.Located Library:/home/radar_user/rst/codebase/base/src.lib/xml/xmldb.1.5
+19.Located Library:/home/radar_user/rst/codebase/base/src.lib/xml/xmldoclib.1.4
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/base/src.lib/graphic/fbuffer.1.17
+================================================================================
+make clean
+rm -f *.o
+make
+make.version /home/radar_user/rst/codebase/base/src.lib/graphic/fbuffer.1.17/src/..
+make.hdr /home/radar_user/rst/codebase/base/src.lib/graphic/fbuffer.1.17/src/../include /home/radar_user/rst/include/base 
+/home/radar_user/rst/codebase/base/src.lib/graphic/fbuffer.1.17/src/../include/rfbuffer.h
+‘/home/radar_user/rst/codebase/base/src.lib/graphic/fbuffer.1.17/src/../include/rfbuffer.h’ -> ‘/home/radar_user/rst/include/base/rfbuffer.h’
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -I/home/radar_user/rst/include/base -fno-stack-protector -m32 -c png.c    
+png.c:18:17: fatal error: png.h: No such file or directory
+ #include <png.h>
+                 ^
+compilation terminated.
+/home/radar_user/rst/build/base/make/makelib.linux:31: recipe for target 'png.o' failed
+make: *** [png.o] Error 1
+Compilation Aborted.

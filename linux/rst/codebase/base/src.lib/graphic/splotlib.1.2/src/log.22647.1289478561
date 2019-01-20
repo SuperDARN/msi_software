@@ -1,0 +1,10 @@
+make.version /home/radar2/rst/codebase/base/src.lib/graphic/splotlib.1.2/src/..
+make.hdr /home/radar2/rst/codebase/base/src.lib/graphic/splotlib.1.2/src/../include /home/radar2/rst/include/base 
+/home/radar2/rst/codebase/base/src.lib/graphic/splotlib.1.2/src/../include/splot.h
+`/home/radar2/rst/codebase/base/src.lib/graphic/splotlib.1.2/src/../include/splot.h' -> `/home/radar2/rst/include/base/splot.h'
+cc -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -I/home/radar2/rst/include/base -c make.c    
+cc -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -I/home/radar2/rst/include/base -c bezier.c    
+cc -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -I/home/radar2/rst/include/base -c line.c    
+cc -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -I/home/radar2/rst/include/base -c shape.c    
+cc -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -I/home/radar2/rst/include/base -c polygon.c    
+make: *** [polygon.o] Interrupt

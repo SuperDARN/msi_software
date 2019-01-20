@@ -1,0 +1,135 @@
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/base/src.bin
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+1.Located Binary:/home/radar_user/rst/codebase/base/src.bin/build/addtext.1.6
+2.Located Binary:/home/radar_user/rst/codebase/base/src.bin/build/makeall.1.20
+3.Located Binary:/home/radar_user/rst/codebase/base/src.bin/build/maketree.1.1
+4.Located Binary:/home/radar_user/rst/codebase/base/src.bin/graphic/padpng.1.1
+5.Located Binary:/home/radar_user/rst/codebase/base/src.bin/graphic/padppm.1.5
+6.Located Binary:/home/radar_user/rst/codebase/base/src.bin/graphic/padppmx.1.1
+7.Located Binary:/home/radar_user/rst/codebase/base/src.bin/graphic/padxml.1.1
+8.Located Binary:/home/radar_user/rst/codebase/base/src.bin/graphic/pngd.1.1
+9.Located Binary:/home/radar_user/rst/codebase/base/src.bin/graphic/pngtoppm.1.1
+10.Located Binary:/home/radar_user/rst/codebase/base/src.bin/graphic/pngtoppmx.1.2
+11.Located Binary:/home/radar_user/rst/codebase/base/src.bin/graphic/pngtoxml.1.2
+12.Located Binary:/home/radar_user/rst/codebase/base/src.bin/graphic/ppmd.1.3
+13.Located Binary:/home/radar_user/rst/codebase/base/src.bin/graphic/ppmtopng.1.1
+14.Located Binary:/home/radar_user/rst/codebase/base/src.bin/graphic/ppmtoppmx.1.7
+15.Located Binary:/home/radar_user/rst/codebase/base/src.bin/graphic/ppmtoxml.1.5
+16.Located Binary:/home/radar_user/rst/codebase/base/src.bin/graphic/ppmxd.1.6
+17.Located Binary:/home/radar_user/rst/codebase/base/src.bin/graphic/ppmxtopng.1.1
+18.Located Binary:/home/radar_user/rst/codebase/base/src.bin/graphic/ppmxtoppm.1.9
+19.Located Binary:/home/radar_user/rst/codebase/base/src.bin/graphic/ppmxtoxml.1.3
+20.Located Binary:/home/radar_user/rst/codebase/base/src.bin/graphic/scalepng.1.1
+21.Located Binary:/home/radar_user/rst/codebase/base/src.bin/graphic/scaleppm.1.8
+22.Located Binary:/home/radar_user/rst/codebase/base/src.bin/graphic/scaleppmx.1.5
+23.Located Binary:/home/radar_user/rst/codebase/base/src.bin/graphic/scalexml.1.6
+24.Located Binary:/home/radar_user/rst/codebase/base/src.bin/graphic/xmld.1.6
+25.Located Binary:/home/radar_user/rst/codebase/base/src.bin/graphic/xmltopng.1.1
+26.Located Binary:/home/radar_user/rst/codebase/base/src.bin/graphic/xmltoppm.1.8
+27.Located Binary:/home/radar_user/rst/codebase/base/src.bin/graphic/xmltoppmx.1.4
+28.Located Binary:/home/radar_user/rst/codebase/base/src.bin/memory/shmemrecv.1.2
+29.Located Binary:/home/radar_user/rst/codebase/base/src.bin/memory/shmemsend.1.2
+30.Located Binary:/home/radar_user/rst/codebase/base/src.bin/tcpip/ipclient.1.5
+31.Located Binary:/home/radar_user/rst/codebase/base/src.bin/tcpip/ipserver.1.10
+32.Located Binary:/home/radar_user/rst/codebase/base/src.bin/xmldoc/scdoc.1.3
+33.Located Binary:/home/radar_user/rst/codebase/base/src.bin/xmldoc/xmldoc.1.5
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/base/src.bin/build/addtext.1.6
+================================================================================
+make clean
+rm -f *.o
+rm -f addtext
+make
+make.version /home/radar_user/rst/codebase/base/src.bin/build/addtext.1.6
+make.help
+./doc/addtext.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX   -m32 -c addtext.c    
+addtext.c: In function ‘print_info’:
+addtext.c:25:3: warning: format not a string literal and no format arguments [-Wformat-security]
+   for (i=0;str[i] !=NULL;i++) fprintf(fp,str[i]);
+   ^
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX   -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/addtext addtext.o   -Wl,-Bstatic \
+                             -Wl,-Bdynamic \
+                              
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/base/src.bin/build/makeall.1.20
+================================================================================
+make clean
+rm -f *.o
+rm -f makeall
+make
+make.version /home/radar_user/rst/codebase/base/src.bin/build/makeall.1.20
+make.help
+./doc/makeall.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX   -m32 -c makeall.c    
+makeall.c: In function ‘log_info’:
+makeall.c:48:3: warning: format not a string literal and no format arguments [-Wformat-security]
+   if (vbflg==1) fprintf(stderr,text);
+   ^
+makeall.c:49:3: warning: format not a string literal and no format arguments [-Wformat-security]
+   fprintf(stdout,text);
+   ^
+makeall.c: In function ‘print_info’:
+makeall.c:253:3: warning: format not a string literal and no format arguments [-Wformat-security]
+   for (i=0;str[i] !=NULL;i++) fprintf(fp,str[i]);
+   ^
+makeall.c: In function ‘do_make’:
+makeall.c:68:5: warning: ignoring return value of ‘freopen’, declared with attribute warn_unused_result [-Wunused-result]
+     freopen(tmpname,"a+",stderr);
+     ^
+makeall.c:69:5: warning: ignoring return value of ‘freopen’, declared with attribute warn_unused_result [-Wunused-result]
+     freopen(tmpname,"a+",stdout);
+     ^
+makeall.c: In function ‘main’:
+makeall.c:374:5: warning: ignoring return value of ‘chdir’, declared with attribute warn_unused_result [-Wunused-result]
+     chdir(path);
+     ^
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX   -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/makeall makeall.o -Wl,-Bstatic \
+                             -Wl,-Bdynamic \
+                           -lm   
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/base/src.bin/build/maketree.1.1
+================================================================================
+make clean
+rm -f *.o
+rm -f maketree
+make
+make.version /home/radar_user/rst/codebase/base/src.bin/build/maketree.1.1
+make.help
+./doc/maketree.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX   -m32 -c maketree.c    
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX   -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/maketree maketree.o -Wl,-Bstatic \
+                             -Wl,-Bdynamic \
+                           -lm   
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/base/src.bin/graphic/padpng.1.1
+================================================================================
+make clean
+rm -f *.o
+rm -f padpng
+make
+make.version /home/radar_user/rst/codebase/base/src.bin/graphic/padpng.1.1
+make.help
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX  -I/home/radar_user/rst/include/base -m32 -c padpng.c    
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX  -I/home/radar_user/rst/include/base -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/padpng padpng.o -Wl,-Bstatic \
+                           -lrfbuf.1 -lrxml.1 -lopt.1   -Wl,-Bdynamic \
+                           -lpng -lm   
+/usr/bin/ld: skipping incompatible /home/radar_user/rst/lib/librfbuf.1.a when searching for -lrfbuf.1
+/usr/bin/ld: cannot find -lrfbuf.1
+/usr/bin/ld: skipping incompatible /home/radar_user/rst/lib/librxml.1.a when searching for -lrxml.1
+/usr/bin/ld: cannot find -lrxml.1
+/usr/bin/ld: skipping incompatible /home/radar_user/rst/lib/libopt.1.a when searching for -lopt.1
+/usr/bin/ld: cannot find -lopt.1
+/usr/bin/ld: cannot find -lpng
+collect2: error: ld returned 1 exit status
+/home/radar_user/rst/build/base/make/makebin.linux:50: recipe for target 'padpng' failed
+make: *** [padpng] Error 1
+Compilation Aborted.

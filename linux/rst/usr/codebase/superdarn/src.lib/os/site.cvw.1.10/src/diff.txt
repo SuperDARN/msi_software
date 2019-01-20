@@ -1,0 +1,59 @@
+38a39
+> /*int invert=0;*/  /* Initialize to zero and set in Site*Start function below */
+95a97,98
+> /* Set invert to 0, there is no phase inversion between main and interf */
+> /*  invert=0;*/
+404a408,409
+>   uint32 uQ32,uI32;
+> 
+586a592,607
+>       nsamp=(int)dprm.samples;
+> 
+>    /* invert interf phase here if necessary */
+> /*      if(invert!=0) {
+>         for(n=0;n<(nsamp);n++){
+>           Q=((rdata.main)[n] & 0xffff0000) >> 16;
+>           I=(rdata.main)[n] & 0x0000ffff;
+>           Q=-Q;
+>           I=-I;
+>           uQ32=((uint32) Q) << 16;
+>           uI32=((uint32) I) & 0xFFFF;
+>           (rdata.main)[n]=uQ32|uI32;
+>         }
+>       }
+> */
+> 
+589d609
+<         nsamp=(int)dprm.samples;
+591d610
+<         
+593,594c612
+<           Q=((rdata.main)[n+i] & 0xffff0000) >> 16;
+<           I=(rdata.main)[n+i] & 0x0000ffff;
+---
+>           /* Process the main array sample: n */
+603d620
+< 
+608,609c625,629
+<                 
+<           (rdata.main)[n]=(Q<<16)|I;
+---
+>           uQ32=((uint32) Q) << 16;
+>           uI32=((uint32) I) & 0xFFFF;
+>           (rdata.main)[n]=uQ32|uI32;
+> 
+>           /* Process the intefer array sample: n */
+622c642,644
+<           (rdata.back)[n]=(Q<<16)|I;
+---
+>           uQ32=((uint32) Q) << 16;
+>           uI32=((uint32) I) & 0xFFFF;
+>           (rdata.back)[n]=uQ32|uI32;
+701c723
+<           roff,ioff,mplgs,lagtable,acfd,ACF_PART,total_samples,badrng,seqatten[nave]*atstp,NULL);
+---
+>           roff,ioff,mplgs,lagtable,acfd,ACF_PART,2*total_samples,badrng,seqatten[nave]*atstp,NULL);
+708c730
+<                     roff,ioff,mplgs,lagtable,xcfd,XCF_PART,total_samples,badrng,seqatten[nave]*atstp,NULL);
+---
+>                     roff,ioff,mplgs,lagtable,xcfd,XCF_PART,2*total_samples,badrng,seqatten[nave]*atstp,NULL);

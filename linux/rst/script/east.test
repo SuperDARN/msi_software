@@ -1,0 +1,1 @@
+normalscan -sb 0 -eb 19 -fast -stid cve -ep 44000 -sp 44001 -bp 44100 -df 14700 -nf 10400 -fixfrq 14900

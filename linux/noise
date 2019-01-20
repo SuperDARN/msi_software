@@ -1,0 +1,13 @@
+#!/bin/sh
+
+errlogdir='/data/ros/errlog'
+
+sites='cvw cve'
+for site in $sites ; do
+	latestfile=`ls $errlogdir/errlog.$site.* | tail -1`
+	echo ""
+	echo "$site:"
+	tail -100 $latestfile | grep "Noise"
+#	date -u
+done
+

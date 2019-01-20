@@ -1,0 +1,64 @@
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/base/src.bin
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/general/src.bin
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/analysis/src.bin
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/superdarn/src.bin/tk
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/superdarn/src.bin/os
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+makeall
+Package Source Directory:/home/radar_user/rst/usr/codebase/superdarn/src.bin/tk
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+makeall
+Package Source Directory:/home/radar_user/rst/usr/codebase/superdarn/src.bin/os
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+1.Located Binary:/home/radar_user/rst/usr/codebase/superdarn/src.bin/os/cp/everyotherbeam.1.0
+================================================================================
+Compiling Binary:/home/radar_user/rst/usr/codebase/superdarn/src.bin/os/cp/everyotherbeam.1.0
+================================================================================
+make clean
+rm -f *.o
+rm -f everyotherbeam
+make
+make.version /home/radar_user/rst/usr/codebase/superdarn/src.bin/os/cp/everyotherbeam.1.0
+make.help
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/superdarn -I/home/radar_user/rst/usr/include/superdarn -m32 -c everyotherbeam.c    
+everyotherbeam.c: In function ‘main’:
+everyotherbeam.c:148:7: warning: unused variable ‘bufus’ [-Wunused-variable]
+   int bufus=0;        /*  been set to 3.0s to account for what???           */
+       ^
+everyotherbeam.c:147:7: warning: unused variable ‘bufsc’ [-Wunused-variable]
+   int bufsc=0;        /* a buffer at the end of scan; historically this has */
+       ^
+mkdir -p /home/radar_user/rst/usr/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/superdarn -I/home/radar_user/rst/usr/include/superdarn -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/usr/bin/everyotherbeam everyotherbeam.o -Wl,-Bstatic \
+                           -lsite.1 -lsite.tst.1 -lsite.cve.1 -lsite.cvw.1 -lradarshell.1 -lshmem.1 -lops.1 -lrmsgsnd.1 -ltcpipmsg.1 -lerrlog.1 -lfreq.1 -lacfex.1 -lacf.1 -lfit.1 -lraw.1 -lfitacf.1 -lcfit.1 -lrscan.1 -liqdata.1 -ltsg.1 -lradar.1 -ldmap.1 -lopt.1 -lrtime.1 -lrcnv.1 -lsite.fhe.1 -lsite.fhw.1  -Wl,-Bdynamic \
+                           -lm -lrt -lz   

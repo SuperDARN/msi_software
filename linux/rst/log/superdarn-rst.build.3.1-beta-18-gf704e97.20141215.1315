@@ -1,0 +1,269 @@
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/base/src.lib
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+1.Located Library:/home/radar_user/rst/codebase/base/src.lib/tcpip/cnx.1.15
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/base/src.lib/tcpip/cnx.1.15
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/base/src.lib/tcpip/cnx.1.15/src/../include /home/radar_user/rst/include/base 
+/home/radar_user/rst/codebase/base/src.lib/tcpip/cnx.1.15/src/../include/connex.h
+‘/home/radar_user/rst/codebase/base/src.lib/tcpip/cnx.1.15/src/../include/connex.h’ -> ‘/home/radar_user/rst/include/base/connex.h’
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/general/src.lib
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/analysis/src.lib
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/imagery/src.lib
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/superdarn/src.lib/tk
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/superdarn/src.lib/os
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+1.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/os/tcpipmsg.1.1
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/os/tcpipmsg.1.1
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/os/tcpipmsg.1.1/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/os/tcpipmsg.1.1/src/../include/tcpipmsg.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/os/tcpipmsg.1.1/src/../include/tcpipmsg.h’ -> ‘/home/radar_user/rst/include/superdarn/tcpipmsg.h’
+makeall
+Package Source Directory:/home/radar_user/rst/usr/codebase/superdarn/src.lib/tk
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+makeall
+Package Source Directory:/home/radar_user/rst/usr/codebase/superdarn/src.lib/os
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/base/src.lib
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+1.Located Library:/home/radar_user/rst/codebase/base/src.lib/tcpip/cnx.1.15
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/base/src.lib/tcpip/cnx.1.15
+================================================================================
+make clean
+rm -f *.o
+make
+make.version /home/radar_user/rst/codebase/base/src.lib/tcpip/cnx.1.15/src/..
+make.hdr /home/radar_user/rst/codebase/base/src.lib/tcpip/cnx.1.15/src/../include /home/radar_user/rst/include/base 
+/home/radar_user/rst/codebase/base/src.lib/tcpip/cnx.1.15/src/../include/connex.h
+‘/home/radar_user/rst/codebase/base/src.lib/tcpip/cnx.1.15/src/../include/connex.h’ -> ‘/home/radar_user/rst/include/base/connex.h’
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -I/home/radar_user/rst/include/base -DPOSIX -D__EXTENSIONS__ -fno-stack-protector -m32 -c connex.c    
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -I/home/radar_user/rst/include/base -DPOSIX -D__EXTENSIONS__ -fno-stack-protector -m32 -c msg.c    
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -I/home/radar_user/rst/include/base -DPOSIX -D__EXTENSIONS__ -fno-stack-protector -m32 -c err.c    
+mkdir -p /home/radar_user/rst/lib
+ar -r /home/radar_user/rst/lib/libcnx.1.15.a connex.o msg.o err.o 
+ld -shared -lm -lz  -o /home/radar_user/rst/lib/libcnx.1.15.so \
+              connex.o msg.o err.o  -Bstatic -L/home/radar_user/rst/lib 
+cd /home/radar_user/rst/lib; ln -sf libcnx.1.15.a \
+               libcnx."1".a 
+cd /home/radar_user/rst/lib; ln -sf libcnx.1.15.so \
+               libcnx."1".so 
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/general/src.lib
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/analysis/src.lib
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/imagery/src.lib
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/superdarn/src.lib/tk
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/superdarn/src.lib/os
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+1.Located Library:/home/radar_user/rst/codebase/superdarn/src.lib/os/tcpipmsg.1.1
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/superdarn/src.lib/os/tcpipmsg.1.1
+================================================================================
+make clean
+rm -f *.o
+make
+make.version /home/radar_user/rst/codebase/superdarn/src.lib/os/tcpipmsg.1.1/src/..
+make.hdr /home/radar_user/rst/codebase/superdarn/src.lib/os/tcpipmsg.1.1/src/../include /home/radar_user/rst/include/superdarn 
+/home/radar_user/rst/codebase/superdarn/src.lib/os/tcpipmsg.1.1/src/../include/tcpipmsg.h
+‘/home/radar_user/rst/codebase/superdarn/src.lib/os/tcpipmsg.1.1/src/../include/tcpipmsg.h’ -> ‘/home/radar_user/rst/include/superdarn/tcpipmsg.h’
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/superdarn  -fno-stack-protector -m32 -c tcpipmsg.c    
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/superdarn  -fno-stack-protector -m32 -c err.c    
+mkdir -p /home/radar_user/rst/lib
+ar -r /home/radar_user/rst/lib/libtcpipmsg.1.1.a tcpipmsg.o err.o
+ld -shared -lm -lz  -o /home/radar_user/rst/lib/libtcpipmsg.1.1.so \
+              tcpipmsg.o err.o -Bstatic -L/home/radar_user/rst/lib 
+cd /home/radar_user/rst/lib; ln -sf libtcpipmsg.1.1.a \
+               libtcpipmsg."1".a 
+cd /home/radar_user/rst/lib; ln -sf libtcpipmsg.1.1.so \
+               libtcpipmsg."1".so 
+makeall
+Package Source Directory:/home/radar_user/rst/usr/codebase/superdarn/src.lib/tk
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+makeall
+Package Source Directory:/home/radar_user/rst/usr/codebase/superdarn/src.lib/os
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/base/src.bin
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+1.Located Binary:/home/radar_user/rst/codebase/base/src.bin/tcpip/ipclient.1.5
+2.Located Binary:/home/radar_user/rst/codebase/base/src.bin/tcpip/ipserver.1.10
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/base/src.bin/tcpip/ipclient.1.5
+================================================================================
+make clean
+rm -f *.o
+rm -f ipclient
+make
+make.version /home/radar_user/rst/codebase/base/src.bin/tcpip/ipclient.1.5
+make.help
+./doc/ipclient.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -m32 -c ipclient.c    
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/ipclient ipclient.o -Wl,-Bstatic \
+                           -lcnx.1 -lopt.1  -Wl,-Bdynamic \
+                               
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/base/src.bin/tcpip/ipserver.1.10
+================================================================================
+make clean
+rm -f *.o
+rm -f ipserver
+make
+make.version /home/radar_user/rst/codebase/base/src.bin/tcpip/ipserver.1.10
+make.help
+./doc/ipserver.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -DPOSIX -D__EXTENSIONS__ -m32 -c log_info.c    
+log_info.c: In function ‘log_info’:
+log_info.c:37:3: warning: format not a string literal and no format arguments [-Wformat-security]
+   fprintf(stderr,date);
+   ^
+log_info.c:38:3: warning: format not a string literal and no format arguments [-Wformat-security]
+   fprintf(stderr,str);
+   ^
+log_info.c:44:3: warning: format not a string literal and no format arguments [-Wformat-security]
+   fprintf(fp,date);
+   ^
+log_info.c:45:3: warning: format not a string literal and no format arguments [-Wformat-security]
+   fprintf(fp,str);
+   ^
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -DPOSIX -D__EXTENSIONS__ -m32 -c fork.c    
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -DPOSIX -D__EXTENSIONS__ -m32 -c socket.c    
+socket.c: In function ‘create_socket’:
+socket.c:71:22: warning: variable ‘temp’ set but not used [-Wunused-but-set-variable]
+   int sc_reuseaddr=1,temp;
+                      ^
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -DPOSIX -D__EXTENSIONS__ -m32 -c connect.c    
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -DPOSIX -D__EXTENSIONS__ -m32 -c msg_mem.c    
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -DPOSIX -D__EXTENSIONS__ -m32 -c ipserver.c    
+ipserver.c: In function ‘main’:
+ipserver.c:61:14: warning: variable ‘arg’ set but not used [-Wunused-but-set-variable]
+   int port=0,arg=0;
+              ^
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -DPOSIX -D__EXTENSIONS__ -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/ipserver log_info.o fork.o socket.o connect.o msg_mem.o ipserver.o  -Wl,-Bstatic \
+                           -lcnx.1 -lopt.1  -Wl,-Bdynamic \
+                               
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/general/src.bin
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+1.Located Binary:/home/radar_user/rst/codebase/general/src.bin/tcpip/buffer_server.1.12
+2.Located Binary:/home/radar_user/rst/codebase/general/src.bin/tcpip/dmapclient.1.6
+3.Located Binary:/home/radar_user/rst/codebase/general/src.bin/tcpip/rtmultiplex.1.26
+4.Located Binary:/home/radar_user/rst/codebase/general/src.bin/tcpip/rtpoll.1.14
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/general/src.bin/tcpip/buffer_server.1.12
+================================================================================
+make clean
+rm -f *.o
+rm -f buffer_server
+make
+make.version /home/radar_user/rst/codebase/general/src.bin/tcpip/buffer_server.1.12
+make.help
+./doc/buffer_server.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -m32 -c buffer_server.c    
+buffer_server.c: In function ‘main’:
+buffer_server.c:242:22: warning: variable ‘temp’ set but not used [-Wunused-but-set-variable]
+   int sc_reuseaddr=1,temp;
+                      ^
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/buffer_server buffer_server.o -Wl,-Bstatic \
+                           -lopt.1  -Wl,-Bdynamic \
+                              
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/general/src.bin/tcpip/dmapclient.1.6
+================================================================================
+make clean
+rm -f *.o
+rm -f dmapclient
+make
+make.version /home/radar_user/rst/codebase/general/src.bin/tcpip/dmapclient.1.6
+make.help
+./doc/dmapclient.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -m32 -c dmapclient.c    
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/dmapclient dmapclient.o -Wl,-Bstatic \
+                           -lcnx.1 -ldmap.1 -lopt.1 -lrcnv.1  -Wl,-Bdynamic \
+                             -lz   
+/usr/bin/ld: skipping incompatible /home/radar_user/rst/lib/libdmap.1.a when searching for -ldmap.1
+/usr/bin/ld: cannot find -ldmap.1
+collect2: error: ld returned 1 exit status
+/home/radar_user/rst/build/base/make/makebin.linux:50: recipe for target 'dmapclient' failed
+make: *** [dmapclient] Error 1
+Compilation Aborted.

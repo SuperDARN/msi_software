@@ -1,0 +1,133 @@
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/base/src.lib
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+1.Located Library:/home/radar_user/rst/codebase/base/src.lib/math/rmath.1.7
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/base/src.lib/math/rmath.1.7
+================================================================================
+make hdr
+make.hdr /home/radar_user/rst/codebase/base/src.lib/math/rmath.1.7/src/../include /home/radar_user/rst/include/base 
+/home/radar_user/rst/codebase/base/src.lib/math/rmath.1.7/src/../include/fft.h
+‘/home/radar_user/rst/codebase/base/src.lib/math/rmath.1.7/src/../include/fft.h’ -> ‘/home/radar_user/rst/include/base/fft.h’
+/home/radar_user/rst/codebase/base/src.lib/math/rmath.1.7/src/../include/nrfit.h
+‘/home/radar_user/rst/codebase/base/src.lib/math/rmath.1.7/src/../include/nrfit.h’ -> ‘/home/radar_user/rst/include/base/nrfit.h’
+/home/radar_user/rst/codebase/base/src.lib/math/rmath.1.7/src/../include/rmath.h
+‘/home/radar_user/rst/codebase/base/src.lib/math/rmath.1.7/src/../include/rmath.h’ -> ‘/home/radar_user/rst/include/base/rmath.h’
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/general/src.lib
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/analysis/src.lib
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/imagery/src.lib
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/superdarn/src.lib/tk
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/superdarn/src.lib/os
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+makeall
+Package Source Directory:/home/radar_user/rst/usr/codebase/superdarn/src.lib/tk
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+makeall
+Package Source Directory:/home/radar_user/rst/usr/codebase/superdarn/src.lib/os
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/base/src.lib
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+1.Located Library:/home/radar_user/rst/codebase/base/src.lib/math/rmath.1.7
+================================================================================
+Compiling Library:/home/radar_user/rst/codebase/base/src.lib/math/rmath.1.7
+================================================================================
+make clean
+rm -f *.o
+make
+make.version /home/radar_user/rst/codebase/base/src.lib/math/rmath.1.7/src/..
+make.hdr /home/radar_user/rst/codebase/base/src.lib/math/rmath.1.7/src/../include /home/radar_user/rst/include/base 
+/home/radar_user/rst/codebase/base/src.lib/math/rmath.1.7/src/../include/fft.h
+‘/home/radar_user/rst/codebase/base/src.lib/math/rmath.1.7/src/../include/fft.h’ -> ‘/home/radar_user/rst/include/base/fft.h’
+/home/radar_user/rst/codebase/base/src.lib/math/rmath.1.7/src/../include/nrfit.h
+‘/home/radar_user/rst/codebase/base/src.lib/math/rmath.1.7/src/../include/nrfit.h’ -> ‘/home/radar_user/rst/include/base/nrfit.h’
+/home/radar_user/rst/codebase/base/src.lib/math/rmath.1.7/src/../include/rmath.h
+‘/home/radar_user/rst/codebase/base/src.lib/math/rmath.1.7/src/../include/rmath.h’ -> ‘/home/radar_user/rst/include/base/rmath.h’
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -I/home/radar_user/rst/include/base -m32 -c nrfit.c    
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -I/home/radar_user/rst/include/base -m32 -c fft.c    
+mkdir -p /home/radar_user/rst/lib
+ar -r /home/radar_user/rst/lib/librmath.1.7.a nrfit.o fft.o
+ld -shared -lm -lz  -o /home/radar_user/rst/lib/librmath.1.7.so \
+              nrfit.o fft.o -Bstatic -L/home/radar_user/rst/lib 
+cd /home/radar_user/rst/lib; ln -sf librmath.1.7.a \
+               librmath."1".a 
+cd /home/radar_user/rst/lib; ln -sf librmath.1.7.so \
+               librmath."1".so 
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/general/src.lib
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/analysis/src.lib
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/imagery/src.lib
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/superdarn/src.lib/tk
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/superdarn/src.lib/os
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+makeall
+Package Source Directory:/home/radar_user/rst/usr/codebase/superdarn/src.lib/tk
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+makeall
+Package Source Directory:/home/radar_user/rst/usr/codebase/superdarn/src.lib/os
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:

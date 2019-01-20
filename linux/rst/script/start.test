@@ -1,0 +1,1 @@
+normalscan -stid tst -ep 44000 -sp 44001 -bp 44100 -df 14800 -nf 10800

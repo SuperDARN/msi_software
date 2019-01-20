@@ -1,0 +1,11 @@
+#######################################################
+# File holding reciever front end settings
+# IFmode  amp1   amp2   amp3   att1  att2   att3   att4
+# RF/IF  +20db  +13db  +13db   -2db  -4db   -8db  -16db 
+#  0/1    0/1    0/1     0/1   0/1    0/1    0/1   0/1
+#  Tuned rf settings: 
+#    0     1      0       1      1      1      0      0
+#  Tuned if settings: 
+#    1     1      1       1      0      0      0      0
+#######################################################
+    1     1      1       1      0      0      0      0

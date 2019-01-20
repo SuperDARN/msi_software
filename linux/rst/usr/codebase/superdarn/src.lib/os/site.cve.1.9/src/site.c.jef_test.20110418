@@ -1,0 +1,446 @@
+/* site.c
+   ====== 
+   Author R.J.Barnes
+*/
+
+/*
+ $License$
+*/
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <sys/types.h>
+#include <sys/time.h>
+#include <errno.h>
+#include <time.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <string.h>
+#include <math.h>
+#include "rtypes.h"
+#include "limit.h"
+#include "tsg.h"
+#include "maketsg.h"
+#include "acf.h"
+#include "acfex.h"
+#include "tcpipmsg.h"
+#include "rosmsg.h"
+#include "shmem.h"
+#include "global.h"
+#include "site.h"
+#include "siteglobal.h"
+
+#define REAL_BUF_OFFSET 0
+#define IMAG_BUF_OFFSET 1
+#define USEC 1000000.0
+int CVE_exit_flag=0;
+
+void SiteCveExit(int signum) {
+
+  struct ROSMsg msg;
+  switch(signum) {
+    case 2:
+      cancel_count++;
+      CVE_exit_flag=signum;
+      printf("SiteCveExit: Sig 2: %d\n",CVE_exit_flag); 
+      if (cancel_count < 3 )
+        break;
+    case 0:
+      /*printf("SiteCveExit: Sig 0: %d\n",CVE_exit_flag); */
+      if(CVE_exit_flag!=0) {
+        msg.type=QUIT;
+        TCPIPMsgSend(sock, &msg, sizeof(struct ROSMsg));
+        TCPIPMsgRecv(sock, &msg, sizeof(struct ROSMsg));
+        if (debug) {
+          fprintf(stderr,"QUIT:type=%c\n",msg.type);
+          fprintf(stderr,"QUIT:status=%d\n",msg.status);
+        }
+        close(sock);
+        if (samples !=NULL)
+          ShMemFree((unsigned char *) samples,sharedmemory,IQBUFSIZE,1,shmemfd);
+        exit(errno);
+      } 
+      break;
+    default:
+      printf("SiteCveExit: Sig %d: %d\n",signum,CVE_exit_flag); 
+      if(CVE_exit_flag==0) {
+        CVE_exit_flag=signum;
+      }
+      break;
+  }
+}
+
+
+int SiteCveStart() {
+
+  signal(SIGPIPE,SiteCveExit);
+  signal(SIGINT,SiteCveExit);
+  signal(SIGUSR1,SiteCveExit);
+  CVE_exit_flag=0;
+  cancel_count=0;
+  /*debug=1;*/
+  sock=0;
+/*  strcpy(server,"127.0.0.1"); */
+  strcpy(server,"192.168.7.5");
+  port=45000;
+/* Radar number to register */
+  rnum=1;
+/* Channel number to register */
+  cnum=1;
+/* Beam Scan Direction settings */
+  backward=0;
+/*  sbm=4;
+ *    ebm=19; */
+  sbm=0;        /* full 24 beams */
+  ebm=23;
+
+/* day/night times for December in Bismarck, ND ~ halfway out */
+/*      day=8+6;*/
+/*      night=18+6;*/
+/*      night=0;*/
+
+/*      day=16;         changed 20110210 */
+/*      night=1;        changed 20110210 */
+
+        day=15;         /* changed 20110321 */
+        night=3;        /* changed 20110321 */
+
+/* rxchn number of channels typically 1*/
+/* rngoff argument in ACFCalculate.. is 2*rxchn and is normally set to 2 */
+  rxchn=1;
+  if (debug) {
+    fprintf(stderr,"SiteCveStart: rxchn=%d\n",rxchn);
+  } 
+  return 0;
+}
+
+
+
+
+int SiteCveSetupRadar() {
+
+  int32 temp32,data_length;;
+  char ini_entry_name[80];
+  char requested_entry_type,returned_entry_type;
+  struct ROSMsg smsg,rmsg;
+
+  if ((sock=TCPIPMsgOpen(server,port)) == -1) {
+    return -1;
+  }
+  smsg.type=SET_RADAR_CHAN;
+  TCPIPMsgSend(sock, &smsg,sizeof(struct ROSMsg)); 
+  temp32=rnum;
+  TCPIPMsgSend(sock, &temp32, sizeof(int32)); 
+  temp32=cnum;
+  TCPIPMsgSend(sock, &temp32, sizeof(int32));
+  TCPIPMsgRecv(sock, &rmsg, sizeof(struct ROSMsg)); 
+  if (rmsg.status < 0) {
+    fprintf(stderr,"Requested radar channel unavailable\nSleeping 1 second and exiting\n");
+    sleep(1);
+    exit(0); 
+  } 
+  if (debug) {
+    fprintf(stderr,"SET_RADAR_CHAN:type=%c\n",rmsg.type);
+    fprintf(stderr,"SET_RADAR_CHAN:status=%d\n",rmsg.status);
+  }
+  smsg.type=QUERY_INI_SETTINGS;
+  TCPIPMsgSend(sock, &smsg, sizeof(struct ROSMsg));
+  sprintf(ini_entry_name,"site_settings:ifmode");  
+  requested_entry_type='b';  
+  returned_entry_type=' ';  
+  temp32=-1;
+  ifmode=-1;
+  data_length=strlen(ini_entry_name);
+  TCPIPMsgSend(sock, &data_length, sizeof(int32));
+  TCPIPMsgSend(sock, &ini_entry_name, data_length*sizeof(char));
+  TCPIPMsgSend(sock, &requested_entry_type, sizeof(char));
+  TCPIPMsgRecv(sock, &returned_entry_type, sizeof(char));
+  TCPIPMsgRecv(sock, &data_length, sizeof(int32));
+  if((returned_entry_type==requested_entry_type)  ) {
+    TCPIPMsgRecv(sock, &temp32, sizeof(int32));
+  } 
+  TCPIPMsgRecv(sock, &rmsg, sizeof(struct ROSMsg));
+  if (debug) {
+    fprintf(stderr,"QUERY_INI_SETTINGS:type=%c\n",rmsg.type);
+    fprintf(stderr,"QUERY_INI_SETTINGS:status=%d\n",rmsg.status);
+    fprintf(stderr,"QUERY_INI_SETTINGS:entry_name=%s\n",ini_entry_name);
+    fprintf(stderr,"QUERY_INI_SETTINGS:entry_type=%c\n",returned_entry_type);
+    fprintf(stderr,"QUERY_INI_SETTINGS:entry_value=%d\n",temp32);
+  }
+  if((rmsg.status) && (temp32>=0) ) ifmode=temp32;
+  if((ifmode!=0) && (ifmode!=1)) {
+    fprintf(stderr,"QUERY_INI_SETTINGS: Bad IFMODE)\n");
+    exit(0); 
+  }
+  smsg.type=GET_PARAMETERS;
+  TCPIPMsgSend(sock, &smsg, sizeof(struct ROSMsg));
+  TCPIPMsgRecv(sock, &rprm, sizeof(struct ControlPRM));
+  TCPIPMsgRecv(sock, &rmsg, sizeof(struct ROSMsg));
+  if (debug) {
+    fprintf(stderr,"GET_PARAMETERS:type=%c\n",rmsg.type);
+    fprintf(stderr,"GET_PARAMETERS:status=%d\n",rmsg.status);
+  }
+
+  sprintf(sharedmemory,"IQBuff_Cve_%d_%d",rnum,cnum);
+
+
+  samples=(int16 *)
+    ShMemAlloc(sharedmemory,IQBUFSIZE,O_RDWR | O_CREAT,1,&shmemfd);
+
+  return 0;
+}
+
+ 
+int SiteCveStartScan() {
+  return 0;
+}
+
+
+
+int SiteCveStartIntt(int sec,int usec) {
+
+  struct ROSMsg smsg,rmsg;
+  int total_samples=0;
+  SiteCveExit(0);
+  if (debug) {
+    fprintf(stderr,"SiteCveStartInt: start\n");
+  }
+  total_samples=tsgprm.samples+tsgprm.smdelay;
+  smsg.type=PING; 
+  TCPIPMsgSend(sock, &smsg, sizeof(struct ROSMsg));
+  TCPIPMsgRecv(sock, &rmsg, sizeof(struct ROSMsg));
+  if (debug) {
+    fprintf(stderr,"PING:type=%c\n",rmsg.type);
+    fprintf(stderr,"PING:status=%d\n",rmsg.status);
+  }
+
+  smsg.type=GET_PARAMETERS;  
+  TCPIPMsgSend(sock, &smsg, sizeof(struct ROSMsg));
+  TCPIPMsgRecv(sock, &rprm, sizeof(struct ControlPRM));
+  TCPIPMsgRecv(sock, &rmsg, sizeof(struct ROSMsg));
+  if (debug) {
+    fprintf(stderr,"GET_PARAMETERS:type=%c\n",rmsg.type);
+    fprintf(stderr,"GET_PARAMETERS:status=%d\n",rmsg.status);
+  }
+
+  rprm.tbeam=bmnum;   
+  rprm.tfreq=12000;   
+  rprm.trise=5000;   
+  rprm.baseband_samplerate=((double)nbaud/(double)txpl)*1E6; 
+  rprm.filter_bandwidth=rprm.baseband_samplerate; 
+  rprm.match_filter=1;
+  rprm.number_of_samples=total_samples+nbaud+10; 
+
+  smsg.type=SET_PARAMETERS;
+  TCPIPMsgSend(sock,&smsg,sizeof(struct ROSMsg));
+  TCPIPMsgSend(sock,&rprm,sizeof(struct ControlPRM));
+  TCPIPMsgRecv(sock,&rmsg,sizeof(struct ROSMsg));
+  if (debug) {
+    fprintf(stderr,"SET_PARAMETERS:type=%c\n",rmsg.type);
+    fprintf(stderr,"SET_PARAMETERS:status=%d\n",rmsg.status);
+  }
+
+  if (gettimeofday(&tock,NULL)==-1) return -1;
+  tock.tv_sec+=sec;
+  tock.tv_usec+=usec;
+
+  if (debug) {
+    fprintf(stderr,"SiteCveStartInt: end\n");
+  }
+  return 0;
+
+
+}
+
+
+int SiteCveFCLR(int stfreq,int edfreq) {
+  int32 tfreq;
+  struct ROSMsg smsg,rmsg;
+  struct CLRFreqPRM fprm;
+  int total_samples=0;
+
+  SiteCveExit(0);
+
+  return 0;
+}
+
+
+
+int SiteCveTimeSeq(int *ptab) {
+
+  int i;
+  int flag,index=0;
+  struct ROSMsg smsg,rmsg;
+
+  struct SeqPRM tprm;
+  SiteCveExit(0);
+  if (tsgbuf !=NULL) TSGFree(tsgbuf);
+  if (tsgprm.pat !=NULL) free(tsgprm.pat);
+  memset(&tsgprm,0,sizeof(struct TSGprm));
+
+  tsgprm.nrang=nrang;         
+  tsgprm.frang=frang;
+  tsgprm.rtoxmin=0;      
+  tsgprm.stdelay=18+2;
+  tsgprm.gort=1;
+  tsgprm.rsep=rsep;          
+  tsgprm.smsep=smsep;
+  tsgprm.txpl=txpl; 
+  tsgprm.mpinc=mpinc;
+  tsgprm.mppul=mppul; 
+  tsgprm.mlag=0;
+  tsgprm.nbaud=nbaud;
+  tsgprm.code=pcode;
+  tsgprm.pat=malloc(sizeof(int)*tsgprm.mppul);
+  for (i=0;i<tsgprm.mppul;i++) tsgprm.pat[i]=ptab[i];
+
+  tsgbuf=TSGMake(&tsgprm,&flag);
+
+  if (tsgbuf==NULL) return -1;
+
+  tprm.index=index;
+/*  memcpy(&tprm.buf,tsgbuf,sizeof(struct TSGbuf));*/
+  tprm.len=tsgbuf->len;
+  tprm.step=CLOCK_PERIOD;
+  tprm.samples=tsgprm.samples;
+  tprm.smdelay=tsgprm.smdelay;
+
+  smsg.type=REGISTER_SEQ;
+  TCPIPMsgSend(sock, &smsg, sizeof(struct ROSMsg));
+  TCPIPMsgSend(sock, &tprm, sizeof(struct SeqPRM));
+  TCPIPMsgSend(sock, tsgbuf->rep, sizeof(unsigned char)*tprm.len);
+  TCPIPMsgSend(sock, tsgbuf->code, sizeof(unsigned char)*tprm.len);
+  TCPIPMsgRecv(sock, &rmsg, sizeof(struct ROSMsg));
+  if (debug) {
+    fprintf(stderr,"REGISTER_SEQ:type=%c\n",rmsg.type);
+    fprintf(stderr,"REGISTER_SEQ:status=%d\n",rmsg.status);
+  }
+
+  if (rmsg.status !=1) return -1;
+
+  lagfr=tsgprm.lagfr;
+  smsep=tsgprm.smsep;
+  txpl=tsgprm.txpl;
+
+  return index;
+}
+
+int SiteCveIntegrate(int (*lags)[2]) {
+
+  int *lagtable[2]={NULL,NULL};
+  int lagsum[LAG_SIZE];
+
+  int badrng=0;
+  int i,j;
+  int roff=REAL_BUF_OFFSET;
+  int ioff=IMAG_BUF_OFFSET;
+  int rngoff=2;
+
+  struct timeval tick;
+  struct timeval tack;
+  double tval=0,tavg=0;
+
+  struct ROSMsg smsg,rmsg;
+
+  int iqoff=0; /* Sequence offset in bytes for current sequence relative to start of samples buffer*/
+  int iqsze=0; /* Total number of bytes so far recorded into samples buffer*/
+
+  int nave=0;
+
+  int atstp=0;
+  int thr=0,lmt=0;
+  int aflg=0,abflg=0;
+  void * dest; /*AJ*/
+  int total_samples=0; /*AJ*/
+
+  short I,Q;
+
+  /* phase code declarations */
+  int n,nsamp, *code,   Iout, Qout;
+  if (debug) {
+    fprintf(stderr,"CVE SiteIntegrate: start\n");
+  }
+  SiteCveExit(0);
+  gettimeofday(&tick,NULL);
+  gettimeofday(&tack,NULL);
+
+
+  while (1) {
+    tval=(tick.tv_sec+tick.tv_usec/1.0e6)-
+         (tack.tv_sec+tack.tv_usec/1.0e6);
+
+    if (nave>0) tavg=tval/nave; 
+     
+    tick.tv_sec+=floor(tavg);
+    tick.tv_usec+=1.0e6*(tavg-floor(tavg));
+
+    if (tick.tv_sec>tock.tv_sec) break;
+    if ((tick.tv_sec>=tock.tv_sec) && (tick.tv_usec>tock.tv_usec)) break;
+
+   usleep(100000);  /* 100 millisecond sleep */
+   nave++;
+   gettimeofday(&tick,NULL);
+
+
+  }
+   SiteCveExit(0);
+   return nave;
+}
+
+int SiteCveEndScan(int bsc,int bus) {
+
+  struct ROSMsg smsg,rmsg;
+  
+  struct timeval tock;
+  struct timeval tick;
+  double bnd;
+  double tme;
+  int count=0;
+  SiteCveExit(0);
+  bnd=bsc+bus/USEC;
+
+  if (gettimeofday(&tock,NULL)==-1) return -1;
+
+  tme=tock.tv_sec+tock.tv_usec/USEC;
+  tme=bnd*floor(1.0+tme/bnd);
+  tock.tv_sec=tme;
+  tock.tv_usec=(tme-floor(tme))*USEC;
+
+  smsg.type=SET_INACTIVE;
+  TCPIPMsgSend(sock, &smsg, sizeof(struct ROSMsg));
+  TCPIPMsgRecv(sock, &rmsg, sizeof(struct ROSMsg));
+
+  gettimeofday(&tick,NULL);
+  while (1) {
+    if (tick.tv_sec>tock.tv_sec) break;
+    if ((tick.tv_sec==tock.tv_sec) && (tick.tv_usec>tock.tv_usec)) break;
+    smsg.type=PING;
+    TCPIPMsgSend(sock, &smsg, sizeof(struct ROSMsg));
+    TCPIPMsgRecv(sock, &rmsg, sizeof(struct ROSMsg));
+
+    if (debug) {
+      fprintf(stderr,"PING:type=%c\n",rmsg.type);
+      fprintf(stderr,"PING:status=%d\n",rmsg.status);
+      fprintf(stderr,"PING:count=%d\n",count);
+      fflush(stderr);
+    }
+    count++;
+    usleep(50000);
+    gettimeofday(&tick,NULL);
+  }
+
+  smsg.type=SET_ACTIVE;
+  TCPIPMsgSend(sock, &smsg, sizeof(struct ROSMsg));
+  TCPIPMsgRecv(sock, &rmsg, sizeof(struct ROSMsg));
+
+  return 0;
+}
+
+
+
+
+
+
+

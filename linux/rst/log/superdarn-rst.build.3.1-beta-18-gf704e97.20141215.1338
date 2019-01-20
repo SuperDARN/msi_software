@@ -1,0 +1,702 @@
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/base/src.bin
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+1.Located Binary:/home/radar_user/rst/codebase/base/src.bin/build/addtext.1.6
+2.Located Binary:/home/radar_user/rst/codebase/base/src.bin/build/makeall.1.20
+3.Located Binary:/home/radar_user/rst/codebase/base/src.bin/build/maketree.1.1
+4.Located Binary:/home/radar_user/rst/codebase/base/src.bin/memory/shmemrecv.1.2
+5.Located Binary:/home/radar_user/rst/codebase/base/src.bin/memory/shmemsend.1.2
+6.Located Binary:/home/radar_user/rst/codebase/base/src.bin/tcpip/ipclient.1.5
+7.Located Binary:/home/radar_user/rst/codebase/base/src.bin/tcpip/ipserver.1.10
+8.Located Binary:/home/radar_user/rst/codebase/base/src.bin/xmldoc/scdoc.1.3
+9.Located Binary:/home/radar_user/rst/codebase/base/src.bin/xmldoc/xmldoc.1.5
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/base/src.bin/build/addtext.1.6
+================================================================================
+make clean
+rm -f *.o
+rm -f addtext
+make
+make.version /home/radar_user/rst/codebase/base/src.bin/build/addtext.1.6
+make.help
+./doc/addtext.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector  -m32 -c addtext.c    
+addtext.c: In function ‘print_info’:
+addtext.c:25:3: warning: format not a string literal and no format arguments [-Wformat-security]
+   for (i=0;str[i] !=NULL;i++) fprintf(fp,str[i]);
+   ^
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector  -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/addtext addtext.o   -Wl,-Bstatic \
+                             -Wl,-Bdynamic \
+                              
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/base/src.bin/build/makeall.1.20
+================================================================================
+make clean
+rm -f *.o
+rm -f makeall
+make
+make.version /home/radar_user/rst/codebase/base/src.bin/build/makeall.1.20
+make.help
+./doc/makeall.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector  -m32 -c makeall.c    
+makeall.c: In function ‘log_info’:
+makeall.c:48:3: warning: format not a string literal and no format arguments [-Wformat-security]
+   if (vbflg==1) fprintf(stderr,text);
+   ^
+makeall.c:49:3: warning: format not a string literal and no format arguments [-Wformat-security]
+   fprintf(stdout,text);
+   ^
+makeall.c: In function ‘print_info’:
+makeall.c:253:3: warning: format not a string literal and no format arguments [-Wformat-security]
+   for (i=0;str[i] !=NULL;i++) fprintf(fp,str[i]);
+   ^
+makeall.c: In function ‘do_make’:
+makeall.c:68:5: warning: ignoring return value of ‘freopen’, declared with attribute warn_unused_result [-Wunused-result]
+     freopen(tmpname,"a+",stderr);
+     ^
+makeall.c:69:5: warning: ignoring return value of ‘freopen’, declared with attribute warn_unused_result [-Wunused-result]
+     freopen(tmpname,"a+",stdout);
+     ^
+makeall.c: In function ‘main’:
+makeall.c:374:5: warning: ignoring return value of ‘chdir’, declared with attribute warn_unused_result [-Wunused-result]
+     chdir(path);
+     ^
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector  -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/makeall makeall.o -Wl,-Bstatic \
+                             -Wl,-Bdynamic \
+                           -lm   
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/base/src.bin/build/maketree.1.1
+================================================================================
+make clean
+rm -f *.o
+rm -f maketree
+make
+make.version /home/radar_user/rst/codebase/base/src.bin/build/maketree.1.1
+make.help
+./doc/maketree.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector  -m32 -c maketree.c    
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector  -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/maketree maketree.o -Wl,-Bstatic \
+                             -Wl,-Bdynamic \
+                           -lm   
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/base/src.bin/memory/shmemrecv.1.2
+================================================================================
+make clean
+rm -f *.o
+rm -f shmemrecv
+make
+make.version /home/radar_user/rst/codebase/base/src.bin/memory/shmemrecv.1.2
+make.help
+./doc/shmemrecv.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -m32 -c shmemrecv.c    
+shmemrecv.c: In function ‘main’:
+shmemrecv.c:32:5: warning: format not a string literal and no format arguments [-Wformat-security]
+     fprintf(stdout,date);
+     ^
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/shmemrecv shmemrecv.o -Wl,-Bstatic \
+                           -lopt.1 -lshmem.1  -Wl,-Bdynamic \
+                           -lm -lrt   
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/base/src.bin/memory/shmemsend.1.2
+================================================================================
+make clean
+rm -f *.o
+rm -f shmemsend
+make
+make.version /home/radar_user/rst/codebase/base/src.bin/memory/shmemsend.1.2
+make.help
+./doc/shmemsend.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -m32 -c shmemsend.c    
+shmemsend.c: In function ‘main’:
+shmemsend.c:46:5: warning: format not a string literal and no format arguments [-Wformat-security]
+     fprintf(stdout,date);
+     ^
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/shmemsend shmemsend.o -Wl,-Bstatic \
+                           -lopt.1 -lshmem.1  -Wl,-Bdynamic \
+                           -lm -lrt   
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/base/src.bin/tcpip/ipclient.1.5
+================================================================================
+make clean
+rm -f *.o
+rm -f ipclient
+make
+make.version /home/radar_user/rst/codebase/base/src.bin/tcpip/ipclient.1.5
+make.help
+./doc/ipclient.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -m32 -c ipclient.c    
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/ipclient ipclient.o -Wl,-Bstatic \
+                           -lcnx.1 -lopt.1  -Wl,-Bdynamic \
+                               
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/base/src.bin/tcpip/ipserver.1.10
+================================================================================
+make clean
+rm -f *.o
+rm -f ipserver
+make
+make.version /home/radar_user/rst/codebase/base/src.bin/tcpip/ipserver.1.10
+make.help
+./doc/ipserver.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -DPOSIX -D__EXTENSIONS__ -m32 -c log_info.c    
+log_info.c: In function ‘log_info’:
+log_info.c:37:3: warning: format not a string literal and no format arguments [-Wformat-security]
+   fprintf(stderr,date);
+   ^
+log_info.c:38:3: warning: format not a string literal and no format arguments [-Wformat-security]
+   fprintf(stderr,str);
+   ^
+log_info.c:44:3: warning: format not a string literal and no format arguments [-Wformat-security]
+   fprintf(fp,date);
+   ^
+log_info.c:45:3: warning: format not a string literal and no format arguments [-Wformat-security]
+   fprintf(fp,str);
+   ^
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -DPOSIX -D__EXTENSIONS__ -m32 -c fork.c    
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -DPOSIX -D__EXTENSIONS__ -m32 -c socket.c    
+socket.c: In function ‘create_socket’:
+socket.c:71:22: warning: variable ‘temp’ set but not used [-Wunused-but-set-variable]
+   int sc_reuseaddr=1,temp;
+                      ^
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -DPOSIX -D__EXTENSIONS__ -m32 -c connect.c    
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -DPOSIX -D__EXTENSIONS__ -m32 -c msg_mem.c    
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -DPOSIX -D__EXTENSIONS__ -m32 -c ipserver.c    
+ipserver.c: In function ‘main’:
+ipserver.c:61:14: warning: variable ‘arg’ set but not used [-Wunused-but-set-variable]
+   int port=0,arg=0;
+              ^
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -DPOSIX -D__EXTENSIONS__ -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/ipserver log_info.o fork.o socket.o connect.o msg_mem.o ipserver.o  -Wl,-Bstatic \
+                           -lcnx.1 -lopt.1  -Wl,-Bdynamic \
+                               
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/base/src.bin/xmldoc/scdoc.1.3
+================================================================================
+make clean
+rm -f *.o
+rm -f scdoc
+make
+make.version /home/radar_user/rst/codebase/base/src.bin/xmldoc/scdoc.1.3
+make.help
+./doc/scdoc.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -m32 -c scdoc.c    
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/scdoc scdoc.o  -Wl,-Bstatic \
+                           -lrscript.1 -lrxmldoc.1 -ltagdb.1 -lrxmldb.1 -lrxml.1 -lopt.1   -Wl,-Bdynamic \
+                           -lm   
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/base/src.bin/xmldoc/xmldoc.1.5
+================================================================================
+make clean
+rm -f *.o
+rm -f xmldoc
+make
+make.version /home/radar_user/rst/codebase/base/src.bin/xmldoc/xmldoc.1.5
+make.help
+./doc/xmldoc.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -m32 -c loadconfig.c    
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -m32 -c xmldoc.c    
+xmldoc.c: In function ‘render’:
+xmldoc.c:120:22: warning: variable ‘doc’ set but not used [-Wunused-but-set-variable]
+   struct XMLdocdata *doc;
+                      ^
+xmldoc.c: In function ‘main’:
+xmldoc.c:347:3: warning: ignoring return value of ‘chdir’, declared with attribute warn_unused_result [-Wunused-result]
+   chdir(argv[arg]);
+   ^
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/xmldoc loadconfig.o xmldoc.o  -Wl,-Bstatic \
+                           -lrscript.1 -lrxmldoc.1 -ltagdb.1 -lrxmldb.1 -lrxml.1 -lopt.1   -Wl,-Bdynamic \
+                           -lm   
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/general/src.bin
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+1.Located Binary:/home/radar_user/rst/codebase/general/src.bin/dmap/dmapblkinx.1.5
+2.Located Binary:/home/radar_user/rst/codebase/general/src.bin/dmap/dmapdump.1.10
+3.Located Binary:/home/radar_user/rst/codebase/general/src.bin/dmap/dmaptocdl.1.8
+4.Located Binary:/home/radar_user/rst/codebase/general/src.bin/dmap/dmaptoskeleton.1.7
+5.Located Binary:/home/radar_user/rst/codebase/general/src.bin/dmap/inxdump.1.5
+6.Located Binary:/home/radar_user/rst/codebase/general/src.bin/rfile/index_file.1.3
+7.Located Binary:/home/radar_user/rst/codebase/general/src.bin/task/eval.1.3
+8.Located Binary:/home/radar_user/rst/codebase/general/src.bin/tcpip/buffer_server.1.12
+9.Located Binary:/home/radar_user/rst/codebase/general/src.bin/tcpip/dmapclient.1.6
+10.Located Binary:/home/radar_user/rst/codebase/general/src.bin/tcpip/rtmultiplex.1.26
+11.Located Binary:/home/radar_user/rst/codebase/general/src.bin/tcpip/rtpoll.1.14
+12.Located Binary:/home/radar_user/rst/codebase/general/src.bin/text/etime.1.7
+13.Located Binary:/home/radar_user/rst/codebase/general/src.bin/text/invtime.1.2
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/general/src.bin/dmap/dmapblkinx.1.5
+================================================================================
+make clean
+rm -f *.o
+rm -f dmapblkinx
+make
+make.version /home/radar_user/rst/codebase/general/src.bin/dmap/dmapblkinx.1.5
+make.help
+./doc/dmapblkinx.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general  -m32 -c dmapblkinx.c    
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general  -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/dmapblkinx dmapblkinx.o -Wl,-Bstatic \
+                           -lopt.1 -ldmap.1 -lrcnv.1  -Wl,-Bdynamic \
+                           -lm -lz   
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/general/src.bin/dmap/dmapdump.1.10
+================================================================================
+make clean
+rm -f *.o
+rm -f dmapdump
+make
+make.version /home/radar_user/rst/codebase/general/src.bin/dmap/dmapdump.1.10
+make.help
+./doc/dmapdump.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general  -m32 -c dmapdump.c    
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general  -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/dmapdump dmapdump.o -Wl,-Bstatic \
+                           -lopt.1 -ldmap.1 -lrcnv.1  -Wl,-Bdynamic \
+                           -lm -lz   
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/general/src.bin/dmap/dmaptocdl.1.8
+================================================================================
+make clean
+rm -f *.o
+rm -f dmaptocdl
+make
+make.version /home/radar_user/rst/codebase/general/src.bin/dmap/dmaptocdl.1.8
+make.help
+./doc/dmaptocdl.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general  -m32 -c dmaptocdl.c    
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general  -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/dmaptocdl dmaptocdl.o -Wl,-Bstatic \
+                           -lopt.1 -ldmap.1 -lrcnv.1  -Wl,-Bdynamic \
+                           -lm -lz   
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/general/src.bin/dmap/dmaptoskeleton.1.7
+================================================================================
+make clean
+rm -f *.o
+rm -f dmaptoskeleton
+make
+make.version /home/radar_user/rst/codebase/general/src.bin/dmap/dmaptoskeleton.1.7
+make.help
+./doc/dmaptoskeleton.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general  -m32 -c dmaptoskeleton.c    
+dmaptoskeleton.c: In function ‘main’:
+dmaptoskeleton.c:321:5: warning: format not a string literal and no format arguments [-Wformat-security]
+     fprintf(fp,buf);
+     ^
+dmaptoskeleton.c:371:5: warning: format not a string literal and no format arguments [-Wformat-security]
+     fprintf(fp,buf);
+     ^
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general  -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/dmaptoskeleton dmaptoskeleton.o -Wl,-Bstatic \
+                           -lopt.1 -ldmap.1 -lrcnv.1  -Wl,-Bdynamic \
+                           -lm -lz   
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/general/src.bin/dmap/inxdump.1.5
+================================================================================
+make clean
+rm -f *.o
+rm -f inxdump
+make
+make.version /home/radar_user/rst/codebase/general/src.bin/dmap/inxdump.1.5
+make.help
+./doc/inxdump.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general  -m32 -c inxdump.c    
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general  -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/inxdump inxdump.o -Wl,-Bstatic \
+                           -lopt.1 -lrtime.1 -lrcnv.1  -Wl,-Bdynamic \
+                           -lm -lz   
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/general/src.bin/rfile/index_file.1.3
+================================================================================
+make clean
+rm -f *.o
+rm -f index_file
+make
+make.version /home/radar_user/rst/codebase/general/src.bin/rfile/index_file.1.3
+make.help
+./doc/index_file.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -m32 -c index_file.c    
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/index_file index_file.o -Wl,-Bstatic \
+                           -lopt.1 -lrfile.1 -lrcnv.1 -lrtime.1  -Wl,-Bdynamic \
+                           -lm -lz   
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/general/src.bin/task/eval.1.3
+================================================================================
+make clean
+rm -f *.o
+rm -f eval
+make
+make.version /home/radar_user/rst/codebase/general/src.bin/task/eval.1.3
+make.help
+./doc/eval.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/analysis -I/home/radar_user/rst/include/imagery -m32 -c eval.c    
+eval.c: In function ‘main’:
+eval.c:183:7: warning: variable ‘s’ set but not used [-Wunused-but-set-variable]
+   int s;
+       ^
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/analysis -I/home/radar_user/rst/include/imagery -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/eval eval.o -Wl,-Bstatic \
+                           -lreval.1 -lopt.1   -Wl,-Bdynamic \
+                           -lm   
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/general/src.bin/tcpip/buffer_server.1.12
+================================================================================
+make clean
+rm -f *.o
+rm -f buffer_server
+make
+make.version /home/radar_user/rst/codebase/general/src.bin/tcpip/buffer_server.1.12
+make.help
+./doc/buffer_server.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -m32 -c buffer_server.c    
+buffer_server.c: In function ‘main’:
+buffer_server.c:242:22: warning: variable ‘temp’ set but not used [-Wunused-but-set-variable]
+   int sc_reuseaddr=1,temp;
+                      ^
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/buffer_server buffer_server.o -Wl,-Bstatic \
+                           -lopt.1  -Wl,-Bdynamic \
+                              
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/general/src.bin/tcpip/dmapclient.1.6
+================================================================================
+make clean
+rm -f *.o
+rm -f dmapclient
+make
+make.version /home/radar_user/rst/codebase/general/src.bin/tcpip/dmapclient.1.6
+make.help
+./doc/dmapclient.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -m32 -c dmapclient.c    
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/dmapclient dmapclient.o -Wl,-Bstatic \
+                           -lcnx.1 -ldmap.1 -lopt.1 -lrcnv.1  -Wl,-Bdynamic \
+                             -lz   
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/general/src.bin/tcpip/rtmultiplex.1.26
+================================================================================
+make clean
+rm -f *.o
+rm -f rtmultiplex
+make
+make.version /home/radar_user/rst/codebase/general/src.bin/tcpip/rtmultiplex.1.26
+make.help
+./doc/rtmultiplex.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/superdarn -DPOSIX -D__EXTENSIONS__ -m32 -c rtmultiplex.c    
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/superdarn -DPOSIX -D__EXTENSIONS__ -m32 -c loginfo.c    
+loginfo.c: In function ‘loginfo’:
+loginfo.c:39:3: warning: format not a string literal and no format arguments [-Wformat-security]
+   fprintf(stderr,date);
+   ^
+loginfo.c:40:3: warning: format not a string literal and no format arguments [-Wformat-security]
+   fprintf(stderr,pid);
+   ^
+loginfo.c:41:3: warning: format not a string literal and no format arguments [-Wformat-security]
+   fprintf(stderr,str);
+   ^
+loginfo.c:54:3: warning: format not a string literal and no format arguments [-Wformat-security]
+   fprintf(fp,date);
+   ^
+loginfo.c:55:3: warning: format not a string literal and no format arguments [-Wformat-security]
+   fprintf(fp,pid);
+   ^
+loginfo.c:56:3: warning: format not a string literal and no format arguments [-Wformat-security]
+   fprintf(fp,str);
+   ^
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/superdarn -DPOSIX -D__EXTENSIONS__ -m32 -c fork.c    
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/superdarn -DPOSIX -D__EXTENSIONS__ -m32 -c socket.c    
+socket.c: In function ‘logtime’:
+socket.c:63:28: warning: variable ‘s’ set but not used [-Wunused-but-set-variable]
+   int yr,mo,dy,hr,mt,sc,us,s;
+                            ^
+socket.c:61:16: warning: variable ‘flock’ set but not used [-Wunused-but-set-variable]
+   struct flock flock;
+                ^
+socket.c: In function ‘createsocket’:
+socket.c:110:22: warning: variable ‘temp’ set but not used [-Wunused-but-set-variable]
+   int sc_reuseaddr=1,temp;
+                      ^
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/superdarn -DPOSIX -D__EXTENSIONS__ -m32 -c msgmem.c    
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/superdarn -DPOSIX -D__EXTENSIONS__ -m32 -c connect.c    
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/superdarn -DPOSIX -D__EXTENSIONS__ -m32 -c pipe.c    
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/superdarn -DPOSIX -D__EXTENSIONS__ -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/rtmultiplex rtmultiplex.o loginfo.o fork.o socket.o msgmem.o connect.o pipe.o -Wl,-Bstatic \
+                           -lrtime.1 -lcnx.1 -lopt.1 -lrcnv.1   -Wl,-Bdynamic \
+                               
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/general/src.bin/tcpip/rtpoll.1.14
+================================================================================
+make clean
+rm -f *.o
+rm -f rtpoll
+make
+make.version /home/radar_user/rst/codebase/general/src.bin/tcpip/rtpoll.1.14
+make.help
+./doc/rtpoll.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -m32 -c rtpoll.c    
+rtpoll.c: In function ‘main’:
+rtpoll.c:51:7: warning: variable ‘status’ set but not used [-Wunused-but-set-variable]
+   int status;
+       ^
+rtpoll.c:50:14: warning: variable ‘rc’ set but not used [-Wunused-but-set-variable]
+   int fildes,rc;
+              ^
+rtpoll.c:150:10: warning: ignoring return value of ‘system’, declared with attribute warn_unused_result [-Wunused-result]
+          system(command);
+          ^
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -m32 -c log_info.c    
+log_info.c: In function ‘log_info’:
+log_info.c:35:3: warning: format not a string literal and no format arguments [-Wformat-security]
+   fprintf(stderr,date);
+   ^
+log_info.c:36:3: warning: format not a string literal and no format arguments [-Wformat-security]
+   fprintf(stderr,str);
+   ^
+log_info.c:44:3: warning: format not a string literal and no format arguments [-Wformat-security]
+   fprintf(fp,date);
+   ^
+log_info.c:45:3: warning: format not a string literal and no format arguments [-Wformat-security]
+   fprintf(fp,str);
+   ^
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/rtpoll rtpoll.o log_info.o -Wl,-Bstatic \
+                           -lrtime.1 -lopt.1   -Wl,-Bdynamic \
+                           -lm   
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/general/src.bin/text/etime.1.7
+================================================================================
+make clean
+rm -f *.o
+rm -f etime
+make
+make.version /home/radar_user/rst/codebase/general/src.bin/text/etime.1.7
+make.help
+./doc/etime.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -m32 -c etime.c    
+etime.c: In function ‘main’:
+etime.c:160:5: warning: format not a string literal and no format arguments [-Wformat-security]
+     fprintf(stdout,buffer);
+     ^
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/etime etime.o -Wl,-Bstatic \
+                           -lopt.1 -lrtime.1  -Wl,-Bdynamic \
+                           -lm   
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/general/src.bin/text/invtime.1.2
+================================================================================
+make clean
+rm -f *.o
+rm -f invtime
+make
+make.version /home/radar_user/rst/codebase/general/src.bin/text/invtime.1.2
+make.help
+./doc/invtime.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -m32 -c invtime.c    
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/invtime invtime.o -Wl,-Bstatic \
+                           -lopt.1 -lrtime.1   -Wl,-Bdynamic \
+                           -lm   
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/analysis/src.bin
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+1.Located Binary:/home/radar_user/rst/codebase/analysis/src.bin/aacgm/aacgmeval.1.1
+2.Located Binary:/home/radar_user/rst/codebase/analysis/src.bin/aacgm/mkidlcoef.1.1
+3.Located Binary:/home/radar_user/rst/codebase/analysis/src.bin/mlt/mlteval.1.2
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/analysis/src.bin/aacgm/aacgmeval.1.1
+================================================================================
+make clean
+rm -f *.o
+rm -f aacgmeval
+make
+make.version /home/radar_user/rst/codebase/analysis/src.bin/aacgm/aacgmeval.1.1
+make.help
+./doc/aacgmeval.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/analysis -m32 -c aacgm.c    
+aacgm.c: In function ‘main’:
+aacgm.c:28:7: warning: variable ‘arg’ set but not used [-Wunused-but-set-variable]
+   int arg;
+       ^
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/analysis -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/aacgmeval aacgm.o -Wl,-Bstatic \
+                           -laacgm.1 -lopt.1 -lrtime.1  -Wl,-Bdynamic \
+                           -lm   
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/analysis/src.bin/aacgm/mkidlcoef.1.1
+================================================================================
+make clean
+rm -f *.o
+rm -f mkidlcoef
+make
+make.version /home/radar_user/rst/codebase/analysis/src.bin/aacgm/mkidlcoef.1.1
+make.help
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/analysis -m32 -c mkidlcoef.c    
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/analysis -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/mkidlcoef mkidlcoef.o -Wl,-Bstatic \
+                           -laacgm.1  -Wl,-Bdynamic \
+                           -lm   
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/analysis/src.bin/mlt/mlteval.1.2
+================================================================================
+make clean
+rm -f *.o
+rm -f mlteval
+make
+make.version /home/radar_user/rst/codebase/analysis/src.bin/mlt/mlteval.1.2
+make.help
+./doc/mlteval.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/analysis -m32 -c mlt.c    
+mlt.c: In function ‘main’:
+mlt.c:62:7: warning: variable ‘arg’ set but not used [-Wunused-but-set-variable]
+   int arg;
+       ^
+mkdir -p /home/radar_user/rst/bin
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/analysis -m32 -L/home/radar_user/rst/lib -L/home/radar_user/rst/usr/lib -o /home/radar_user/rst/bin/mlteval mlt.o -Wl,-Bstatic \
+                           -lmlt.1 -laacgm.1 -lastalg.1 -lopt.1 -lrtime.1  -Wl,-Bdynamic \
+                           -lm   
+makeall
+Package Source Directory:/home/radar_user/rst/codebase/superdarn/src.bin/tk
+Abort on failure:yes
+Compile most recent version of code only:yes
+================================================================================
+Located Source Code:
+1.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/plot/field_plot.1.9
+2.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/plot/fov_plot.1.9
+3.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/plot/grid_plot.1.9
+4.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/plot/hmb_plot.1.5
+5.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/plot/iqplot.1.5
+6.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/plot/map_plot.1.9
+7.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/plot/pc_plot.1.5
+8.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/plot/time_plot.1.5
+9.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/plot/vec_plot.1.8
+10.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/reformat/dattorawacf.1.7
+11.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/reformat/fitacftofit.1.8
+12.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/reformat/fittofitacf.1.7
+13.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/reformat/rawacftodat.1.7
+14.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tcpip/fitacfclient.1.9
+15.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tcpip/fitacfclientscan.1.6
+16.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tcpip/fitacfserver.1.15
+17.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tcpip/rtfitacftofit.1.16
+18.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tcpip/rtfittofitacf.1.17
+19.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/testing/cmpfit.1.5
+20.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/testing/cmpraw.1.5
+21.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/cat_fit.1.11
+22.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/cat_raw.1.13
+23.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/cnvmaptomap.1.5
+24.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/combine_grid.1.18
+25.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/extract_grid.1.14
+26.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/extract_map.1.12
+27.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/fit_cp.1.12
+28.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/fitfilter.1.2
+29.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/fitstat.1.5
+30.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/grdmaptogrid.1.5
+31.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/grid_filter.1.6
+32.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/gridtogrdmap.1.6
+33.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/imfdelay.1.6
+34.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/make_cfit.1.9
+35.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/make_efieldinx.1.5
+36.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/make_fit.1.18
+37.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/make_fitinx.1.8
+38.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/make_grdinx.1.6
+39.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/make_grid.1.11
+40.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/make_info.1.10
+41.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/make_iqinx.1.4
+42.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/make_mapinx.1.5
+43.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/make_raw.1.7
+44.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/make_rawinx.1.6
+45.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/make_smr.1.15
+46.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/make_vec.1.15
+47.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/map_addhmb.1.16
+48.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/map_addimf.1.17
+49.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/map_addmodel.1.13
+50.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/map_ascii.1.7
+51.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/map_filter.1.7
+52.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/map_fit.1.12
+53.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/map_grd.1.15
+54.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/maptocnvmap.1.5
+55.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/maptoefield.1.7
+56.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/maptometaxml.1.6
+57.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/merge_grid.1.7
+58.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/merge_rt.1.17
+59.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/radar_id.1.16
+60.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/raw_cp.1.4
+61.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/rawstat.1.4
+62.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/rtcfit.1.9
+63.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/rtgrid.1.19
+64.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/test_cfit.1.5
+65.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/test_fit.1.16
+66.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/test_raw.1.11
+67.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/trim_cfit.1.5
+68.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/trim_fit.1.19
+69.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/trim_grid.1.17
+70.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/trim_iq.1.4
+71.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/trim_map.1.10
+72.Located Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/tool/trim_raw.1.14
+================================================================================
+Compiling Binary:/home/radar_user/rst/codebase/superdarn/src.bin/tk/plot/field_plot.1.9
+================================================================================
+make clean
+rm -f *.o
+rm -f field_plot
+make
+make.version /home/radar_user/rst/codebase/superdarn/src.bin/tk/plot/field_plot.1.9
+make.help
+./doc/field_plot.doc.xml
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -D_XLIB_ -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/analysis -I/home/radar_user/rst/include/imagery -I/home/radar_user/rst/include/superdarn -m32 -c text_box.c    
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -D_XLIB_ -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/analysis -I/home/radar_user/rst/include/imagery -I/home/radar_user/rst/include/superdarn -m32 -c plot_time_label.c    
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -D_XLIB_ -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/analysis -I/home/radar_user/rst/include/imagery -I/home/radar_user/rst/include/superdarn -m32 -c plot_source.c    
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -D_XLIB_ -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/analysis -I/home/radar_user/rst/include/imagery -I/home/radar_user/rst/include/superdarn -m32 -c plot_logo.c    
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -D_XLIB_ -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/analysis -I/home/radar_user/rst/include/imagery -I/home/radar_user/rst/include/superdarn -m32 -c plot_time.c    
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -D_XLIB_ -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/analysis -I/home/radar_user/rst/include/imagery -I/home/radar_user/rst/include/superdarn -m32 -c plot_cell.c    
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -D_XLIB_ -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/analysis -I/home/radar_user/rst/include/imagery -I/home/radar_user/rst/include/superdarn -m32 -c plot_outline.c    
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -D_XLIB_ -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/analysis -I/home/radar_user/rst/include/imagery -I/home/radar_user/rst/include/superdarn -m32 -c plot_vec.c    
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -D_XLIB_ -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/analysis -I/home/radar_user/rst/include/imagery -I/home/radar_user/rst/include/superdarn -m32 -c plot_refvec.c    
+plot_refvec.c: In function ‘plot_refvec’:
+plot_refvec.c:48:9: warning: variable ‘s’ set but not used [-Wunused-but-set-variable]
+     int s;
+         ^
+plot_refvec.c:67:9: warning: variable ‘s’ set but not used [-Wunused-but-set-variable]
+     int s;
+         ^
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -D_XLIB_ -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/analysis -I/home/radar_user/rst/include/imagery -I/home/radar_user/rst/include/superdarn -m32 -c make_fov.c    
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -D_XLIB_ -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/analysis -I/home/radar_user/rst/include/imagery -I/home/radar_user/rst/include/superdarn -m32 -c make_grid.c    
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -D_XLIB_ -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/analysis -I/home/radar_user/rst/include/imagery -I/home/radar_user/rst/include/superdarn -m32 -c key.c    
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -D_XLIB_ -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/analysis -I/home/radar_user/rst/include/imagery -I/home/radar_user/rst/include/superdarn -m32 -c geobeam.c    
+geobeam.c: In function ‘GeoLocCenter’:
+geobeam.c:30:7: warning: variable ‘s’ set but not used [-Wunused-but-set-variable]
+   int s;
+       ^
+geobeam.c: In function ‘GeoLocBeam’:
+geobeam.c:48:9: warning: variable ‘s’ set but not used [-Wunused-but-set-variable]
+   int n,s,x;
+         ^
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -D_XLIB_ -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/analysis -I/home/radar_user/rst/include/imagery -I/home/radar_user/rst/include/superdarn -m32 -c expr.c    
+expr.c: In function ‘eval_expr’:
+expr.c:226:7: warning: variable ‘s’ set but not used [-Wunused-but-set-variable]
+   int s;
+       ^
+gcc			 -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -fno-stack-protector -D_XLIB_ -I/home/radar_user/rst/include/base -I/home/radar_user/rst/include/general -I/home/radar_user/rst/include/analysis -I/home/radar_user/rst/include/imagery -I/home/radar_user/rst/include/superdarn -m32 -c field_plot.c    
+field_plot.c:22:22: fatal error: X11/Xlib.h: No such file or directory
+ #include <X11/Xlib.h>
+                      ^
+compilation terminated.
+/home/radar_user/rst/build/base/make/makebin.linux:46: recipe for target 'field_plot.o' failed
+make: *** [field_plot.o] Error 1
+Compilation Aborted.

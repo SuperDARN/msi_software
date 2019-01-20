@@ -1,0 +1,1 @@
+normalscan -sb 23 -eb 4 -fast -stid cvw -ep 54000 -sp 54001 -bp 54100 -df 14700 -nf 10400 -fixfrq 1500 -nowait
