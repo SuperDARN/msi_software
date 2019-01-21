@@ -13,7 +13,7 @@ extern pthread_mutex_t coord_lock;
 extern int *trigger_state_pointer; //0-no activity,1-pre-trigger, 2-triggering 
 extern int *ready_state_pointer; //0-no cntrolprograms ready,1-some controlprograms ready, 2-all controlprograms ready 
 extern int *ready_count_pointer;
-extern int *trigger_type_pointer;  //0-strict controlprogram ready  1-elasped software time  2-external gps event 
+extern int trigger_type;  //0-strict controlprogram ready  1-elasped software time  2-external gps event
 extern int txread[MAX_RADARS];
 extern int verbose;
 extern int gpssock;
@@ -27,14 +27,13 @@ void *coordination_handler(struct ControlProgram *control_program)
    int gpssecond,gpsnsecond;
    struct DriverMsg msg;
    struct ControlProgram *cprog;
-   int ready_state,trigger_state,trigger_type,ready_count;
+   int ready_state,trigger_state,ready_count;
    struct timeval t0,t1,t2,t3,t4,t5,t6;
    unsigned long elapsed;
    if(verbose > 1 ) gettimeofday(&t0,NULL);
    pthread_mutex_lock(&coord_lock); //lock the global structures
 
    ready_state=*ready_state_pointer;
-   trigger_type=*trigger_type_pointer;
    trigger_state=*trigger_state_pointer;
    ready_count=*ready_count_pointer;
    if (control_program->active==1) {
