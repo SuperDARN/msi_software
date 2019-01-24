@@ -54,14 +54,14 @@ pthread_t status_thread=NULL,timeout_thread=NULL,log_thread=NULL;
 /* State Global Variables */
 dictionary *Site_INI;
 void *radar_channels[MAX_RADARS*MAX_CHANNELS];
-int *trigger_state_pointer,*trigger_type_pointer;
+int *trigger_state_pointer, trigger_type;
 int *ready_state_pointer,*ready_count_pointer;
 struct tx_status txstatus[MAX_RADARS];
 int txread[MAX_RADARS];
 struct SiteSettings site_settings;
 struct GPSStatus gpsstatus;
 struct TRTimes bad_transmit_times;
-int gpsrate=REFRESHRATE;
+int32 gpsrate=GPS_DEFAULT_TRIGRATE;
 int verbose=0;
 
 int clear_frequency_request;
@@ -259,11 +259,10 @@ int main()
   ready_state_pointer=malloc(sizeof(int));
   ready_count_pointer=malloc(sizeof(int));
   trigger_state_pointer=malloc(sizeof(int));
-  trigger_type_pointer=malloc(sizeof(int));
   *ready_state_pointer=0; //no control programs ready
   *ready_count_pointer=0; //no control programs ready
   *trigger_state_pointer=0; //pre-trigger state
-  *trigger_type_pointer=0; //strict control program ready trigger type
+  trigger_type=0; //strict control program ready trigger type
   for(i=0;i<MAX_RADARS*MAX_CHANNELS;i++) {
     radar_channels[i]=NULL ;
   }
