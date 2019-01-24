@@ -12,7 +12,8 @@
 extern int verbose;
 extern pthread_mutex_t settings_lock;
 extern dictionary *Site_INI;
-
+extern int trigger_type;
+extern int32 gpsrate;
 
 void *settings_parse_ini_file(struct SiteSettings *ros_settings) {
      char ini_name[80]="/root/test.ini";
@@ -38,6 +39,23 @@ void *settings_parse_ini_file(struct SiteSettings *ros_settings) {
      ros_settings->use_beam_table=iniparser_getboolean(Site_INI,"beam_lookup_table:use_table",0);
      sprintf(ros_settings->beam_table_1,iniparser_getstring(Site_INI,"beam_lookup_table:beam_table_1",""));
      sprintf(ros_settings->beam_table_2,iniparser_getstring(Site_INI,"beam_lookup_table:beam_table_2",""));
+
+     trigger_type=iniparser_getint(Site_INI,"site_settings:trigger_type",0);
+     fprintf(stdout,"Trigger_type: %d\n",trigger_type);
+     switch(trigger_type) {
+       case 0:
+         gpsrate=0;
+         gpsrate=iniparser_getint(Site_INI,"gps:trigger_rate",GPS_DEFAULT_TRIGRATE);
+         fprintf(stdout,"GPSrate: %d\n",gpsrate);
+         break;
+       case 1:
+       case 2:
+         gpsrate=iniparser_getint(Site_INI,"gps:trigger_rate",GPS_DEFAULT_TRIGRATE);
+         fprintf(stdout,"GPSrate: %d\n",gpsrate);
+         break;
+       default:
+         break;
+     }
 
      sprintf(ros_settings->name,"%s",iniparser_getstring(Site_INI,"site_settings:name",SITE_NAME));
      sprintf(entry_value,"%s",iniparser_getstring(Site_INI,"beam_lookup_table:use_table","ERROR"));
@@ -113,94 +131,3 @@ void *settings_rxfe_update_if(struct RXFESettings *rxfe_if_settings)
   pthread_exit(NULL);
 }
 
-
-
-/*
-void *settings_rxfe_update_if(struct RXFESettings *rxfe_if_settings)
-{
-  FILE  *fp;
-  char rxfe_file[300],hmm[300];
-  char *s,*line,*field;
-  pthread_mutex_lock(&settings_lock);
-  if (rxfe_if_settings!=NULL) {
-    sprintf(rxfe_file,"%s/rxfe_if.dat",SITE_DIR);
-    fp=fopen(rxfe_file,"r+");
-    if(fp==NULL) {
-      fprintf(stdout,"RXFE Settings File: FAILED :: %s\n",rxfe_file);
-    } else {
-      fprintf(stdout,"RXFE Settings File: OPENED :: %s\n",rxfe_file);
-      s=fgets(hmm,300,fp);
-      while (s!=NULL) {
-        field=strtok_r(s," ",&line);
-        if (strlen(field) > 0) {
-          if(field[0]=='#') {
-            fprintf(stdout,"found a comment :%s\n",s);                                                           
-          } else {                                                                                               
-            if ((field[0]>='1') && (field[0] <='9')) rxfe_if_settings->ifmode=atoi(field);            
-            fprintf(stdout,"RXFE :: IF: %d\n",rxfe_if_settings->ifmode);                              
-            field=strtok_r(NULL," ",&line);                                                                     
-            if ((field[0]>='1') && (field[0] <='9')) rxfe_if_settings->amp1=atoi(field);              
-            fprintf(stdout,"RXFE :: amp1: %d\n",rxfe_if_settings->amp1);                              
-            field=strtok_r(NULL," ",&line);                                                                     
-            if ((field[0]>='1') && (field[0] <='9')) rxfe_if_settings->amp2=atoi(field);              
-            fprintf(stdout,"RXFE :: amp2: %d\n",rxfe_if_settings->amp2);                              
-            field=strtok_r(NULL," ",&line);                                                                     
-            if ((field[0]>='1') && (field[0] <='9')) rxfe_if_settings->amp3=atoi(field);              
-            fprintf(stdout,"RXFE :: amp3: %d\n",rxfe_if_settings->amp3);                              
-            field=strtok_r(NULL," ",&line);                                                                     
-            if ((field[0]>='1') && (field[0] <='9')) rxfe_if_settings->att1=atoi(field);              
-            fprintf(stdout,"RXFE :: att1: %d\n",rxfe_if_settings->att1);                              
-            field=strtok_r(NULL," ",&line);                                                                     
-            if ((field[0]>='1') && (field[0] <='9')) rxfe_if_settings->att2=atoi(field);              
-            fprintf(stdout,"RXFE :: att2: %d\n",rxfe_if_settings->att2);                              
-            field=strtok_r(NULL," ",&line);                                                                     
-            if ((field[0]>='1') && (field[0] <='9')) rxfe_if_settings->att3=atoi(field);              
-            fprintf(stdout,"RXFE :: att3: %d\n",rxfe_if_settings->att3);                              
-            field=strtok_r(NULL," ",&line);                                                                     
-            if ((field[0]>='1') && (field[0] <='9')) rxfe_if_settings->att4=atoi(field);              
-            fprintf(stdout,"RXFE :: att4: %d\n",rxfe_if_settings->att4);                              
-          }                                                                                                      
-        }                                                                                                       
-        s=fgets(hmm,300,fp);                                                                                 
-      }                                                                                                         
-      fclose(fp);      
-    }
-  }
-  pthread_mutex_unlock(&settings_lock);
-  pthread_exit(NULL);
-}
-
-void *settings_ros_update(struct SiteSettings *ros_settings)
-{
-  FILE  *fp;
-  char ros_file[300],hmm[300];
-  char *s,*line,*field;
-  pthread_mutex_lock(&settings_lock);
-  if (ros_settings!=NULL) {
-    sprintf(ros_file,"%s/ros_settings.dat",SITE_DIR);
-    fp=fopen(ros_file,"r+");
-    if(fp==NULL) {
-      fprintf(stdout,"ROS Settings File: FAILED :: %s\n",ros_file);
-    } else {
-      fprintf(stdout,"ROS Settings File: OPENED :: %s\n",ros_file);
-      s=fgets(hmm,300,fp);
-      while (s!=NULL) {
-        field=strtok_r(s," ",&line);
-        if (strlen(field) > 0) {
-          if(field[0]=='#') {
-            fprintf(stdout,"found a comment :%s\n",s);                                                           
-          } else {                                                                                               
-            if ((field[0]>='1') && (field[0] <='9')) ros_settings->ifmode=atoi(field);            
-            fprintf(stdout,"ROS :: IF: %d\n",ros_settings->ifmode);                              
-            field=strtok_r(NULL," ",&line);                                                                     
-          }                                                                                                      
-        }                                                                                                       
-        s=fgets(hmm,300,fp);                                                                                 
-      }                                                                                                         
-      fclose(fp);      
-    }
-  }
-  pthread_mutex_unlock(&settings_lock);
-  pthread_exit(NULL);
-}
-*/
