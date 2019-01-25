@@ -22,8 +22,11 @@ int get_event_time(int *sec, int *nsec, int BASE1){
 
 	   // READ THE TIME
 		//Check event status flag
+	if (verbose > 1) printf("get_event_time()\n");
+
               if (BASE1!=NULL) {
 		if ((*((uint32*)(BASE1+0xfe))& 0x01) != 0x01) {
+			if (verbose > 1) printf("something wrong with BASE1, aborting\n");
                   return -1;
                 }
                 if (verbose > 1 ) printf("Event status flag enabled\n");
