@@ -7,9 +7,11 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <time.h>
 #include "rtypes.h"
 #include "_prog_conventions.h"
+extern int verbose;
 
 /*-GET_SOFTWARE_TIME-------------------------------------------------*/
 int get_software_time(int *sec, int *nsec, int BASE1) {
@@ -23,16 +25,14 @@ int get_software_time(int *sec, int *nsec, int BASE1) {
   // READ THE TIME
   // poll status reg an wait 10 us
   if (verbose > 1) {
-    printf("get_softwre_time()\n");
-    if (BASE1 == NULL) printf("BASE1 is NULL\n");
-    else printf("  [%02x] should be 0x01\n", (*((uint32*)(BASE1+0xfe)) & 0x01));
+    printf("get_software_time()\n");
   }
 
-  if (BASE1!=NULL) {
+  if (BASE1 != NULL) {
     *((uint08*)(BASE1+0xfc)) = 0x0;
     sleep.tv_sec  = 0;
     sleep.tv_nsec = 10000;
-    temp = *((uint32*)(BASE1+0x104));
+    temp = *((uint32_t*)(BASE1+0x104));
     year = 1000*((temp & 0xf0000000) >> 28) + 100*((temp & 0xf000000) >> 24) +
              10*((temp & 0xf00000) >> 20) + ((temp & 0xf0000) >> 16);
 //             10*((temp & 0xf00000) >> 20) + 1*((temp & 0xf0000) >> 16);
@@ -171,7 +171,7 @@ int get_software_time(int *sec, int *nsec, int BASE1) {
     localtime.tm_gmtoff = 0;
 
     //hour
-    temp = *((uint32*)(BASE1+0x100));
+    temp = *((uint32_t*)(BASE1+0x100));
 //    hour = 10*((temp & 0xf0000000) >> 28) + 1*((temp & 0xf000000) >> 24);
     hour = 10*((temp & 0xf0000000) >> 28) + ((temp & 0xf000000) >> 24);
     localtime.tm_hour = hour;
@@ -187,13 +187,13 @@ int get_software_time(int *sec, int *nsec, int BASE1) {
     localtime.tm_sec = second;
 
     //nano second
-    temp = *((uint32*)(BASE1+0xfc));
+    temp = *((uint32_t*)(BASE1+0xfc));
     nsecond = 100*((temp & 0xf0000000) >> 28) +
               1000000*((temp & 0xf000) >> 12) +
               100000*((temp & 0xf00) >> 8) +
               10000*((temp & 0xf0) >> 4) +
               1000*((temp & 0xf));
-    temp = *((uint32*)(BASE1+0x100));
+    temp = *((uint32_t*)(BASE1+0x100));
     nsecond += ( 100000000*((temp & 0xf0) >> 4) + 10000000*(temp & 0xf) );
 
     calandertime = mktime(&localtime);
