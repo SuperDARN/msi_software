@@ -111,12 +111,12 @@ void graceful_cleanup(int signum)
 
   //INITIALIZE CARD
   if (configured) {
-    // set card for synchronized generator mode, GPS reference enabled Daylight
-    // Savings Time Disabled	
-    *((uint32*)(BASE1+0x118)) = 0x90000021; //x90 to address x11B produced
+    // set card for synchronized generator mode, GPS reference enabled
+    // Daylight Savings Time Disabled	
+    *((uint32_t*)(BASE1+0x118)) = 0x90000021; //x90 to address x11B produced
                                             // 10 MHz reference signal output
     //clear time compare register
-    //now.tv_sec += 0;  // this HAS to be a mistake
+    //now.tv_sec += 0;  // SGS: this HAS to be a mistake
     now.tv_sec  = 0;
     now.tv_nsec = 0;
     temp = set_time_compare(0, &now);
@@ -125,21 +125,26 @@ void graceful_cleanup(int signum)
 
     //SET INITIAL TIME COMPARE TIME
   //*((uint32*)(BASE1+0x128)) = 2;    // value for FH
-    *((uint32*)(BASE1+0x128)) = 10;   // set rate synthesiser rate to a default
+  //*((uint32*)(BASE1+0x128)) = 10;   // set rate synthesiser rate to a default
+    *((uint32_t*)(BASE1+0x128)) = 2;  // set rate synthesiser rate to a default
                                       //   of 100ms (10pps)
   //*((uint32*)(BASE1+0x12c)) = 0x0200ff00;  // value for CV
-    *((uint32*)(BASE1+0x12c)) = 0x02000f00;  // x12e: event trigger on external
+    *((uint32_t*)(BASE1+0x12c)) = 0x02000f00;// x12e: event trigger on external
                                              //       event, falling edge 
     // x12d: rising edge rate synthesizer on pin 6, 
     // x12f: rate generator on code-out 
 
-    fprintf(stdout,"GPS Card Registers:\n");
+    fprintf(stdout,"****************************************");
+    fprintf(stdout,"**************************************/n");
+    fprintf(stdout,"GPS Card Registers\n");
     fprintf(stdout,"Rate synth:         0x%08x\n",*((uint32_t*)(BASE1+0x128)));
     fprintf(stdout,"Cntl:               0x%08x\n",*((uint32_t*)(BASE1+0x12c)));
     fprintf(stdout,"Misc ctrl:          0x%02x\n",*((uint8_t*)(BASE1+0x12C)));
     fprintf(stdout,"Rate Sync ctrl:     0x%02x\n",*((uint8_t*)(BASE1+0x12D)));
     fprintf(stdout,"Event Capture ctrl: 0x%02x\n",*((uint8_t*)(BASE1+0x12E)));
     fprintf(stdout,"Code Out cntrl:     0x%02x\n",*((uint8_t*)(BASE1+0x12F)));
+    fprintf(stdout,"****************************************");
+    fprintf(stdout,"**************************************/n");
  
     //set flag to indicate default trigger mode of rate synthesizer triggers
     //displaystat.triggermode=8;
@@ -209,7 +214,7 @@ void graceful_cleanup(int signum)
 
     }
     rval = 1;
-    msgsock=accept(sock, 0, 0);
+    msgsock = accept(sock, 0, 0);
     if (verbose > 0) printf("accepting socket!!!!!\n");
     if (msgsock==-1) {
       perror("accept FAILED!");
@@ -310,11 +315,11 @@ void graceful_cleanup(int signum)
               if (configured) {
 
                 // set rate synthesizer rate
-                *((uint32*)(BASE1+0x128)) = displaystat.ratesynthrate;
-//					  *((uint32*)(BASE1+0x12c))|=0x00000200;  // CV value
+                *((uint32_t*)(BASE1+0x128)) = displaystat.ratesynthrate;
 
                 // load rate synthesizer rate 
-    					  *((uint32*)(BASE1+0x12c)) |= 0x00000f00;
+//					  *((uint32*)(BASE1+0x12c))|=0x00000200;  // CV value
+    					  *((uint32_t*)(BASE1+0x12c)) |= 0x00000f00;
               }
               rval = send_data(msgsock, &msg, sizeof(struct DriverMsg));
               break;
