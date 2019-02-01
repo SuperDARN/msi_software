@@ -7,6 +7,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <time.h>
 #include "rtypes.h"
 #include "_prog_conventions.h"
@@ -26,11 +27,12 @@ int get_event_time(int *sec, int *nsec, int BASE1) {
   if (verbose > 1) {
     printf("get_event_time()\n");
     if (BASE1 == NULL) printf("BASE1 is NULL\n");
-    else printf("  [%02x] should be 0x01\n", (*((uint32*)(BASE1+0xfe)) & 0x01));
+    else printf("  [%02x] should be 0x01\n",
+               (*((uint32_t*)(BASE1+0xfe)) & 0x01));
   }
 
   if (BASE1!=NULL) {
-    if ((*((uint32*)(BASE1+0xfe)) & 0x01) != 0x01) {
+    if ((*((uint32_t*)(BASE1+0xfe)) & 0x01) != 0x01) {
       if (verbose > 1) printf("something wrong with BASE1, aborting\n");
       return -1;
     }
@@ -38,12 +40,12 @@ int get_event_time(int *sec, int *nsec, int BASE1) {
     if (verbose > 1 ) printf("Event status flag enabled\n");
 
     //read time of last event 
-    temp174 =* ((uint32*)(BASE1+0x174));
-    temp178 =* ((uint32*)(BASE1+0x178));
-    temp17c =* ((uint32*)(BASE1+0x17c));
+    temp174 = *((uint32_t*)(BASE1+0x174));
+    temp178 = *((uint32_t*)(BASE1+0x178));
+    temp17c = *((uint32_t*)(BASE1+0x17c));
 
     //clear event status flag so new event can be captured
-    *((uint32*)(BASE1+0xf8)) |= 0x01;
+    *((uint32_t*)(BASE1+0xf8)) |= 0x01;
     if (verbose > 1) printf("Clear event status flag\n");
 
     temp = temp17c;
