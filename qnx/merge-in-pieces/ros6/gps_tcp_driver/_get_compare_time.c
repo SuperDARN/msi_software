@@ -16,92 +16,82 @@
 /*-GET_COMPARE_TIME-------------------------------------------------*/
 int get_compare_time(int *sec, int *nsec, int BASE1){
 
-	struct		 timespec systime;
-	struct		 tm localtime,*syslocaltime;
-	time_t 		 calandertime;
-	int		 temp,temp138,temp13c;
-	int		 year,month,day,hour,minute,second,nsecond,yday;
-	FILE		 *fp;
+	struct  timespec systime;
+	struct  tm localtime,*syslocaltime;
+	time_t  calandertime;
+	int     temp,temp138,temp13c;
+	int     year,month,day,hour,minute,second,nsecond,yday;
+	FILE    *fp;
 
-	   // READ THE TIME
-		//get year from system time
-	      temp=clock_gettime(CLOCK_REALTIME,&systime);
-              if(BASE1!=NULL) {
-		//read time of last event 
-		temp138=*((uint32*)(BASE1+0x138));
-		temp13c=*((uint32*)(BASE1+0x13c));
-		syslocaltime=gmtime(&systime.tv_sec);
-		localtime.tm_year=syslocaltime->tm_year;
-		year=localtime.tm_year;
-		//day
-		temp=temp13c;
-		day= 100*((temp & 0xf000000) >> 24) + 10*((temp & 0xf00000) >> 20) + 1*((temp & 0xf0000)>>16) ;
-		yday=day;
-		//day+=1;
-		if( (year%4) == 0){
-			//leap year
-			if( (day>=0) && (day <=31) ){
-				//jan
-				month=0;
-				day-=0;
-			}
-			else if ( (day > 31) && (day <= 60) ){
-				//feb
-				month=1;
-				day-=31;
-			}
-			else if ( (day > 60) && (day <= 91)){
-				//march
-				month=2;
-				day-=60;
-			}
-			else if ( (day > 91) && (day <= 121)){
-				//apr
-				month=3;
-				day-=91;
-			}
-			else if ( (day > 121) && (day <= 152)){
-				//may
-				month=4;
-				day-=121;
-			}
-			else if ( (day > 152) && (day <= 182)){
-				//jun
-				month=5;
-				day-=152;
-			}
-			else if ( (day > 182) && (day <= 213)){
-				//jul
-				month=6;
-				day-=182;
-			}
-			else if ( (day > 213) && (day <= 244)){
-				//aug
-				month=7;
-				day-=213;
-			}
-			else if ( (day > 244) && (day <= 274)){
-				//sept
-				month=8;
-				day-=244;
-			}
-			else if ( (day > 274) && (day <= 305)){
-				//oct
-				month=9;
-				day-=274;
-			}
-			else if ( (day > 305) && (day <= 335)){
-				//nov
-				month=10;
-				day-=305;
-			}
-			else if ( (day > 335) && (day <= 366)){
-				//dec
-				month=11;
-				day-=335;
-			}
-		}
-		else{
+  // READ THE TIME
+  //get year from system time
+  temp=clock_gettime(CLOCK_REALTIME,&systime);
+  if (BASE1!=NULL) {
+    //read time of last event 
+    temp138=*((uint32_t*)(BASE1+0x138));
+    temp13c=*((uint32_t*)(BASE1+0x13c));
+    syslocaltime=gmtime(&systime.tv_sec);
+    localtime.tm_year=syslocaltime->tm_year;
+    year=localtime.tm_year;
+    //day
+    temp=temp13c;
+    day= 100*((temp & 0xf000000) >> 24) + 10*((temp & 0xf00000) >> 20) +
+           1*((temp & 0xf0000) >> 16) ;
+    yday=day;
+    //day+=1;
+    /* SGS: this code is for real?! */
+    if( (year%4) == 0){
+      //leap year
+      if( (day>=0) && (day <=31) ){
+        //jan
+        month=0;
+        day-=0;
+      } else if ( (day > 31) && (day <= 60) ){
+        //feb
+        month=1;
+        day-=31;
+      } else if ( (day > 60) && (day <= 91)){
+        //march
+        month=2;
+        day-=60;
+      } else if ( (day > 91) && (day <= 121)){
+        //apr
+        month=3;
+        day-=91;
+      } else if ( (day > 121) && (day <= 152)){
+        //may
+        month=4;
+        day-=121;
+      } else if ( (day > 152) && (day <= 182)){
+        //jun
+        month=5;
+        day-=152;
+      } else if ( (day > 182) && (day <= 213)){
+        //jul
+        month=6;
+        day-=182;
+      } else if ( (day > 213) && (day <= 244)){
+        //aug
+        month=7;
+        day-=213;
+      } else if ( (day > 244) && (day <= 274)){
+        //sept
+        month=8;
+        day-=244;
+      } else if ( (day > 274) && (day <= 305)){
+        //oct
+        month=9;
+        day-=274;
+      } else if ( (day > 305) && (day <= 335)){
+        //nov
+        month=10;
+        day-=305;
+      } else if ( (day > 335) && (day <= 366)){
+        //dec
+        month=11;
+        day-=335;
+      }
+    } else {    /* NOT leap year */
 			if( (day>=0) && (day <=31) ){
 				//jan
 				month=0;
@@ -183,17 +173,20 @@ int get_compare_time(int *sec, int *nsec, int BASE1){
 		localtime.tm_sec=second;
 
 		//nano second
-		nsecond= 1000000*((temp & 0xf000) >> 12) + 100000*((temp & 0xf00) >> 8) + 10000*((temp & 0xf0) >> 4) + 1000*((temp & 0xf));
-		nsecond += ( 100000000*((temp & 0xf00000) >> 20) + 10000000*((temp & 0xf0000) >> 16) );
+		nsecond= 1000000*((temp & 0xf000) >> 12) + 100000*((temp & 0xf00) >> 8) +
+               10000*((temp & 0xf0) >> 4) + 1000*((temp & 0xf));
+		nsecond += ( 100000000*((temp & 0xf00000) >> 20) +
+                  10000000*((temp & 0xf0000) >> 16) );
 	
-		calandertime=mktime(&localtime);
-		*sec=calandertime;
-		*nsec=nsecond;
-              } else {
-                *sec=systime.tv_sec;
-                *nsec=systime.tv_nsec; 
-                calandertime=systime.tv_sec; 
-             }
-		return calandertime;
+    calandertime=mktime(&localtime);
+    *sec=calandertime;
+    *nsec=nsecond;
+  } else {
+    *sec=systime.tv_sec;
+    *nsec=systime.tv_nsec; 
+    calandertime=systime.tv_sec; 
+  }
+
+  return calandertime;
 }
 
