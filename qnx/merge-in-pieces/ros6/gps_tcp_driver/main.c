@@ -51,8 +51,12 @@ int set_time_compare_register(int mask, struct timespec *nexttime);
 
 void graceful_cleanup(int signum)
 {
+  char path[256];
+  sprintf(path,"%s:%d", "rosgps",0);
   close(msgsock);
   close(sock);
+  unlink(path);
+  fprintf(stdout, "Unlinking Unix Socket: %s\n", path);
   exit(0);
 }
 /*-MAIN--------------------------------------------------------------*/
@@ -79,6 +83,8 @@ void graceful_cleanup(int signum)
 //	sleep.tv_sec=0;
 //	sleep.tv_nsec=10000;
 #ifdef __QNX__
+  /* SGS all of this is commented out in FH code */
+  /*
   temp = ClockPeriod(CLOCK_REALTIME,&new,0,0);
   if (temp==-1) {
     perror("Unable to change system clock resolution");
@@ -93,6 +99,7 @@ void graceful_cleanup(int signum)
     fprintf(stderr,"CLOCK_RES: %d\n", CLOCK_RES);
     fflush(stderr); 
   }
+  */
 #endif
 
   /* OPEN THE PLX9656 AND GET LOCAL BASE ADDRESSES */
@@ -176,7 +183,8 @@ void graceful_cleanup(int signum)
 	//for (i=0;i<1000;i++)
   temp = clock_gettime(CLOCK_REALTIME, &start_p);
   //open tcp socket	
-  sock = tcpsocket(GPS_HOST_PORT);
+  //sock = tcpsocket(GPS_HOST_PORT);
+  sock = server_unixsocket("rosgps",0);
   temp = 1;
 	//ioctl(sock,FIONBIO,&temp);
 	//cntl(sock,F_SETFL,O_NONBLOCK);
