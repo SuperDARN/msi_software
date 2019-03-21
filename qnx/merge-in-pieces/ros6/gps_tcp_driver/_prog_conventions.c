@@ -13,10 +13,10 @@ void write08(unsigned long BASE, unsigned long reg1, signed char val){
 	byte=reg1%4;
 	reg1=reg1-byte;	
 	val32=val<<(8*byte);
-	temp=*((uint32*)(BASE+reg1));
+	temp=*((uint32_t*)(BASE+reg1));
 	val_to_write=temp & bitmask[byte];	
 	val_to_write=val_to_write | val32;
-	*((uint32*)(BASE+reg1))=val_to_write;
+	*((uint32_t*)(BASE+reg1))=val_to_write;
 	
 }
 /*-WRITE16-----------------------------------------------------------*/
@@ -28,10 +28,10 @@ void write16(unsigned long BASE, unsigned long reg1, signed short val){
 	byte=reg1%4;
 	reg1=reg1-byte;	
 	val32=val<<(8*byte);
-	temp=*((uint32*)(BASE+reg1));
+	temp=*((uint32_t*)(BASE+reg1));
 	val_to_write=temp & bitmask[byte];	
 	val_to_write=val_to_write | val32;
-	*((uint32*)(BASE+reg1))=val_to_write;
+	*((uint32_t*)(BASE+reg1))=val_to_write;
 
 }
 /*-WRITE32-----------------------------------------------------------*/
@@ -40,7 +40,7 @@ void write32(unsigned long BASE, unsigned long reg1, signed long val){
 	unsigned long bitmask[1]={0x00000000};
 	int byte;
 	
-	*((uint32*)(BASE+reg1))=val;
+	*((uint32_t*)(BASE+reg1))=val;
 }
 /*-READ8-------------------------------------------------------------*/
 char read08(unsigned long reg1){

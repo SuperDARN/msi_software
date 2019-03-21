@@ -28,8 +28,8 @@ int get_compare_time(int *sec, int *nsec, int BASE1){
 	      temp=clock_gettime(CLOCK_REALTIME,&systime);
               if(BASE1!=NULL) {
 		//read time of last event 
-		temp138=*((uint32*)(BASE1+0x138));
-		temp13c=*((uint32*)(BASE1+0x13c));
+		temp138=*((uint32_t*)(BASE1+0x138));
+		temp13c=*((uint32_t*)(BASE1+0x13c));
 		syslocaltime=gmtime(&systime.tv_sec);
 		localtime.tm_year=syslocaltime->tm_year;
 		year=localtime.tm_year;

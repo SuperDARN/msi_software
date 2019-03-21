@@ -71,7 +71,7 @@ int get_lock_stat(){
 
 	// check lock status
         if (BASE1!=NULL) {
-	  temp=*((uint32*)(BASE1+0x104));
+	  temp=*((uint32_t*)(BASE1+0x104));
 	  temp= (temp & 0x00007000) >> 12;
         }
 	return temp;
@@ -84,7 +84,7 @@ int get_ant_stat(){
 
 	// check antenna status
         if (BASE1!=NULL) {
-	  temp=*((uint32*)(BASE1+0xfc));
+	  temp=*((uint32_t*)(BASE1+0xfc));
 	  temp= temp & 0x00300000;
 	  temp=temp >> 20;
         }
@@ -99,7 +99,7 @@ int get_sat_stat(int sv[6], float signal[6]){
         if (BASE1!=NULL) {
 	  for (i=0;i<6;i++){
 	//read satellite signal levels
-		temp=*((uint32*)(BASE1+0x198+4*i));
+		temp=*((uint32_t*)(BASE1+0x198+4*i));
 		sv[i]= 10*((temp & 0xf0) >> 4) + 1*(temp & 0x0f);	
 		signal[i]= 10*(float)((temp & 0xf0000000) >> 28) + 1*(float)((temp & 0xf000000) >> 24) + 0.1*(float)((temp & 0xf00000) >>20) + 0.01*(float)((temp & 0xf0000) >> 16);
 	  }
@@ -186,8 +186,8 @@ int set_time_compare_register(int mask,struct timespec *nexttime){
 
 	//mask=0x0;
         if (BASE1!=NULL) {
-	  *((uint32*)(BASE1+0x138))= ((tsec & 0xf)<<28) + ((sec & 0xf)<<24) + ((hmsec & 0xf)<<20) + ((tmsec & 0xf)<<16) + ((msec & 0xf)<<12) + ((husec & 0xf)<<8) + ((tusec & 0xf)<<4) + (usec & 0xf);
-	  *((uint32*)(BASE1+0x13c))= ((mask & 0xf)<<28) + ((hdays & 0xf)<<24) + ((tdays & 0xf)<<20) + ((days & 0xf)<<16) + ((thours & 0xf)<<12) + ((hours & 0xf)<<8) + ((tmins & 0xf)<<4) + (mins & 0xf);
+	  *((uint32_t*)(BASE1+0x138))= ((tsec & 0xf)<<28) + ((sec & 0xf)<<24) + ((hmsec & 0xf)<<20) + ((tmsec & 0xf)<<16) + ((msec & 0xf)<<12) + ((husec & 0xf)<<8) + ((tusec & 0xf)<<4) + (usec & 0xf);
+	  *((uint32_t*)(BASE1+0x13c))= ((mask & 0xf)<<28) + ((hdays & 0xf)<<24) + ((tdays & 0xf)<<20) + ((days & 0xf)<<16) + ((thours & 0xf)<<12) + ((hours & 0xf)<<8) + ((tmins & 0xf)<<4) + (mins & 0xf);
         }
 
 	return 0;	
@@ -200,16 +200,16 @@ float get_lat(){
 	float	degf=0.0;
 
         if (BASE1!=NULL) {
-	  temp=*((uint32*)(BASE1+0x108));
+	  temp=*((uint32_t*)(BASE1+0x108));
 	  deg=100*((temp & 0xf00) >> 8) + 10*((temp & 0xf0) >> 4) + ((temp & 0xf));
 	  min=10*((temp &0xf00000) >> 20) + ((temp & 0xf0000) >> 16);
-	  temp=*((uint32*)(BASE1+0x10c));
+	  temp=*((uint32_t*)(BASE1+0x10c));
 	  sec=10*((temp & 0xf000) >> 12) + ((temp & 0xf00) >> 8);
 	  tenthsec=(temp & 0xf);
 
 	  degf=(float)deg+((float)min/60)+( ( (float)sec + 0.1*(float)tenthsec ) /3600);
 
-	  temp=*((uint32*)(BASE1+0x108));
+	  temp=*((uint32_t*)(BASE1+0x108));
 	  temp=((temp&0xff000000) >> 24);
 
 	  if (temp==0x4e) return degf;
@@ -227,9 +227,9 @@ float get_lon(){
 	float degf=0.0;
 
         if (BASE1!=NULL) {
-	  temp=*((uint32*)(BASE1+0x10c));
+	  temp=*((uint32_t*)(BASE1+0x10c));
 	  deg=100*((temp & 0xf000000) >> 24) + 10*((temp & 0xf00000) >> 20) + ((temp & 0xf0000) >> 16);
-	  temp=*((uint32*)(BASE1+0x110));
+	  temp=*((uint32_t*)(BASE1+0x110));
 	  min=10*((temp & 0xf0) >> 4) + (temp & 0xf);
 	  sec=10*((temp & 0xf0000000) >> 28) + ((temp & 0xf000000) >> 24);
 	  tenthsec=((temp & 0xf0000) >> 16);
@@ -251,7 +251,7 @@ float get_alt(){
 	float altf=0.0;
 
         if (BASE1!=NULL) {
-	  temp=*((uint32*)(BASE1+0x114));
+	  temp=*((uint32_t*)(BASE1+0x114));
 
 	  alt=10000*((temp & 0xf0) >> 4) + 1000*((temp & 0xf)) + ((temp & 0xf00000) >> 20) + 10*((temp & 0xf000000) >> 24) + 100*((temp & 0xf0000000) >> 28);
 	  tenthmeter= (temp & 0xf0000) >> 16;
