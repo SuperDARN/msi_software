@@ -79,6 +79,7 @@ void graceful_cleanup(int signum)
 //	sleep.tv_sec=0;
 //	sleep.tv_nsec=10000;
 #ifdef __QNX__
+/* commented out in FH code
   temp = ClockPeriod(CLOCK_REALTIME,&new,0,0);
   if (temp==-1) {
     perror("Unable to change system clock resolution");
@@ -93,6 +94,7 @@ void graceful_cleanup(int signum)
     fprintf(stderr,"CLOCK_RES: %d\n", CLOCK_RES);
     fflush(stderr); 
   }
+*/
 #endif
 
   /* OPEN THE PLX9656 AND GET LOCAL BASE ADDRESSES */
