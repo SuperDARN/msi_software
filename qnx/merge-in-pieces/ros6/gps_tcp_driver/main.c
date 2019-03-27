@@ -137,16 +137,26 @@ void graceful_cleanup(int signum)
     // x12f: rate generator on code-out 
 
     fprintf(stdout,"****************************************");
-    fprintf(stdout,"**************************************/n");
+    fprintf(stdout,"****************************************\n");
     fprintf(stdout,"GPS Card Registers\n");
-    fprintf(stdout,"Rate synth:         0x%08x\n",*((uint32_t*)(BASE1+0x128)));
-    fprintf(stdout,"Cntl:               0x%08x\n",*((uint32_t*)(BASE1+0x12c)));
+    fprintf(stdout,"Rate synth:   0x%08x\n",*((uint32_t*)(BASE1+0x128)));
+    fprintf(stdout,"Cntl:         0x%08x\n",*((uint32_t*)(BASE1+0x12c)));
     fprintf(stdout,"Misc ctrl:          0x%02x\n",*((uint8_t*)(BASE1+0x12C)));
     fprintf(stdout,"Rate Sync ctrl:     0x%02x\n",*((uint8_t*)(BASE1+0x12D)));
     fprintf(stdout,"Event Capture ctrl: 0x%02x\n",*((uint8_t*)(BASE1+0x12E)));
     fprintf(stdout,"Code Out cntrl:     0x%02x\n",*((uint8_t*)(BASE1+0x12F)));
     fprintf(stdout,"****************************************");
-    fprintf(stdout,"**************************************/n");
+    fprintf(stdout,"****************************************\n");
+    fprintf(stdout,"Antenna Status:     0x%02x\n",*((uint8_t*)(BASE1+0xFE)));
+    fprintf(stdout,"Backgrnd Test Stat: 0x%02x\n",*((uint8_t*)(BASE1+0x11C)));
+    fprintf(stdout,"Satellite A:        0x%02x\n",*((uint8_t*)(BASE1+0x198)));
+    fprintf(stdout,"Satellite B:        0x%02x\n",*((uint8_t*)(BASE1+0x19C)));
+    fprintf(stdout,"Satellite C:        0x%02x\n",*((uint8_t*)(BASE1+0x1A0)));
+    fprintf(stdout,"Satellite D:        0x%02x\n",*((uint8_t*)(BASE1+0x1A4)));
+    fprintf(stdout,"Satellite E:        0x%02x\n",*((uint8_t*)(BASE1+0x1A8)));
+    fprintf(stdout,"Satellite F:        0x%02x\n",*((uint8_t*)(BASE1+0x1AC)));
+    fprintf(stdout,"****************************************");
+    fprintf(stdout,"****************************************\n");
  
     //set flag to indicate default trigger mode of rate synthesizer triggers
     //displaystat.triggermode=8;
