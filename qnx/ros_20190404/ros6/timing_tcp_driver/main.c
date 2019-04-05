@@ -738,29 +738,32 @@ int main()
               break;
 
             case TIMING_WAIT:
-              if (verbose > 1 ) printf("Timing Card: Wait\n");  
+              if (verbose > 1)
+                printf("Timing Card: Wait: configured %d\n", configured);  
 
-              msg.status=0;
-              dead_flag=0;
+              msg.status = 0;
+              dead_flag  = 0;
 
               if (configured) {
 #ifdef __QNX__
-                delay_count=0;
+                delay_count = 0;
                 gettimeofday(&t0,NULL);
                 while (writingFIFO==1 && dead_flag==0) {
                   gettimeofday(&t1,NULL);
-                  delay(1); //wait to finish writing FIFO
+                  delay(1); // wait 1ms to finish writing FIFO
                   delay_count++;
                   if ((t1.tv_sec-t0.tv_sec) >= 1) dead_flag=1;
                 }
-                if (delay_count > 0)
-                  if (verbose > -1)
-                    printf("writingFIFO wait %d ms\n",delay_count);  
+                if (delay_count > 0 && verbose > -1)
+                  printf("writingFIFO wait %d ms\n",delay_count);  
+
                 if (dead_flag==0) { 
                   while ((in32(mmap_io_ptr_dio+0x04) & 0x00001000) !=0x00001000)
                     delay(1); //wait for FIFO empty 
                 } else {
                   msg.status+=-1;
+                  if (verbose > -1)
+                    fprintf(stderr, "Timing Card: Wait: TIMEOUT\n");
                   //printf("Wait timeout!!!!!! %d\n",dma_count);
                 } 
 

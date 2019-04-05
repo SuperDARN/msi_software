@@ -16,11 +16,11 @@ extern int verbose;
 /*-GET_EVENT_TIME-------------------------------------------------*/
 int get_event_time(int *sec, int *nsec, int BASE1) {
 
-  struct		 timespec sleep,tp;
-  struct		 tm localtime;
-  time_t 		 calandertime;
-  int		 temp,temp174,temp178,temp17c;
-  int		 year,month,day,hour,minute,second,nsecond;
+  struct timespec sleep,tp;
+  struct tm localtime;
+  time_t calandertime;
+  int    temp,temp174,temp178,temp17c;
+  int    year,month,day,hour,minute,second,nsecond;
 
   // READ THE TIME
   //Check event status flag
@@ -31,13 +31,13 @@ int get_event_time(int *sec, int *nsec, int BASE1) {
                (*((uint32_t*)(BASE1+0xfe)) & 0x01));
   }
 
-  if (BASE1!=NULL) {
+  if (BASE1 != NULL) {
     if ((*((uint32_t*)(BASE1+0xfe)) & 0x01) != 0x01) {
       if (verbose > 1) printf("something wrong with BASE1, aborting\n");
       return -1;
     }
 
-    if (verbose > 1 ) printf("Event status flag enabled\n");
+    if (verbose > 1) printf("Event status flag enabled\n");
 
     //read time of last event 
     temp174 = *((uint32_t*)(BASE1+0x174));
@@ -61,131 +61,131 @@ int get_event_time(int *sec, int *nsec, int BASE1) {
 //          1*((temp & 0xf0000)>>16);
 
     /* this is awful code AND wrong */
-		if( (year%4) == 0){
-			//leap year
-			if( (day>=0) && (day <=31) ){
-				//jan
-				month=0;
-				day-=0;
-			}
-			else if ( (day > 31) && (day <= 60) ){
-				//feb
-				month=1;
-				day-=31;
-			}
-			else if ( (day > 60) && (day <= 91)){
-				//march
-				month=2;
-				day-=60;
-			}
-			else if ( (day > 91) && (day <= 121)){
-				//apr
-				month=3;
-				day-=91;
-			}
-			else if ( (day > 121) && (day <= 152)){
-				//may
-				month=4;
-				day-=121;
-			}
-			else if ( (day > 152) && (day <= 182)){
-				//jun
-				month=5;
-				day-=152;
-			}
-			else if ( (day > 182) && (day <= 213)){
-				//jul
-				month=6;
-				day-=182;
-			}
-			else if ( (day > 213) && (day <= 244)){
-				//aug
-				month=7;
-				day-=213;
-			}
-			else if ( (day > 244) && (day <= 274)){
-				//sept
-				month=8;
-				day-=244;
-			}
-			else if ( (day > 274) && (day <= 305)){
-				//oct
-				month=9;
-				day-=274;
-			}
-			else if ( (day > 305) && (day <= 335)){
-				//nov
-				month=10;
-				day-=305;
-			}
-			else if ( (day > 335) && (day <= 366)){
-				//dec
-				month=11;
-				day-=335;
-			}
-		}
-		else{
-			if( (day>=0) && (day <=31) ){
-				//jan
-				month=0;
-				day-=0;
-			}
-			else if ( (day > 31) && (day <= 59)){
-				//feb
-				month=1;
-				day-=31;
-			}
-			else if ( (day > 59) && (day <= 90)){
-				//march
-				month=2;
-				day-=59;
-			}
-			else if ( (day > 90) & (day <= 120)){
-				//apr
-				month=3;
-				day-=90;
-			}
-			else if ( (day > 120) && (day <= 151)){
-				//may
-				month=4;
-				day-=120;
-			}
-			else if ( (day > 151) && (day <= 181)){
-				//jun
-				month=5;
-				day-=151;
-			}
-			else if ( (day > 181) && (day <= 212)){
-				//jul
-				month=6;
-				day-=181;
-			}
-			else if ( (day > 212) && (day <= 243)){
-				//aug
-				month=7;
-				day-=212;
-			}
-			else if ( (day > 243) && (day <= 273)){
-				//sept
-				month=8;
-				day-=243;
-			}
-			else if ( (day > 273) && (day <= 304)){
-				//oct
-				month=9;
-				day-=273;
-			}
-			else if ( (day > 304) && (day <= 334)){
-				//nov
-				month=10;
-				day-=304;
-			}
-			else if ( (day > 334) && (day <= 365)){
-				//dec
-				month=11;
-				day-=334;
-			}
-		}
+    if( (year%4) == 0){
+      //leap year
+      if( (day>=0) && (day <=31) ){
+        //jan
+        month=0;
+        day-=0;
+      }
+      else if ( (day > 31) && (day <= 60) ){
+        //feb
+        month=1;
+        day-=31;
+      }
+      else if ( (day > 60) && (day <= 91)){
+        //march
+        month=2;
+        day-=60;
+      }
+      else if ( (day > 91) && (day <= 121)){
+        //apr
+        month=3;
+        day-=91;
+      }
+      else if ( (day > 121) && (day <= 152)){
+        //may
+        month=4;
+        day-=121;
+      }
+      else if ( (day > 152) && (day <= 182)){
+        //jun
+        month=5;
+        day-=152;
+      }
+      else if ( (day > 182) && (day <= 213)){
+        //jul
+        month=6;
+        day-=182;
+      }
+      else if ( (day > 213) && (day <= 244)){
+        //aug
+        month=7;
+        day-=213;
+      }
+      else if ( (day > 244) && (day <= 274)){
+        //sept
+        month=8;
+        day-=244;
+      }
+      else if ( (day > 274) && (day <= 305)){
+        //oct
+        month=9;
+        day-=274;
+      }
+      else if ( (day > 305) && (day <= 335)){
+        //nov
+        month=10;
+        day-=305;
+      }
+      else if ( (day > 335) && (day <= 366)){
+        //dec
+        month=11;
+        day-=335;
+      }
+    }
+    else{
+      if( (day>=0) && (day <=31) ){
+        //jan
+        month=0;
+        day-=0;
+      }
+      else if ( (day > 31) && (day <= 59)){
+        //feb
+        month=1;
+        day-=31;
+      }
+      else if ( (day > 59) && (day <= 90)){
+        //march
+        month=2;
+        day-=59;
+      }
+      else if ( (day > 90) & (day <= 120)){
+        //apr
+        month=3;
+        day-=90;
+      }
+      else if ( (day > 120) && (day <= 151)){
+        //may
+        month=4;
+        day-=120;
+      }
+      else if ( (day > 151) && (day <= 181)){
+        //jun
+        month=5;
+        day-=151;
+      }
+      else if ( (day > 181) && (day <= 212)){
+        //jul
+        month=6;
+        day-=181;
+      }
+      else if ( (day > 212) && (day <= 243)){
+        //aug
+        month=7;
+        day-=212;
+      }
+      else if ( (day > 243) && (day <= 273)){
+        //sept
+        month=8;
+        day-=243;
+      }
+      else if ( (day > 273) && (day <= 304)){
+        //oct
+        month=9;
+        day-=273;
+      }
+      else if ( (day > 304) && (day <= 334)){
+        //nov
+        month=10;
+        day-=304;
+      }
+      else if ( (day > 334) && (day <= 365)){
+        //dec
+        month=11;
+        day-=334;
+      }
+    }
     localtime.tm_mday   = day;
     localtime.tm_mon    = month;
     localtime.tm_isdst  = 0;

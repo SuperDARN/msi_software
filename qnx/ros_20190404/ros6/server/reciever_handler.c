@@ -34,12 +34,12 @@ extern dictionary *Site_INI;
  */
 int compare_structs(const void *a, const void *b)
 {
-    t_fft_index *struct_a = (t_fft_index *)a;
-    t_fft_index *struct_b = (t_fft_index *)b;
+  t_fft_index *struct_a = (t_fft_index *)a;
+  t_fft_index *struct_b = (t_fft_index *)b;
 
-    if (struct_a->apwr > struct_b->apwr) return 1;
-    else if (struct_a->apwr == struct_b->apwr) return 0;
-    else return -1;
+  if (struct_a->apwr > struct_b->apwr) return 1;
+  else if (struct_a->apwr == struct_b->apwr) return 0;
+  else return -1;
 }
 
 void *receiver_rxfe_settings(void *arg)
@@ -55,7 +55,8 @@ void *receiver_rxfe_settings(void *arg)
     msg.type=RECV_RXFE_SETTINGS;
     msg.status=1;
     send_data(recvsock, &msg, sizeof(struct DriverMsg));
-    send_data(recvsock, &site_settings->ifmode, sizeof(site_settings->ifmode));
+    send_data(recvsock, &site_settings->ifmode,
+              sizeof(site_settings->ifmode));
     send_data(recvsock, &site_settings->rf_settings,
               sizeof(struct RXFESettings));
     send_data(recvsock, &site_settings->if_settings,
@@ -94,8 +95,6 @@ void receiver_assign_frequency(struct ControlProgram *arg)
   int32 temp;
   float tempf;
 
-  /* SGS: where does stderr go? 
-  *  http://en.wikipedia.org/wiki/Standard_streams */
   if (verbose > -1) {
     fprintf(stdout, "ASSIGN FREQ: %d %d\n",
           arg->parameters->radar-1,arg->parameters->channel-1);
@@ -116,7 +115,7 @@ void receiver_assign_frequency(struct ControlProgram *arg)
   strcat(test_file,"/collect.fft");
   /* If requested setup fft diagnostic file */
   ftest=fopen(test_file, "r");
-  if (ftest!=NULL) {
+  if (ftest != NULL) {
     fclose(ftest);
     data_file[0]='\0';
     clock_gettime(CLOCK_REALTIME, &time_now);
@@ -407,9 +406,9 @@ void receiver_assign_frequency(struct ControlProgram *arg)
   * Let's check the frequency blacklist...for science!!!!!
   */  
 
-  if (blacklist!=NULL) {  
+  if (blacklist != NULL) {  
     /* Set the counter to the unmodified blacklist count */
-    blacklist_count=*blacklist_count_pointer;
+    blacklist_count = *blacklist_count_pointer;
     if (verbose > -1) fprintf(stderr,"%d %d :: Filling backlist %d\n",
                               arg->parameters->radar,arg->parameters->channel,
                               blacklist_count); 
@@ -418,9 +417,9 @@ void receiver_assign_frequency(struct ControlProgram *arg)
      * blacklist priority is like golf: lower number wins
      */
     thread_list=controlprogram_threads;
-    while (thread_list!=NULL) {
+    while (thread_list != NULL) {
       controlprogram=thread_list->data;
-      if (controlprogram!=arg) {                   
+      if (controlprogram != arg) {                   
         if (verbose>1)
           fprintf(stderr,"  %d %d :: Checking Control Program :: %p  :: %d "
                           "%d\n", arg->parameters->radar,
@@ -429,50 +428,53 @@ void receiver_assign_frequency(struct ControlProgram *arg)
                           controlprogram->parameters->channel);
         if (controlprogram->active!=0) {
           //if (controlprogram->parameters->priority < arg->parameters->priority){
-          if (blacklist_count < (Max_Control_THREADS+*blacklist_count_pointer)) {  
-                    /* place controlprogram's assigned frequency on the blacklist */
-                    blacklist[blacklist_count].start=controlprogram->state->best_assigned_freq-controlprogram->state->rx_sideband;
-                    blacklist[blacklist_count].end=controlprogram->state->best_assigned_freq+controlprogram->state->rx_sideband;
-                    blacklist[blacklist_count].program=(unsigned int)controlprogram;
-                    if (verbose>1) fprintf(stderr,"  %d %d :: Adding backlist :: %d %d :  %d %d\n",
-                                arg->parameters->radar,arg->parameters->channel,
-                                controlprogram->parameters->radar,controlprogram->parameters->channel,
-                                blacklist[blacklist_count].start,blacklist[blacklist_count].end); 
-                    blacklist_count++;
-                    if (blacklist_count >= (Max_Control_THREADS+*blacklist_count_pointer)) blacklist_count=(Max_Control_THREADS+*blacklist_count_pointer); 
+          if (blacklist_count < (Max_Control_THREADS+*blacklist_count_pointer)){
+            /* place controlprogram's assigned frequency on the blacklist */
+            blacklist[blacklist_count].start=controlprogram->state->best_assigned_freq-controlprogram->state->rx_sideband;
+            blacklist[blacklist_count].end=controlprogram->state->best_assigned_freq+controlprogram->state->rx_sideband;
+            blacklist[blacklist_count].program=(unsigned int)controlprogram;
+            if (verbose>1)
+              fprintf(stderr,"  %d %d :: Adding backlist :: %d %d :  %d %d\n",
+                      arg->parameters->radar,arg->parameters->channel,
+                      controlprogram->parameters->radar,controlprogram->parameters->channel,
+                      blacklist[blacklist_count].start,blacklist[blacklist_count].end); 
+            blacklist_count++;
+            if (blacklist_count >= (Max_Control_THREADS+*blacklist_count_pointer)) blacklist_count=(Max_Control_THREADS+*blacklist_count_pointer); 
           }
               //} 
         }
-            }
-            thread_list=thread_list->prev;
-        }
-    if (verbose>-1) fprintf(stderr,"%d %d :: Done Filling backlist %d\n",arg->parameters->radar,arg->parameters->channel,blacklist_count);  
-    if(verbose > -1 ) {
-      fprintf(stderr,"Current blacklist:\n");
-      for (k=0; k<blacklist_count; k++) {
-        fprintf(stderr," %8d %8d : %p\n",blacklist[k].start,blacklist[k].end,blacklist[k].program);
       }
+      thread_list=thread_list->prev;
+    }
+    if (verbose > -1 ) {
+      fprintf(stderr,"%d %d :: Done Filling backlist %d\n",
+              arg->parameters->radar,arg->parameters->channel,blacklist_count);
+      fprintf(stderr,"Current blacklist:\n");
+      for (k=0; k<blacklist_count; k++)
+        fprintf(stderr," %8d %8d : %p\n",blacklist[k].start,blacklist[k].end,
+                        blacklist[k].program);
     }
 
     /* Put the updated blacklist information into the diagnostic file */
-    if(f_fft>=0){
-            temp=blacklist_count;
-            write(f_fft, &temp, sizeof(int32));     
+    if (f_fft >= 0) {
+      temp=blacklist_count;
+      write(f_fft, &temp, sizeof(int32));     
       for (k=0; k<blacklist_count; k++) {
         temp=blacklist[k].start;
-              write(f_fft, &temp, sizeof(int32));
+        write(f_fft, &temp, sizeof(int32));
       }
       for (k=0; k<blacklist_count; k++) {
         temp=blacklist[k].end;
-              write(f_fft, &temp, sizeof(int32));
+        write(f_fft, &temp, sizeof(int32));
       }
       for (k=0; k<blacklist_count; k++) {
         temp=blacklist[k].program;
-              write(f_fft, &temp, sizeof(int32));
+        write(f_fft, &temp, sizeof(int32));
       }
     }
 
-    /* Now let's select the subset of fft frequencies not in the updated blacklist */
+    /* Now let's select the subset of fft frequencies not in the updated
+        blacklist */
     j = 0;
     for (i=0; i<ncfs-1; i++) {
       clean = 1;
@@ -501,12 +503,12 @@ void receiver_assign_frequency(struct ControlProgram *arg)
 
     /* now let's get an array that is the proper size and transfer
      * everything to that array */
-    if(sub_fft_array!=NULL) free(sub_fft_array);
-                sub_fft_array=NULL; 
+    if (sub_fft_array!=NULL) free(sub_fft_array);
+    sub_fft_array=NULL; 
     sub_fft_array = (t_fft_index *)malloc(sizeof(t_fft_index)*nfreq);
-          memcpy(sub_fft_array,fft_array,nfreq*sizeof(t_fft_index));
-    if(fft_array!=NULL) free(fft_array);
-                fft_array=NULL; 
+    memcpy(sub_fft_array,fft_array,nfreq*sizeof(t_fft_index));
+    if (fft_array != NULL) free(fft_array);
+    fft_array=NULL; 
                     
   } else {
     /* I am assuming that if blacklist is NULL there is no restricted
@@ -514,116 +516,132 @@ void receiver_assign_frequency(struct ControlProgram *arg)
      * the restrict.dat file */
     nfreq = ncfs;
 
-    if(fft_array!=NULL) free(fft_array);
+    if (fft_array!=NULL) free(fft_array);
     fft_array=NULL;
   }
+
   /* The only array we now have is sub_fft_array and it contains only those
    * frequencies that are in the clear frequency search band and not in
    * any of the restricted frequency bands */
 
   /* sort the array of allowable frequencies */
   qsort(sub_fft_array, nfreq, sizeof(sub_fft_array[0]), compare_structs);
-        if (detrend_enabled) {
+  if (detrend_enabled) {
     /* Add back the detrended value to get the correct noise value */
-          for(i=0;i<nfreq;i++) {
-              sub_fft_array[i].pwr=sub_fft_array[i].pwr+sub_fft_array[i].detrend;
-              sub_fft_array[i].apwr=sub_fft_array[i].apwr+sub_fft_array[i].detrend;
+    for (i=0;i<nfreq;i++) {
+      sub_fft_array[i].pwr=sub_fft_array[i].pwr+sub_fft_array[i].detrend;
+      sub_fft_array[i].apwr=sub_fft_array[i].apwr+sub_fft_array[i].detrend;
     }
   }
   /* Put sorted and available frequencies into diagnostic file */
-   if(f_fft>=0){
-          temp=nfreq;
-          write(f_fft, &temp, sizeof(int32));
-          for(i=0;i<nfreq;i++) {
-              temp=sub_fft_array[i].index;
-              write(f_fft, &temp, sizeof(int32));
-          }
-          for(i=0;i<nfreq;i++) {
-              tempf=sub_fft_array[i].freq;
-              write(f_fft, &tempf, sizeof(float));
-          }
-          for(i=0;i<nfreq;i++) {
-              tempf=sub_fft_array[i].pwr;
-              write(f_fft, &tempf, sizeof(float));
-          }
-          for(i=0;i<nfreq;i++) {
-              tempf=sub_fft_array[i].apwr;
-              write(f_fft, &tempf, sizeof(float));
-          }
+  if (f_fft >= 0) {
+    temp = nfreq;
+    write(f_fft, &temp, sizeof(int32));
+    for (i=0;i<nfreq;i++) {
+      temp=sub_fft_array[i].index;
+      write(f_fft, &temp, sizeof(int32));
     }
+    for (i=0;i<nfreq;i++) {
+      tempf=sub_fft_array[i].freq;
+      write(f_fft, &tempf, sizeof(float));
+    }
+    for (i=0;i<nfreq;i++) {
+      tempf=sub_fft_array[i].pwr;
+      write(f_fft, &tempf, sizeof(float));
+    }
+    for (i=0;i<nfreq;i++) {
+      tempf=sub_fft_array[i].apwr;
+      write(f_fft, &tempf, sizeof(float));
+    }
+  }
 
 
-        if(nfreq > 0 ) {
+  if (nfreq > 0) {
     /* Just here for logging purposes */
-      if (verbose>-1) { 
-          fprintf(stderr," Highest 5 freqs: \n");
-          for(i = nfreq-1; i > nfreq-6; i--){
-            if(i >= 0) { 
-                  fprintf(stderr,"%d: freq = %8.3lf, pwr = %8.3lf apwr = %8.3lf\n",i,sub_fft_array[i].freq,sub_fft_array[i].pwr,sub_fft_array[i].apwr);
+    if (verbose > -1) { 
+      fprintf(stderr," Highest 5 freqs: \n");
+      for (i = nfreq-1; i > nfreq-6; i--) {
+        if (i >= 0) { 
+          fprintf(stderr,"%d: freq = %8.3lf, pwr = %8.3lf apwr = %8.3lf\n",
+                  i,sub_fft_array[i].freq,sub_fft_array[i].pwr,
+                  sub_fft_array[i].apwr);
         } else {
-                  fprintf(stderr,"%d: Not enough valid frequencies in fft %d\n",i,nfreq);
+          fprintf(stderr,"%d: Not enough valid frequencies in fft %d\n",
+                  i,nfreq);
         }
-          }
-          fprintf(stderr," Lowest 5 freqs: \n");
-          for(i = 0; i< 5;i++){
-            if(i < nfreq) { 
-                  fprintf(stderr,"%d: freq = %8.3lf, pwr = %8.3lf apwr = %8.3lf\n",i,sub_fft_array[i].freq,sub_fft_array[i].pwr,sub_fft_array[i].apwr);
+      }
+      fprintf(stderr," Lowest 5 freqs: \n");
+      for (i = 0; i< 5;i++) {
+        if (i < nfreq) { 
+          fprintf(stderr,"%d: freq = %8.3lf, pwr = %8.3lf apwr = %8.3lf\n",
+                  i,sub_fft_array[i].freq,sub_fft_array[i].pwr,
+                  sub_fft_array[i].apwr);
         } else {
-                  fprintf(stderr,"%d: Not enough valid frequencies in fft %d\n",i,nfreq);
+          fprintf(stderr,"%d: Not enough valid frequencies in fft %d\n",
+                  i,nfreq);
         }
-          }
-      } 
-    /*
-    * Now set best available frequency from the sorted sub_fft_array as this controlprogram's best assigned frequency   
-    */
-      best_index=0; 
-          arg->state->current_assigned_freq=sub_fft_array[best_index].freq;
-          arg->state->current_assigned_noise=sub_fft_array[best_index].apwr;
-      arg->state->best_assigned_freq=sub_fft_array[best_index].freq;
-      arg->state->best_assigned_noise=sub_fft_array[best_index].apwr;
+      }
+    } 
 
-      if(verbose > 1 ) fprintf(stderr,"%lf best frequency: %d assigned frequency: %d\n",sub_fft_array[best_index].freq,
-                           arg->state->best_assigned_freq,arg->state->current_assigned_freq);
+    /*
+     * Now set best available frequency from the sorted sub_fft_array as this
+     *  controlprogram's best assigned frequency   
+     */
+    best_index=0; 
+    arg->state->current_assigned_freq=sub_fft_array[best_index].freq;
+    arg->state->current_assigned_noise=sub_fft_array[best_index].apwr;
+    arg->state->best_assigned_freq=sub_fft_array[best_index].freq;
+    arg->state->best_assigned_noise=sub_fft_array[best_index].apwr;
+
+    if (verbose > 1)
+      fprintf(stderr,"%lf best frequency: %d assigned frequency: %d\n",
+              sub_fft_array[best_index].freq, arg->state->best_assigned_freq,
+              arg->state->current_assigned_freq);
 
     arg->state->tx_sideband=padded_tx_sideband;
     arg->state->rx_sideband=padded_rx_sideband;
     /*
-    * TODO: check to see if any controlprogram has a currently assigned frequency that conflicts with the best freq   
-    * priority :high number wins
-    * Kick lower priority control programs to give up their frequency.
-    */
+     * TODO: check to see if any controlprogram has a currently assigned
+     *       frequency that conflicts with the best freq   
+     * priority :high number wins
+     * Kick lower priority control programs to give up their frequency.
+     */
 
   } else {
-    /* JDS QUESTION: Is this the best fallback when no valid frequency is available?
-    *  A simple single _default_ for all controlprograms is not valid in a multi channel configuration */ 
-      if (verbose>-1) fprintf(stderr,"No valid frequencies Setting best available frequency to zero with very high noise\n");
-          arg->state->current_assigned_freq=0;
-          arg->state->current_assigned_noise=1E10;
-      arg->state->best_assigned_freq=0;
-      arg->state->best_assigned_noise=0;
-
+    /* JDS QUESTION: Is this the best fallback when no valid frequency is
+     * available?
+     * A simple single _default_ for all controlprograms is not valid in a
+     * multi channel configuration
+     */ 
+    if (verbose >- 1)
+      fprintf(stderr,"No valid frequencies Setting best available frequency "
+                     "to zero with very high noise\n");
+    arg->state->current_assigned_freq=0;
+    arg->state->current_assigned_noise=1E10;
+    arg->state->best_assigned_freq=0;
+    arg->state->best_assigned_noise=0;
   }
+
   /* Put assignment data into diagnostic file */
-  if(f_fft>=0){
-         temp=arg->state->current_assigned_freq;
-         write(f_fft, &temp, sizeof(int32));
-         tempf=arg->state->current_assigned_noise;
-         write(f_fft, &tempf, sizeof(float));
-         temp=arg->state->best_assigned_freq;
-         write(f_fft, &temp, sizeof(int32));
-         tempf=arg->state->best_assigned_noise;
-         write(f_fft, &tempf, sizeof(float));
-         close(f_fft);
+  if (f_fft >= 0){
+    temp=arg->state->current_assigned_freq;
+    write(f_fft, &temp, sizeof(int32));
+    tempf=arg->state->current_assigned_noise;
+    write(f_fft, &tempf, sizeof(float));
+    temp=arg->state->best_assigned_freq;
+    write(f_fft, &temp, sizeof(int32));
+    tempf=arg->state->best_assigned_noise;
+    write(f_fft, &tempf, sizeof(float));
+    close(f_fft);
   }
 
-/*
- * Final Clean up
- */
-  if(sub_fft_array!=NULL) free(sub_fft_array);
+  /*
+   * Final Clean up
+   */
+  if (sub_fft_array != NULL) free(sub_fft_array);
   sub_fft_array=NULL;
   pthread_exit(NULL);
 }
-
 
 void receiver_exit(void *arg)
 {
@@ -711,21 +729,25 @@ void *receiver_controlprogram_get_data(struct ControlProgram *arg)
   int r,c,b;
   unsigned long wait_elapsed;
   double error_percent=0;
-  int error_flag;
-  error_flag=0;
+  int error_flag=0;
+
   if (collection_count==ULONG_MAX) {
     error_count=0;
     collection_count=0;
   }
-  if (arg!=NULL) {
-    if (arg->state!=NULL) {
+
+  if (arg != NULL) {
+    if (arg->state != NULL) {
       gettimeofday(&t0,NULL);
-      while(arg->state->ready!=0) {
+      while (arg->state->ready != 0) {
         gettimeofday(&t3,NULL);
-        wait_elapsed=(t3.tv_sec-t0.tv_sec)*1E6;
-        wait_elapsed+=t3.tv_usec-t0.tv_usec;
-        if(wait_elapsed > 10*1E6) {
-          error_flag=-101; 
+        fprintf(stderr,"RECV::Waiting in RX_ctrlprog_get_data(): %s\n",
+                ctime(&t3.tv_sec));
+        wait_elapsed =  (t3.tv_sec-t0.tv_sec)*1E6;
+        wait_elapsed += t3.tv_usec-t0.tv_usec;
+        if (wait_elapsed > 10*1E6) {
+          error_flag = -101; 
+          fprintf(stderr,"RECV::Wait too long in RX_ctrlprog_get_data()\n");
           break;  
         } else {
           usleep(1);
@@ -733,10 +755,14 @@ void *receiver_controlprogram_get_data(struct ControlProgram *arg)
       } 
       pthread_mutex_lock(&recv_comm_lock);
       collection_count++;
-      if (error_flag==0) {
+
+      if (error_flag == 0) {
+        fprintf(stderr, "RECV::No error in RX_ctrlprog_get_data()\n");
         arg->data->samples=arg->parameters->number_of_samples;
-        if(arg->main!=NULL) munmap(arg->main,sizeof(unsigned int)*arg->data->samples);
-        if(arg->back!=NULL) munmap(arg->back,sizeof(unsigned int)*arg->data->samples);
+        if (arg->main != NULL)
+          munmap(arg->main,sizeof(unsigned int)*arg->data->samples);
+        if (arg->back != NULL)
+          munmap(arg->back,sizeof(unsigned int)*arg->data->samples);
 
         msg.type=RECV_GET_DATA;
         msg.status=1;
@@ -744,49 +770,58 @@ void *receiver_controlprogram_get_data(struct ControlProgram *arg)
         send_data(recvsock, arg->parameters, sizeof(struct ControlPRM));
         recv_data(recvsock,&arg->data->status,sizeof(arg->data->status));
       } else {
-        arg->data->status=error_flag;
-        arg->data->samples=0;
-      }      
-      if (arg->data->status==0 ) {
+        fprintf(stderr, "RECV::Error %d in RX_ctrlprog_get_data()\n", error_flag);
+        arg->data->status = error_flag;
+        arg->data->samples = 0;
+      }
+
+      if (arg->data->status == 0) {
+        fprintf(stderr, "RECV:: status good in RX_ctrlprog_get_data()\n");
         //printf("RECV: GET_DATA: status good\n");
-        recv_data(recvsock,&arg->data->shm_memory,sizeof(arg->data->shm_memory));
-        recv_data(recvsock,&arg->data->frame_header,sizeof(arg->data->frame_header));
+        recv_data(recvsock,&arg->data->shm_memory,
+                  sizeof(arg->data->shm_memory));
+        recv_data(recvsock,&arg->data->frame_header,
+                  sizeof(arg->data->frame_header));
         recv_data(recvsock,&arg->data->bufnum,sizeof(arg->data->bufnum));
         recv_data(recvsock,&arg->data->samples,sizeof(arg->data->samples));
         recv_data(recvsock,&arg->main_address,sizeof(arg->main_address));
         recv_data(recvsock,&arg->back_address,sizeof(arg->back_address));
         //printf("RECV: GET_DATA: data recv'd\n");
-        r=arg->parameters->radar-1;
-        c=arg->parameters->channel-1;
-        b=arg->data->bufnum;
+        r = arg->parameters->radar-1;
+        c = arg->parameters->channel-1;
+        b = arg->data->bufnum;
 
         //printf("RECV: GET_DATA: samples %d\n",arg->data->samples);
         //printf("RECV: GET_DATA: frame header %d\n",arg->data->frame_header);
         //printf("RECV: GET_DATA: shm flag %d\n",arg->data->shm_memory);
-        if(arg->data->shm_memory) {
+        if (arg->data->shm_memory) {
           //printf("RECV: GET_DATA: set up shm memory space\n");
           sprintf(shm_device,"/receiver_main_%d_%d_%d",r,c,b);
           shm_fd=shm_open(shm_device,O_RDONLY,S_IRUSR | S_IWUSR);
           if (shm_fd == -1) fprintf(stderr,"shm_open error\n");              
-          arg->main=mmap(0,sizeof(unsigned int)*arg->data->samples,PROT_READ,MAP_SHARED,shm_fd,0);
+          arg->main=mmap(0,sizeof(unsigned int)*arg->data->samples,
+                          PROT_READ,MAP_SHARED,shm_fd,0);
           close(shm_fd);
           sprintf(shm_device,"/receiver_back_%d_%d_%d",r,c,b);
           shm_fd=shm_open(shm_device,O_RDONLY,S_IRUSR | S_IWUSR);
-          arg->back=mmap(0,sizeof(unsigned int)*arg->data->samples,PROT_READ,MAP_SHARED,shm_fd,0);
+          arg->back=mmap(0,sizeof(unsigned int)*arg->data->samples,
+                          PROT_READ,MAP_SHARED,shm_fd,0);
           close(shm_fd);
           //printf("RECV: GET_DATA: end set up shm memory space\n");
 
         } else {
 #ifdef __QNX__
           //printf("RECV: GET_DATA: set up non-shm memory space\n");
-          arg->main =mmap( 0, sizeof(unsigned int)*arg->data->samples, 
-                        PROT_READ|PROT_NOCACHE, MAP_PHYS, NOFD, 
-                            arg->main_address+sizeof(unsigned int)*arg->data->frame_header);
-//                            arg->main_address);
-          arg->back =mmap( 0, sizeof(unsigned int)*arg->data->samples, 
-                        PROT_READ|PROT_NOCACHE, MAP_PHYS, NOFD, 
-                        arg->back_address+sizeof(unsigned int)*arg->data->frame_header);
-//                            arg->back_address);
+          arg->main = mmap(0, sizeof(unsigned int)*arg->data->samples, 
+                            PROT_READ|PROT_NOCACHE, MAP_PHYS, NOFD, 
+                            arg->main_address+sizeof(unsigned int)*
+                              arg->data->frame_header);
+                              //arg->main_address);
+          arg->back = mmap(0, sizeof(unsigned int)*arg->data->samples, 
+                            PROT_READ|PROT_NOCACHE, MAP_PHYS, NOFD, 
+                            arg->back_address+sizeof(unsigned int)*
+                              arg->data->frame_header);
+                              //arg->back_address);
 #else
           arg->main=NULL;
           arg->back=NULL;
@@ -795,18 +830,22 @@ void *receiver_controlprogram_get_data(struct ControlProgram *arg)
         }
 
       } else { //error occurred
+        fprintf(stderr, "RECV:: status bad %d in RX_ctrlprog_get_data()\n",
+                arg->data->status);
         error_count++;
         error_percent=(double)error_count/(double)collection_count*100.0;
         arg->data->samples=0;
         arg->main=NULL;
         arg->back=NULL;
         gettimeofday(&t1,NULL);
-        fprintf(stderr,"RECV::GET_DATA: Bad Status: %d Time: %s",arg->data->status,ctime(&t1.tv_sec));
-        fprintf(stderr,"  Collected: %ld  Errors: %ld  Percentage: %lf\n",collection_count,error_count,error_percent);
+        fprintf(stderr,"RECV::GET_DATA: Bad Status: %d Time: %s",
+                        arg->data->status, ctime(&t1.tv_sec));
+        fprintf(stderr,"  Collected: %ld  Errors: %ld  Percentage: %lf\n",
+                        collection_count,error_count,error_percent);
         fflush(stderr);
       }
 
-      if (error_flag==0) {
+      if (error_flag == 0) {
         //printf("RECV: GET_DATA: recv RosMsg\n");
         recv_data(recvsock, &msg, sizeof(struct DriverMsg));
       }
@@ -814,8 +853,9 @@ void *receiver_controlprogram_get_data(struct ControlProgram *arg)
       pthread_mutex_unlock(&recv_comm_lock);
     }
   }
+
   pthread_exit(NULL);
-};
+}
 
 void *receiver_clrfreq(struct ControlProgram *arg)
 {
@@ -833,13 +873,16 @@ void *receiver_clrfreq(struct ControlProgram *arg)
   int start,end,centre,acount;
   int clr_needed=0;
 
-  //printf("CLRFREQ: %d %d\n",arg->parameters->radar-1,arg->parameters->channel-1);
-  //printf(" FFT FREQ: %d %d\n",arg->clrfreqsearch.start,arg->clrfreqsearch.end);
+  //printf("CLRFREQ: %d %d\n",arg->parameters->radar-1,
+  //                          arg->parameters->channel-1);
+  //printf(" FFT FREQ: %d %d\n",arg->clrfreqsearch.start,
+  //                            arg->clrfreqsearch.end);
   pthread_mutex_lock(&recv_comm_lock);
   gettimeofday(&t0,NULL);
 
   /* Check to see if Clr search request falls within full scan parameters */
-  if((arg->clrfreqsearch.start >=full_clr_start) && (arg->clrfreqsearch.end <= full_clr_end)) {
+  if ((arg->clrfreqsearch.start >= full_clr_start) &&
+      (arg->clrfreqsearch.end <= full_clr_end)) {
     /* Check to see if Full Clr was done recently enough to be useful*/
     wait_elapsed=t0.tv_usec-latest_full_clr_time.tv_usec;
     wait_elapsed*=1E6;
@@ -855,7 +898,8 @@ void *receiver_clrfreq(struct ControlProgram *arg)
     //Do not perform Full Search
     clr_needed=1;
   }
-  switch(clr_needed) {
+
+  switch (clr_needed) {
    case 0:
      break; 
 /*
@@ -909,19 +953,20 @@ void *receiver_clrfreq(struct ControlProgram *arg)
     bandwidth=arg->state->N;
     start=centre-arg->state->N/2;
     end=centre+arg->state->N/2;
-    for(i = 0; i< arg->state->N;i++){
-        index=(start+i-full_clr_start);
-        if ((index >=0) && (index < max_freqs)) {
-          latest_clr_fft[r][index].pwr=pwr[i];
-        }
+    for (i=0; i< arg->state->N;i++) {
+      index=(start+i-full_clr_start);
+      if ((index >= 0) && (index < max_freqs))
+        latest_clr_fft[r][index].pwr=pwr[i];
     }
     break;
   } // END of Switch 
-/* Fill the requested client data */
-  if(arg->state->fft_array!=NULL) free(arg->state->fft_array);
+
+  /* Fill the requested client data */
+  if (arg->state->fft_array!=NULL) free(arg->state->fft_array);
   arg->state->fft_array=NULL;
-  arg->state->fft_array = (t_fft_index *) malloc(sizeof(t_fft_index) * arg->state->N);
-  for(i = 0; i< arg->state->N;i++){
+  arg->state->fft_array = (t_fft_index *)malloc(sizeof(t_fft_index)*
+                                                arg->state->N);
+  for (i=0; i<arg->state->N;i++) {
     arg->state->fft_array[i].apwr=0;
     arg->state->fft_array[i].index = i;
     arg->state->fft_array[i].freq = start+i;
@@ -932,11 +977,11 @@ void *receiver_clrfreq(struct ControlProgram *arg)
       arg->state->fft_array[i].pwr=1E6;
     }
   }
+
   //printf(" Start Freq: %lf\n",arg->state->fft_array[0].freq);
   if (pwr!=NULL) free(pwr);
   pwr=NULL;
   pthread_mutex_unlock(&recv_comm_lock);
   pthread_exit(NULL);
-
 }
 

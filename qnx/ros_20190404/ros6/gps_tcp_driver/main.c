@@ -29,7 +29,7 @@
 #include "include/_refresh_state.h"
 #include "utils.h"
 
-int	sock, msgsock;
+int sock, msgsock;
 int sockaccepted=0;
 int tc_count=0;
 int configured=0, locked=0;
@@ -55,6 +55,7 @@ void graceful_cleanup(int signum)
   close(sock);
   exit(0);
 }
+
 /*-MAIN--------------------------------------------------------------*/
  main() {
   int temp, pci_handle, i, frame_size, status, temp2, ch;
@@ -64,9 +65,9 @@ void graceful_cleanup(int signum)
   int gpssecond, gpsnsecond;
   struct timeval tv;
   struct DriverMsg msg;
-	// socket and message passing variables
+  // socket and message passing variables
   char datacode;
-  int	rval, buf; 
+  int rval, buf; 
   int first_gps_lock;
   fd_set rfds, efds;
 
@@ -76,8 +77,8 @@ void graceful_cleanup(int signum)
 
   /* SET THE SYSTEM CLOCK RESOLUTION AND GET THE START TIME OF THIS PROCESS */
   new.tv_nsec=10000;
-//	sleep.tv_sec=0;
-//	sleep.tv_nsec=10000;
+//  sleep.tv_sec=0;
+//  sleep.tv_nsec=10000;
 #ifdef __QNX__
 /* commented out in FH code
   temp = ClockPeriod(CLOCK_REALTIME,&new,0,0);
@@ -98,23 +99,23 @@ void graceful_cleanup(int signum)
 #endif
 
   /* OPEN THE PLX9656 AND GET LOCAL BASE ADDRESSES */
-//	clock_gettime(CLOCK_REALTIME, &start);
+  //clock_gettime(CLOCK_REALTIME, &start);
   temp = _open_PLX9050(&BASE0, &BASE1, &pci_handle, &mmap_io_ptr, &IRQ);
-  if (temp==-1) {
-    fprintf(stderr, "	PLX9695 configuration failed\n");
+  if (temp == -1) {
+    fprintf(stderr, " PLX9695 configuration failed\n");
     configured = 0;
   } else {
     if (verbose > 0) fprintf(stderr,"IRQ is %d\n",IRQ);
     configured = 1;
   }
-  fprintf(stderr,"BASE0 %p  BASE1 %p\n",BASE0,BASE1);
+  fprintf(stderr,"BASE0 %p  BASE1 %p\n", BASE0, BASE1);
   fflush(stderr);
   displaystat.mdrift = 0;
 
   //INITIALIZE CARD
   if (configured) {
     // set card for synchronized generator mode, GPS reference enabled
-    // Daylight Savings Time Disabled	
+    // Daylight Savings Time Disabled 
     *((uint32_t*)(BASE1+0x118)) = 0x90000021; //x90 to address x11B produced
                                             // 10 MHz reference signal output
     //clear time compare register
@@ -169,29 +170,31 @@ void graceful_cleanup(int signum)
   EventInterrupt = 0;
 //        if(configured && IRQ < 16) {
 //          if (verbose > 0) printf("starting int thread\n");
-//	  pthread_create(&int_thread_id, NULL, int_thread, NULL);
+//    pthread_create(&int_thread_id, NULL, int_thread, NULL);
 //        } 
 //        if(configured) {
 //          if (verbose > 0) printf("enabling event interrupt\n");
-//	  *((uint08*)(BASE1+0xf8))=0x00;
-//	  *((uint08*)(BASE1+0xf8))=0xcf;
+//    *((uint08*)(BASE1+0xf8))=0x00;
+//    *((uint08*)(BASE1+0xf8))=0xcf;
 //        }
+
   //start thread to refresh display
   if (verbose > 0) {
     fprintf(stderr,"starting refresh thread\n");
     fflush(stderr);
   }
   pthread_create(&refresh_thread_id, NULL, refresh_state, NULL);
-  //set terminal for input
-//	halfdelay(1);
 
-	//for (i=0;i<1000;i++)
+  //set terminal for input
+  //  halfdelay(1);
+
+  //for (i=0;i<1000;i++)
   temp = clock_gettime(CLOCK_REALTIME, &start_p);
-  //open tcp socket	
+  //open tcp socket 
   sock = tcpsocket(GPS_HOST_PORT);
   temp = 1;
-	//ioctl(sock,FIONBIO,&temp);
-	//cntl(sock,F_SETFL,O_NONBLOCK);
+  //ioctl(sock,FIONBIO,&temp);
+  //cntl(sock,F_SETFL,O_NONBLOCK);
   listen(sock,5);
   first_gps_lock = 0;
   while (1) {
@@ -290,8 +293,8 @@ void graceful_cleanup(int signum)
                 fprintf(stderr," %s\n", ctime(&gpssecond)); 
                 fflush(stderr);
               }
-					    rval = send_data(msgsock,&gpssecond, sizeof(int));
-					    rval = send_data(msgsock,&gpsnsecond, sizeof(int));
+              rval = send_data(msgsock,&gpssecond, sizeof(int));
+              rval = send_data(msgsock,&gpsnsecond, sizeof(int));
               rval = send_data(msgsock, &msg, sizeof(struct DriverMsg));
               break;
 
@@ -330,8 +333,8 @@ void graceful_cleanup(int signum)
                 *((uint32_t*)(BASE1+0x128)) = displaystat.ratesynthrate;
 
                 // load rate synthesizer rate 
-//					  *((uint32*)(BASE1+0x12c))|=0x00000200;  // CV value
-    					  *((uint32_t*)(BASE1+0x12c)) |= 0x00000f00;
+//            *((uint32*)(BASE1+0x12c))|=0x00000200;  // CV value
+                *((uint32_t*)(BASE1+0x12c)) |= 0x00000f00;
               }
               rval = send_data(msgsock, &msg, sizeof(struct DriverMsg));
               break;
@@ -353,7 +356,7 @@ void graceful_cleanup(int signum)
               rval = send_data(msgsock,&status, sizeof(int));
               break;
 
-            default:	
+            default:  
             if (verbose > 0)
               fprintf(stderr,"BAD CODE: %c : %d\n",datacode,datacode);
             break;
@@ -365,15 +368,15 @@ void graceful_cleanup(int signum)
 
   /* CLOSE THE PLX9656 AND CLEAR ALL MEMORY MAPS */
   temp = _close_PLX9656(pci_handle, BASE0, BASE1, mmap_io_ptr);
-  printf("close:		0x%x\n", 3);
+  printf("close:    0x%x\n", 3);
 
   /* READ SYSTEM TIME AND END OF PROCESS, AND PRINT TOTAL TIME TO RUN */
   temp = clock_gettime(CLOCK_REALTIME, &stop_p);
   if (temp==-1) {
     perror("Unable to read sytem time");
   }
-//	time=(float)(stop_p.tv_nsec-start_p.tv_nsec);
-//	fprintf(stderr, "TOTAL TIME: %f\n",time);
+//  time=(float)(stop_p.tv_nsec-start_p.tv_nsec);
+//  fprintf(stderr, "TOTAL TIME: %f\n",time);
 
 }
 

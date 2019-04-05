@@ -24,9 +24,8 @@ int get_software_time(int *sec, int *nsec, int BASE1) {
 
   // READ THE TIME
   // poll status reg an wait 10 us
-  if (verbose > 1) {
+  if (verbose > 1)
     printf("get_software_time()\n");
-  }
 
   if (BASE1 != NULL) {
     *((uint08*)(BASE1+0xfc)) = 0x0;

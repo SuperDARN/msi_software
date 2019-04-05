@@ -90,9 +90,11 @@ void *coordination_handler(struct ControlProgram *control_program)
       }
 
       trigger_state = 1;
-      thread_list = controlprogram_threads;
 
-      thread_list=controlprogram_threads;   // SGS: why twice???
+      // SGS: this whole construct does nothing...
+      /*
+      thread_list = controlprogram_threads;
+      thread_list = controlprogram_threads;   // SGS: why twice???
       while (thread_list != NULL) { // SGS: this whole thing is dumb
         cprog = thread_list->data;
         if (cprog != NULL) {
@@ -103,6 +105,7 @@ void *coordination_handler(struct ControlProgram *control_program)
         } else { }
         thread_list = thread_list->prev;
       }
+      */
 
       if (verbose > 1) { 
         gettimeofday(&t2,NULL);
