@@ -11,11 +11,13 @@
 #include <time.h>
 #include "rtypes.h"
 #include "_prog_conventions.h"
+#include "dayno.h"
+
 extern int verbose;
 
 /*-GET_EVENT_TIME-------------------------------------------------*/
-int get_event_time(int *sec, int *nsec, int BASE1) {
-
+int get_event_time(int *sec, int *nsec, int BASE1)
+{
   struct timespec sleep,tp;
   struct tm localtime;
   time_t calandertime;
@@ -54,13 +56,16 @@ int get_event_time(int *sec, int *nsec, int BASE1) {
 //           10*((temp & 0xf0) >> 4) + 1*((temp & 0xf));
     localtime.tm_year = year-1900;
 
-    //day
+    //day number
     temp = temp178;
     day = 100*((temp & 0xf000000) >> 24) + 10*((temp & 0xf00000) >> 20) +
-          ((temp & 0xf0000)>>16);
+              ((temp & 0xf0000) >> 16);
 //          1*((temp & 0xf0000)>>16);
 
+    dayno2mmdd(year, day, &month, &day);
+
     /* this is awful code AND wrong */
+/*
     if( (year%4) == 0){
       //leap year
       if( (day>=0) && (day <=31) ){
@@ -186,6 +191,8 @@ int get_event_time(int *sec, int *nsec, int BASE1) {
         day-=334;
       }
     }
+*/
+
     localtime.tm_mday   = day;
     localtime.tm_mon    = month;
     localtime.tm_isdst  = 0;

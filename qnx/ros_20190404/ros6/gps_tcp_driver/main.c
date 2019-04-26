@@ -37,7 +37,7 @@ unsigned char *BASE0=NULL, *BASE1=NULL;
 int IRQ;
 int intid;
 struct sigevent interruptevent;
-struct GPSStatus displaystat;
+struct GPSStatus dstat;
 struct timespec timecompare, event;
 int RateSynthInterrupt=0, EventInterrupt=0, TimeCompareInterrupt=0;
 int timecompareupdate=0, eventupdate=0;
@@ -57,7 +57,8 @@ void graceful_cleanup(int signum)
 }
 
 /*-MAIN--------------------------------------------------------------*/
- main() {
+int main()
+{
   int temp, pci_handle, i, frame_size, status, temp2, ch;
   unsigned int *mmap_io_ptr, CLOCK_RES;
   struct timespec now, start_p, stop_p;
@@ -110,7 +111,7 @@ void graceful_cleanup(int signum)
   }
   fprintf(stderr,"BASE0 %p  BASE1 %p\n", BASE0, BASE1);
   fflush(stderr);
-  displaystat.mdrift = 0;
+  dstat.mdrift = 0;
 
   //INITIALIZE CARD
   if (configured) {
@@ -119,19 +120,23 @@ void graceful_cleanup(int signum)
     *((uint32_t*)(BASE1+0x118)) = 0x90000021; //x90 to address x11B produced
                                             // 10 MHz reference signal output
     //clear time compare register
-    //now.tv_sec += 0;  // SGS: this HAS to be a mistake
-    now.tv_sec  = 0;
+    now.tv_sec += 0;  // SGS: this HAS to be a mistake
+    //now.tv_sec  = 0;
     now.tv_nsec = 0;
     temp = set_time_compare(0, &now);
     // clear time compare event
     if (configured) *((uint08*)(BASE1+0xf8)) |= 0x02;
 
     //SET INITIAL TIME COMPARE TIME
+
   //*((uint32*)(BASE1+0x128)) = 2;    // value for FH
   //*((uint32*)(BASE1+0x128)) = 10;   // set rate synthesiser rate to a default
-    *((uint32_t*)(BASE1+0x128)) = 2;  // set rate synthesiser rate to a default
                                       //   of 100ms (10pps)
+    *((uint32_t*)(BASE1+0x128)) = 2;  // set rate synthesiser rate to a default
+                                      //   of 100ms (2pps)
+
   //*((uint32*)(BASE1+0x12c)) = 0x0200ff00;  // value for CV
+
     *((uint32_t*)(BASE1+0x12c)) = 0x02000f00;// x12e: event trigger on external
                                              //       event, falling edge 
     // x12d: rising edge rate synthesizer on pin 6, 
@@ -159,8 +164,12 @@ void graceful_cleanup(int signum)
     fprintf(stdout,"****************************************");
     fprintf(stdout,"****************************************\n");
  
+    fprintf(stdout, "TEST START\n");
+    for (i=0; i<100; i++)
+      fprintf(stdout, "  0x%02x\n", *((uint8_t*)(BASE1+0xFE)));
+    fprintf(stdout, "TEST DONE\n");
     //set flag to indicate default trigger mode of rate synthesizer triggers
-    //displaystat.triggermode=8;
+    //dstat.triggermode=8;
 
     //start the interrupt handler
   }
@@ -201,7 +210,7 @@ void graceful_cleanup(int signum)
     if (!first_gps_lock && configured) {
       pthread_mutex_lock(&gps_state_lock);
       get_state();
-      first_gps_lock |= displaystat.gps_lock;
+      first_gps_lock |= dstat.gps_lock;
       pthread_mutex_unlock(&gps_state_lock);
       if (!first_gps_lock) {
         fprintf(stderr,"No GPS Lock Yet\n");
@@ -209,8 +218,8 @@ void graceful_cleanup(int signum)
         locked = 0;
         if (wait_for_lock) {
           fprintf(stderr,"Waiting a few seconds for GPS Lock %d %d %d %d\n",
-                  displaystat.antenna, displaystat.reference_lock,
-                  displaystat.phase_lock, displaystat.gps_lock);
+                  dstat.antenna, dstat.reference_lock,
+                  dstat.phase_lock, dstat.gps_lock);
           fflush(stderr);
           sleep(10);
           continue; 
@@ -271,10 +280,11 @@ void graceful_cleanup(int signum)
           rval = recv_data(msgsock,&msg,sizeof(struct DriverMsg));
           datacode=msg.type;
           if (verbose > 0) printf("\nmsg code is %c\n", datacode);
-          locked |= displaystat.gps_lock;
+          locked |= dstat.gps_lock;
 
           switch (datacode) {
 
+            /*---------------------------------------------------------------*/
             case GPS_GET_SOFT_TIME:
               if (verbose > 1)
                 fprintf(stderr,"GPS_GET_SOFT_TIME: Configured: %d Locked: %d\n",
@@ -298,6 +308,7 @@ void graceful_cleanup(int signum)
               rval = send_data(msgsock, &msg, sizeof(struct DriverMsg));
               break;
 
+            /*---------------------------------------------------------------*/
             case GPS_GET_EVENT_TIME:
               gpssecond  = 0;
               gpsnsecond = 0;
@@ -321,16 +332,17 @@ void graceful_cleanup(int signum)
               rval = send_data(msgsock, &msg, sizeof(struct DriverMsg));
               break;
 
+            /*---------------------------------------------------------------*/
             case GPS_SET_TRIGGER_RATE:
               if (verbose > 1) fprintf(stderr,"GPS_SET_TRIGGER_RATE: ");
-              rval = recv_data(msgsock,&displaystat.ratesynthrate,sizeof(int));
+              rval = recv_data(msgsock,&dstat.ratesynthrate,sizeof(int));
               if (verbose > 1)
-                fprintf(stderr, " Set Rate: %d\n", displaystat.ratesynthrate);
+                fprintf(stderr, " Set Rate: %d\n", dstat.ratesynthrate);
 /*              if (configured && locked) */
               if (configured) {
 
                 // set rate synthesizer rate
-                *((uint32_t*)(BASE1+0x128)) = displaystat.ratesynthrate;
+                *((uint32_t*)(BASE1+0x128)) = dstat.ratesynthrate;
 
                 // load rate synthesizer rate 
 //            *((uint32*)(BASE1+0x12c))|=0x00000200;  // CV value
@@ -339,16 +351,18 @@ void graceful_cleanup(int signum)
               rval = send_data(msgsock, &msg, sizeof(struct DriverMsg));
               break;
 
+            /*---------------------------------------------------------------*/
             case GPS_GET_HDW_STATUS:
               //this function does not yet work
               if (verbose > 1) fprintf(stderr, "GPS_GET_HDW_STATUS: ");
               pthread_mutex_lock(&gps_state_lock);
               get_state();
               pthread_mutex_unlock(&gps_state_lock);
-              rval = send_data(msgsock, &displaystat, sizeof(struct GPSStatus));
+              rval = send_data(msgsock, &dstat, sizeof(struct GPSStatus));
               rval = send_data(msgsock, &msg, sizeof(struct DriverMsg));
               break;
 
+            /*---------------------------------------------------------------*/
             case GPS_TRIGGER_NOW:
               //this function does not yet work
               if (verbose > 1) fprintf(stderr, "GPS_TRIGGER_NOW: ");
@@ -356,6 +370,7 @@ void graceful_cleanup(int signum)
               rval = send_data(msgsock,&status, sizeof(int));
               break;
 
+            /*---------------------------------------------------------------*/
             default:  
             if (verbose > 0)
               fprintf(stderr,"BAD CODE: %c : %d\n",datacode,datacode);

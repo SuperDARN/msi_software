@@ -11,24 +11,28 @@
 #include <time.h>
 #include "rtypes.h"
 #include "_prog_conventions.h"
+#include "dayno.h"
+
 extern int verbose;
 
 /*-GET_SOFTWARE_TIME-------------------------------------------------*/
-int get_software_time(int *sec, int *nsec, int BASE1) {
-
+int get_software_time(int *sec, int *nsec, int BASE1)
+{
   struct timespec sleep,tp;
   struct tm localtime;
   time_t calandertime;
   int temp;
   int year,month,day,hour,minute,second,nsecond;
 
+  if (verbose > 1) printf("get_software_time(): ");
+
   // READ THE TIME
   // poll status reg an wait 10 us
-  if (verbose > 1)
-    printf("get_software_time()\n");
-
   if (BASE1 != NULL) {
-    *((uint08*)(BASE1+0xfc)) = 0x0;
+
+    if (verbose > 1) printf("polling GPS card\n");
+
+    *((uint08*)(BASE1+0xfc)) = 0x0; // write any value to update time and pos
     sleep.tv_sec  = 0;
     sleep.tv_nsec = 10000;
     temp = *((uint32_t*)(BASE1+0x104));
@@ -37,9 +41,61 @@ int get_software_time(int *sec, int *nsec, int BASE1) {
 //             10*((temp & 0xf00000) >> 20) + 1*((temp & 0xf0000) >> 16);
     localtime.tm_year = year-1900;
 
-    //day
+    //day number
     day = 100*((temp & 0xf00) >> 8) + 10*((temp & 0xf0) >> 4) + (temp & 0x0f);
 
+    dayno2mmdd(year, day, &month, &day);
+
+    /* bad code here */
+
+    localtime.tm_mday = day;
+    localtime.tm_mon = month;
+    localtime.tm_isdst  = 0;
+    localtime.tm_gmtoff = 0;
+
+    //hour
+    temp = *((uint32_t*)(BASE1+0x100));
+//    hour = 10*((temp & 0xf0000000) >> 28) + 1*((temp & 0xf000000) >> 24);
+    hour = 10*((temp & 0xf0000000) >> 28) + ((temp & 0xf000000) >> 24);
+    localtime.tm_hour = hour;
+
+    //minute
+//    minute = 10*((temp & 0xf00000) >> 20) + 1*((temp & 0xf0000) >> 16);
+    minute = 10*((temp & 0xf00000) >> 20) + ((temp & 0xf0000) >> 16);
+    localtime.tm_min = minute;
+		
+    //second
+//    second = 10*((temp & 0xf000) >> 12) + 1*((temp & 0xf00) >> 8);
+    second = 10*((temp & 0xf000) >> 12) + ((temp & 0xf00) >> 8);
+    localtime.tm_sec = second;
+
+    //nano second
+    temp = *((uint32_t*)(BASE1+0xfc));
+    nsecond = 100*((temp & 0xf0000000) >> 28) +
+              1000000*((temp & 0xf000) >> 12) +
+              100000*((temp & 0xf00) >> 8) +
+              10000*((temp & 0xf0) >> 4) +
+              1000*((temp & 0xf));
+    temp = *((uint32_t*)(BASE1+0x100));
+    nsecond += ( 100000000*((temp & 0xf0) >> 4) + 10000000*(temp & 0xf) );
+
+    calandertime = mktime(&localtime);
+    *sec  = calandertime;
+    *nsec = nsecond;
+  } else {
+
+    if (verbose > 1) printf("NO GPS card\n");
+
+    clock_gettime(CLOCK_REALTIME,&tp);
+    *nsec = tp.tv_nsec;
+    *sec  = tp.tv_sec;
+    calandertime = tp.tv_sec;
+}                                     
+
+  return calandertime;
+}
+
+/*
 		if( (year%4) == 0){
 			//leap year
 			if( (day>=0) && (day <=31) ){
@@ -164,47 +220,5 @@ int get_software_time(int *sec, int *nsec, int BASE1) {
 				day-=334;
 			}
 		}
-    localtime.tm_mday = day;
-    localtime.tm_mon = month;
-    localtime.tm_isdst  = 0;
-    localtime.tm_gmtoff = 0;
-
-    //hour
-    temp = *((uint32_t*)(BASE1+0x100));
-//    hour = 10*((temp & 0xf0000000) >> 28) + 1*((temp & 0xf000000) >> 24);
-    hour = 10*((temp & 0xf0000000) >> 28) + ((temp & 0xf000000) >> 24);
-    localtime.tm_hour = hour;
-
-    //minute
-//    minute = 10*((temp & 0xf00000) >> 20) + 1*((temp & 0xf0000) >> 16);
-    minute = 10*((temp & 0xf00000) >> 20) + ((temp & 0xf0000) >> 16);
-    localtime.tm_min = minute;
-		
-    //second
-//    second = 10*((temp & 0xf000) >> 12) + 1*((temp & 0xf00) >> 8);
-    second = 10*((temp & 0xf000) >> 12) + ((temp & 0xf00) >> 8);
-    localtime.tm_sec = second;
-
-    //nano second
-    temp = *((uint32_t*)(BASE1+0xfc));
-    nsecond = 100*((temp & 0xf0000000) >> 28) +
-              1000000*((temp & 0xf000) >> 12) +
-              100000*((temp & 0xf00) >> 8) +
-              10000*((temp & 0xf0) >> 4) +
-              1000*((temp & 0xf));
-    temp = *((uint32_t*)(BASE1+0x100));
-    nsecond += ( 100000000*((temp & 0xf0) >> 4) + 10000000*(temp & 0xf) );
-
-    calandertime = mktime(&localtime);
-    *sec  = calandertime;
-    *nsec = nsecond;
-  } else {
-    clock_gettime(CLOCK_REALTIME,&tp);
-    *nsec = tp.tv_nsec;
-    *sec  = tp.tv_sec;
-    calandertime = tp.tv_sec;
-}                                     
-
-  return calandertime;
-}
+*/
 

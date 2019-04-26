@@ -874,12 +874,13 @@ void *control_handler(struct ControlProgram *ctrl_prog)
           break;
 
         case SET_READY_FLAG:
-          if (verbose > 1) printf("SET READY : START\n");
+          if (verbose > 1) printf("SET READY : START :: r=%d  c=%d stat=",r,c);
           gettimeofday(&t0,NULL);
           if ((r < 0) || (c < 0)) {
-            if (verbose > 1) printf("  status -1: r: %d  c: %d\n", r,c);
+            if (verbose > 1) printf("-1\n");
             msg.status=-1;
           } else {
+            if (verbose > 1) printf("0\n");
             msg.status=0;
             pthread_mutex_lock(&ctrlprog_list_lock);
             if (ctrl_prog->active!=0) ctrl_prog->active=1;
@@ -998,7 +999,7 @@ void *control_handler(struct ControlProgram *ctrl_prog)
           break;
 
         case REQUEST_ASSIGNED_FREQ:
-          if (verbose > 1) printf("REQUEST_ASSIGNED_FREQ"\n);
+          if (verbose > 1) printf("REQUEST_ASSIGNED_FREQ\n");
           gettimeofday(&t0,NULL);
           pthread_mutex_lock(&ctrlprog_list_lock);
           if ( (r < 0) || (c < 0)) {
@@ -1028,7 +1029,7 @@ void *control_handler(struct ControlProgram *ctrl_prog)
             elapsed+=(t1.tv_usec-t0.tv_usec);
             printf("Client:  Request Freq Elapsed Microseconds: %ld\n",elapsed);
           }
-          if (verbose > 1) printf("REQUEST_ASSIGNED_FREQ : END"\n);
+          if (verbose > 1) printf("REQUEST_ASSIGNED_FREQ : END\n");
           break;
 
         case QUIT:

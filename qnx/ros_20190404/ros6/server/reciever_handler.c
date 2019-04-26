@@ -736,13 +736,20 @@ void *receiver_controlprogram_get_data(struct ControlProgram *arg)
     collection_count=0;
   }
 
+  if (verbose > 1) {
+    fprintf(stderr, "s: %d; r: %d; c: %d\n", arg->radarinfo->site,
+                  arg->radarinfo->radar, arg->radarinfo->channel);
+    fprintf(stderr, "** error_flag %d\n", error_flag);
+  }
+
   if (arg != NULL) {
     if (arg->state != NULL) {
       gettimeofday(&t0,NULL);
       while (arg->state->ready != 0) {
         gettimeofday(&t3,NULL);
-        fprintf(stderr,"RECV::Waiting in RX_ctrlprog_get_data(): %s\n",
-                ctime(&t3.tv_sec));
+        if (verbose > 10)
+          fprintf(stderr,"RECV::Waiting in RX_ctrlprog_get_data(): %s\n",
+                  ctime(&t3.tv_sec));
         wait_elapsed =  (t3.tv_sec-t0.tv_sec)*1E6;
         wait_elapsed += t3.tv_usec-t0.tv_usec;
         if (wait_elapsed > 10*1E6) {
@@ -753,11 +760,14 @@ void *receiver_controlprogram_get_data(struct ControlProgram *arg)
           usleep(1);
         }
       } 
+      if (verbose > 1) fprintf(stderr, "** error_flag %d\n", error_flag);
       pthread_mutex_lock(&recv_comm_lock);
       collection_count++;
+      if (verbose > 1) fprintf(stderr, "** error_flag %d\n", error_flag);
 
       if (error_flag == 0) {
-        fprintf(stderr, "RECV::No error in RX_ctrlprog_get_data()\n");
+        if (verbose > 1)
+          fprintf(stderr, "RECV::No error in RX_ctrlprog_get_data()\n");
         arg->data->samples=arg->parameters->number_of_samples;
         if (arg->main != NULL)
           munmap(arg->main,sizeof(unsigned int)*arg->data->samples);
@@ -770,13 +780,16 @@ void *receiver_controlprogram_get_data(struct ControlProgram *arg)
         send_data(recvsock, arg->parameters, sizeof(struct ControlPRM));
         recv_data(recvsock,&arg->data->status,sizeof(arg->data->status));
       } else {
-        fprintf(stderr, "RECV::Error %d in RX_ctrlprog_get_data()\n", error_flag);
+        if (verbose > 1)
+          fprintf(stderr, "RECV::Error %d in RX_ctrlprog_get_data()\n",
+                          error_flag);
         arg->data->status = error_flag;
         arg->data->samples = 0;
       }
 
       if (arg->data->status == 0) {
-        fprintf(stderr, "RECV:: status good in RX_ctrlprog_get_data()\n");
+        if (verbose > 1)
+          fprintf(stderr, "RECV:: status good in RX_ctrlprog_get_data()\n");
         //printf("RECV: GET_DATA: status good\n");
         recv_data(recvsock,&arg->data->shm_memory,
                   sizeof(arg->data->shm_memory));

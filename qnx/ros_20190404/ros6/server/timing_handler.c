@@ -78,21 +78,25 @@ void *timing_pretrigger(void *arg)
 
   msg.type=TIMING_PRETRIGGER;
   msg.status=1;
-  //printf("TIMING: PRETRIGGER: Send msg\n");
+  if (verbose>1) printf("TIMING: PRETRIGGER: Send msg\n");
   send_data(timingsock, &msg, sizeof(struct DriverMsg));
-  //printf("TIMING: PRETRIGGER: free %p %p\n", bad_transmit_times.start_usec,
-                                            //bad_transmit_times.duration_usec);
+
+  if (verbose>1) printf("TIMING: PRETRIGGER: free %p %p\n",
+                        bad_transmit_times.start_usec,
+                        bad_transmit_times.duration_usec);
   if (bad_transmit_times.start_usec != NULL)
     free(bad_transmit_times.start_usec);
   if (bad_transmit_times.duration_usec != NULL)
     free(bad_transmit_times.duration_usec);
   bad_transmit_times.start_usec=NULL;
   bad_transmit_times.duration_usec=NULL;
-  //printf("TIMING: PRETRIGGER: free end\n");
-  //printf("TIMING: PRETRIGGER: recv bad_transmit times object\n");
+  if (verbose>1) printf("TIMING: PRETRIGGER: free end\n"
+                        "TIMING: PRETRIGGER: recv bad_transmit times object\n");
   recv_data(timingsock, &bad_transmit_times.length,
             sizeof(bad_transmit_times.length));
-  //printf("TIMING: PRETRIGGER: length %d\n",bad_transmit_times.length);
+  if (verbose>1)
+    printf("TIMING: PRETRIGGER: length %d\n",bad_transmit_times.length);
+
   if (bad_transmit_times.length>0) {
     //printf("TIMING: PRETRIGGER: Mallocs start\n");
     bad_transmit_times.start_usec =
@@ -114,7 +118,7 @@ void *timing_pretrigger(void *arg)
   //printf("TIMING: PRETRIGGER: recv msg\n");
   recv_data(timingsock, &msg, sizeof(struct DriverMsg));
   pthread_mutex_unlock(&timing_comm_lock);
-  //printf("TIMING: PRETRIGGER: exit\n");
+  if (verbose>1) printf("TIMING: PRETRIGGER: exit\n");
   pthread_exit(NULL);
 }
 
@@ -124,15 +128,19 @@ void *timing_trigger(int trigger_type)
 
   pthread_mutex_lock(&timing_comm_lock);
 
-  switch(trigger_type) {
+  if (verbose>1) printf("TIMING: TRIGGER: type ");
+  switch (trigger_type) {
     case 0:
       msg.type=TIMING_TRIGGER;
+      if (verbose>1) printf(" free-run\n");
       break;
     case 1:
       msg.type=TIMING_TRIGGER;
+      if (verbose>1) printf(" elapsed time\n");
       break;
     case 2:
       msg.type=TIMING_GPS_TRIGGER;
+      if (verbose>1) printf(" GPS\n");
       break;
   }
 

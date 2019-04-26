@@ -9,25 +9,30 @@
 #endif
 #include "gc314FS.h"
 
-void gc314SetExternalTrigger(int filedes, int state){
-	
-	int retval;
-	int status=0;
-	struct S_external_trigger_data   to_send;
-	
+void gc314SetExternalTrigger(int filedes, int state)
+{
+  int retval;
+  int status=0;
+  struct S_external_trigger_data   to_send;
+  
 #ifdef __QNX__
 
-	to_send.state=state;
+  to_send.state=state;
 
-	retval = devctl(filedes, GC314_SET_EXTERNAL_TRIGGER, &to_send, sizeof(to_send), &status);
-	if(retval != EOK){
-		fprintf(stderr,"Error in gc314fs device descriptor %d: %s\n", filedes, strerror(errno));
-		exit(EXIT_FAILURE);
-	}
-	if(status != GC314_SET_EXTERNAL_TRIGGER){
-		fprintf(stderr,"!!!!Error setting global reset on device descriptor %d.  Error %d\n", filedes, status);
-		if( status == GC314_WRONG_CHANNEL ) fprintf(stderr, "   WRONG CHANNEL\n");
-		exit(EXIT_FAILURE);
-	}
+  retval = devctl(filedes, GC314_SET_EXTERNAL_TRIGGER, &to_send,
+                  sizeof(to_send), &status);
+  if (retval != EOK) {
+    fprintf(stderr,"Error in gc314fs device descriptor %d: %s\n",
+            filedes, strerror(errno));
+    exit(EXIT_FAILURE);
+  }
+
+  if (status != GC314_SET_EXTERNAL_TRIGGER) {
+    fprintf(stderr, "!!!!Error setting global reset on device descriptor %d."
+                    "  Error %d\n", filedes, status);
+    if (status == GC314_WRONG_CHANNEL) fprintf(stderr, "   WRONG CHANNEL\n");
+    exit(EXIT_FAILURE);
+  }
 #endif
 }
+
