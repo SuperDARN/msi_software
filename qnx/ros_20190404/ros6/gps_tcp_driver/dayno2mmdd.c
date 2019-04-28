@@ -13,8 +13,6 @@
 #include <stdio.h>
 #include "dayno.h"
 
-extern int verbose;
-
 int dayno2mmdd(int year, int dayno, int *month, int *day)
 {
   int leap;
@@ -24,15 +22,15 @@ int dayno2mmdd(int year, int dayno, int *month, int *day)
   leap = leap_correct(year);
 
   if ((dayno <= 0) || (dayno > days[12]+leap)) {
-    if (verbose > -1) fprintf(stderr, "Day out of range %d\n", dayno);
+    printf("Day out of range %d\n", dayno);
     return (-1);
   }
 
-  for (k=0; k<12; k++) {
+  for (k=0;k<12;k++) {
     /* add a day if leap year and month > Jan */
-    if (dayno <= days[k+1]+(leap-(k>1))) {
+    if (dayno <= days[k+1]+(leap*(k>0))) {
       *month = k;
-      *day = dayno-(days[k]+leap-(k>1));
+      *day = dayno-(days[k]+leap*(k>1));
       break;
     }
   }
@@ -46,7 +44,6 @@ int leap_correct(int year)
   else return (0);
 }
 
-/* included only because this is what was being used prior */
 int leap_not(int year)
 {
   if (year % 4 == 0) return (1);

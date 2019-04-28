@@ -64,8 +64,54 @@ int get_event_time(int *sec, int *nsec, int BASE1)
 
     dayno2mmdd(year, day, &month, &day);
 
+    /* bad code here */
+
+    localtime.tm_mday   = day;
+    localtime.tm_mon    = month;
+    localtime.tm_isdst  = 0;
+    localtime.tm_gmtoff = 0;
+
+    //hour
+    temp = temp178;
+//    hour = 10*((temp & 0xf000) >> 12) + 1*((temp & 0xf00) >> 8);
+    hour = 10*((temp & 0xf000) >> 12) + ((temp & 0xf00) >> 8);
+    localtime.tm_hour = hour;
+
+    //minute
+//    minute = 10*((temp & 0xf0) >> 4) + 1*((temp & 0xf));
+    minute = 10*((temp & 0xf0) >> 4) + ((temp & 0xf));
+    localtime.tm_min = minute;
+
+    //second
+    temp = temp174;
+//    second = 10*((temp & 0xf0000000) >> 28) + 1*((temp & 0xf000000) >> 24);
+    second = 10*((temp & 0xf0000000) >> 28) + ((temp & 0xf000000) >> 24);
+    localtime.tm_sec = second;
+
+    //nano second
+    nsecond = 100*((temp17c & 0xf00000) >> 20) +
+              1000000*((temp & 0xf000) >> 12) +
+              100000*((temp & 0xf00) >> 8) +
+              10000*((temp & 0xf0) >> 4) +
+              1000*((temp & 0xf));
+    nsecond += ( 100000000*((temp & 0xf00000) >> 20) +
+                 10000000*((temp & 0xf0000) >> 16) );
+
+    calandertime = mktime(&localtime);
+    *sec  = calandertime;
+    *nsec = nsecond;
+  } else {
+    clock_gettime(CLOCK_REALTIME,&tp);
+    *nsec = tp.tv_nsec;
+    *sec  = tp.tv_sec;
+    calandertime = tp.tv_sec;
+  }
+
+  return calandertime;
+}
+
     /* this is awful code AND wrong */
-/*
+    /*
     if( (year%4) == 0){
       //leap year
       if( (day>=0) && (day <=31) ){
@@ -191,49 +237,4 @@ int get_event_time(int *sec, int *nsec, int BASE1)
         day-=334;
       }
     }
-*/
-
-    localtime.tm_mday   = day;
-    localtime.tm_mon    = month;
-    localtime.tm_isdst  = 0;
-    localtime.tm_gmtoff = 0;
-
-    //hour
-    temp = temp178;
-//    hour = 10*((temp & 0xf000) >> 12) + 1*((temp & 0xf00) >> 8);
-    hour = 10*((temp & 0xf000) >> 12) + ((temp & 0xf00) >> 8);
-    localtime.tm_hour = hour;
-
-    //minute
-//    minute = 10*((temp & 0xf0) >> 4) + 1*((temp & 0xf));
-    minute = 10*((temp & 0xf0) >> 4) + ((temp & 0xf));
-    localtime.tm_min = minute;
-
-    //second
-    temp = temp174;
-//    second = 10*((temp & 0xf0000000) >> 28) + 1*((temp & 0xf000000) >> 24);
-    second = 10*((temp & 0xf0000000) >> 28) + ((temp & 0xf000000) >> 24);
-    localtime.tm_sec = second;
-
-    //nano second
-    nsecond = 100*((temp17c & 0xf00000) >> 20) +
-              1000000*((temp & 0xf000) >> 12) +
-              100000*((temp & 0xf00) >> 8) +
-              10000*((temp & 0xf0) >> 4) +
-              1000*((temp & 0xf));
-    nsecond += ( 100000000*((temp & 0xf00000) >> 20) +
-                 10000000*((temp & 0xf0000) >> 16) );
-
-    calandertime = mktime(&localtime);
-    *sec  = calandertime;
-    *nsec = nsecond;
-  } else {
-    clock_gettime(CLOCK_REALTIME,&tp);
-    *nsec = tp.tv_nsec;
-    *sec  = tp.tv_sec;
-    calandertime = tp.tv_sec;
-  }
-
-  return calandertime;
-}
-
+    */

@@ -33,6 +33,7 @@ int get_software_time(int *sec, int *nsec, int BASE1)
     if (verbose > 1) printf("polling GPS card\n");
 
     *((uint08*)(BASE1+0xfc)) = 0x0; // write any value to update time and pos
+    if (verbose > 1) printf("update time and pos\n");
     sleep.tv_sec  = 0;
     sleep.tv_nsec = 10000;
     temp = *((uint32_t*)(BASE1+0x104));
@@ -43,9 +44,13 @@ int get_software_time(int *sec, int *nsec, int BASE1)
 
     //day number
     day = 100*((temp & 0xf00) >> 8) + 10*((temp & 0xf0) >> 4) + (temp & 0x0f);
+    //dayno = day;
+    //printf("DAY: %d\n", day);
 
     dayno2mmdd(year, day, &month, &day);
+    //printf("mo: %d; dy: %d\n", month, day);
 
+    //day = dayno;
     /* bad code here */
 
     localtime.tm_mday = day;
@@ -95,7 +100,7 @@ int get_software_time(int *sec, int *nsec, int BASE1)
   return calandertime;
 }
 
-/*
+    /*
 		if( (year%4) == 0){
 			//leap year
 			if( (day>=0) && (day <=31) ){
@@ -220,5 +225,7 @@ int get_software_time(int *sec, int *nsec, int BASE1)
 				day-=334;
 			}
 		}
-*/
+
+    //printf("mo: %d; dy: %d\n", month, day);
+    */
 
