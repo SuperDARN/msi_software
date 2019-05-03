@@ -71,20 +71,16 @@ void *coordination_handler(struct ControlProgram *control_program)
     }
   }
 
-  /*Coordinate Trigger events*/
+  /* Coordinate trigger events from multiple control programs */
   switch (ready_state) {
-    case 0:
-      /*no control program ready for trigger*/
-      break;
-    case 1:
-      /*some control programs ready for trigger*/
-      break;
-    case 2:
-      /*all control programs ready for trigger*/
+    case 0: break; /* no control program is ready to trigger */
+    case 1: break; /* some control programs are ready to trigger */
+    case 2: /* all control programs ready to trigger */
+
       if (verbose > 1) { 
-        gettimeofday(&t1,NULL);
-        elapsed=(t1.tv_sec-t0.tv_sec)*1E6;
-        elapsed+=(t1.tv_usec-t0.tv_usec);
+        gettimeofday(&t1, NULL);
+        elapsed = (t1.tv_sec-t0.tv_sec)*1E6;
+        elapsed += (t1.tv_usec-t0.tv_usec);
         printf("Coord: Start Ready State Case 2 Elapsed Microseconds: %ld\n",
                 elapsed);
       }
@@ -108,14 +104,15 @@ void *coordination_handler(struct ControlProgram *control_program)
       */
 
       if (verbose > 1) { 
-        gettimeofday(&t2,NULL);
-        elapsed=(t2.tv_sec-t1.tv_sec)*1E6;
-        elapsed+=(t2.tv_usec-t1.tv_usec);
+        gettimeofday(&t2, NULL);
+        elapsed = (t2.tv_sec-t1.tv_sec)*1E6;
+        elapsed += (t2.tv_usec-t1.tv_usec);
         printf("Coord: Pre-Trigger Active Check %d Elapsed Microseconds: "
                 "%ld\n",i,elapsed);
       }
  
-      i=0;
+      /* start pretrigger threads and wait for them to finish */
+      i = 0;
       rc = pthread_create(&threads[i], NULL,
                           (void *)&receiver_pretrigger, NULL);
       i++;
@@ -135,39 +132,47 @@ void *coordination_handler(struct ControlProgram *control_program)
       trigger_state = 2; //trigger
       // trigger_type:  0: free run  1: elapsed-time  2: gps
 
-      usleep(1000);
+      usleep(1000); /* waiting for 1 millisecond for some reason... */
+      /* start a thread that tells the timing card we are ready to trigger,
+         it knows the trigger type, and wait for it to finish */
       rc = pthread_create(&threads[0], NULL,
                           (void *)&timing_trigger, (void *)trigger_type);
       pthread_join(threads[0],NULL);
+
       if (verbose > 1) { 
         gettimeofday(&t4,NULL);
-        elapsed=(t4.tv_sec-t3.tv_sec)*1E6;
-        elapsed+=(t4.tv_usec-t3.tv_usec);
+        elapsed = (t4.tv_sec-t3.tv_sec)*1E6;
+        elapsed += (t4.tv_usec-t3.tv_usec);
         printf("Coord: Trigger Elapsed Microseconds: %ld\n",elapsed);
       }
 
-      trigger_state=3; //post-trigger
-      msg.type=GPS_GET_EVENT_TIME;
-      msg.status=1;
+      trigger_state = 3; //post-trigger
+      msg.type = GPS_GET_EVENT_TIME; // pickup the time saved in the event
+                                     // register on the GPS card
+      msg.status = 1;
       send_data(gpssock, &msg, sizeof(struct DriverMsg));
       recv_data(gpssock, &gpssecond, sizeof(int));
       recv_data(gpssock, &gpsnsecond, sizeof(int));
       recv_data(gpssock, &msg, sizeof(struct DriverMsg));
+
       if (verbose > 1)
         printf("Coord: GPS_GET_EVENT_TIME: %d %d\n", gpssecond, gpsnsecond);
-      i=0;
-      if (control_program->active==1) { 
-        control_program->state->gpssecond=gpssecond;
-        control_program->state->gpsnsecond=gpsnsecond;
+
+      i = 0;
+      if (control_program->active == 1) { 
+        control_program->state->gpssecond = gpssecond;
+        control_program->state->gpsnsecond = gpsnsecond;
         if (txread[control_program->parameters->radar-1]) {
           rc = pthread_create(&threads[i], NULL,
                               (void *)&DIO_transmitter_status,
                               (void *)control_program->parameters->radar);
           pthread_join(threads[i],NULL);
-          txread[control_program->parameters->radar-1]=0;
+          txread[control_program->parameters->radar-1] = 0;
           i++;
         }
       }
+
+      // initiate post-trigger threads
       rc = pthread_create(&threads[i], NULL,
                           (void *)&receiver_posttrigger, NULL);
       pthread_join(threads[i],NULL);
@@ -177,40 +182,41 @@ void *coordination_handler(struct ControlProgram *control_program)
 
       for (;i>=0;i--) pthread_join(threads[i],NULL);
 
-      thread_list=controlprogram_threads;
+      thread_list = controlprogram_threads;
       while (thread_list!=NULL) {
         cprog=thread_list->data;
         if (cprog!=NULL) {
           if (cprog->state!=NULL) {
             if (cprog->state->ready==1) {
-              cprog->state->ready=0;
-              cprog->state->processing=1;
+              cprog->state->ready = 0;
+              cprog->state->processing = 1;
             }
           }
         }
-        thread_list=thread_list->prev;
+        thread_list = thread_list->prev;
       }
 
-      trigger_state=0; //post-trigger
-      ready_count=0;
-      ready_state=0;
+      trigger_state = 0; //post-trigger
+      ready_count = 0;
+      ready_state = 0;
+
       if (verbose > 1) { 
         gettimeofday(&t6,NULL);
-        elapsed=(t6.tv_sec-t4.tv_sec)*1E6;
-        elapsed+=(t6.tv_usec-t4.tv_usec);
+        elapsed = (t6.tv_sec-t4.tv_sec)*1E6;
+        elapsed += (t6.tv_usec-t4.tv_usec);
         printf("Coord: Post Trigger Elapsed Microseconds: %ld\n",elapsed);
 
-        elapsed=(t6.tv_sec-t0.tv_sec)*1E6;
-        elapsed+=(t6.tv_usec-t0.tv_usec);
+        elapsed = (t6.tv_sec-t0.tv_sec)*1E6;
+        elapsed += (t6.tv_usec-t0.tv_usec);
         printf("Coord: Total Elapsed Microseconds: %ld\n",elapsed);
       }
       break; 
 
    } // end of ready_state switch
 
-   *ready_state_pointer=ready_state;
-   *trigger_state_pointer=trigger_state;
-   *ready_count_pointer=ready_count;
+   *ready_state_pointer = ready_state;
+   *trigger_state_pointer = trigger_state;
+   *ready_count_pointer = ready_count;
 
    pthread_mutex_unlock(&coord_lock); //unlock 
    pthread_exit(NULL);

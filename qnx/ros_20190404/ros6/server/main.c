@@ -62,7 +62,7 @@ struct SiteSettings site_settings;
 struct GPSStatus gpsstatus;
 struct TRTimes bad_transmit_times;
 int32 gpsrate=GPS_DEFAULT_TRIGRATE;
-int verbose=2;
+int verbose=0;
 
 int clear_frequency_request;
 struct BlackList *blacklist=NULL;

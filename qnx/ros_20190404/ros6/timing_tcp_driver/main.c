@@ -365,6 +365,7 @@ int main()
           if (verbose > 1) printf("\nmsg code is %c\n", datacode);
           switch (datacode) {
 
+            /*---------------------------------------------------------------*/
             case TIMING_REGISTER_SEQ:
               if (verbose > 0)
                 printf("\nRegister new timing sequence for timing card\n");  
@@ -410,6 +411,7 @@ int main()
               rval = send_data(msgsock, &msg, sizeof(struct DriverMsg));
               break;
 
+            /*---------------------------------------------------------------*/
             case TIMING_CtrlProg_END:
               if (verbose > 0) printf("\nA client is done\n");  
               msg.status =   0;
@@ -417,6 +419,7 @@ int main()
               new_seq_id =  -1;
               break;
 
+            /*---------------------------------------------------------------*/
             case TIMING_CtrlProg_READY:
               if (verbose > 0)
                 printf("\nAsking to set up timing info for client that is "
@@ -479,6 +482,7 @@ int main()
               rval=send_data(msgsock, &msg, sizeof(struct DriverMsg));
               break; 
 
+            /*---------------------------------------------------------------*/
             case TIMING_PRETRIGGER:
               if (verbose > 1) {
                 gettimeofday(&t0,NULL);
@@ -680,6 +684,7 @@ int main()
               }
               break; 
 
+            /*---------------------------------------------------------------*/
             case TIMING_TRIGGER:
               if (verbose > 1) {
                 printf("Setup Timing Card trigger\n");  
@@ -708,6 +713,7 @@ int main()
               rval = send_data(msgsock, &msg, sizeof(struct DriverMsg));
               break;
 
+            /*---------------------------------------------------------------*/
             case TIMING_GPS_TRIGGER:
               if (verbose > 1) {
                 printf("Setup Timing Card GPS trigger\n");
@@ -737,6 +743,7 @@ int main()
               rval = send_data(msgsock, &msg, sizeof(struct DriverMsg));
               break;
 
+            /*---------------------------------------------------------------*/
             case TIMING_WAIT:
               if (verbose > 1)
                 printf("Timing Card: Wait: configured %d\n", configured);  
@@ -787,6 +794,7 @@ int main()
               rval = send_data(msgsock, &msg, sizeof(struct DriverMsg));
               break;
 
+            /*---------------------------------------------------------------*/
             case TIMING_POSTTRIGGER:
               numclients=0;
               for (r=0;r<MAX_RADARS;r++)
@@ -796,6 +804,7 @@ int main()
               rval = send_data(msgsock, &msg, sizeof(struct DriverMsg));
               break;
 
+            /*---------------------------------------------------------------*/
             default:
               if (verbose > -10)
                 fprintf(stderr,"BAD CODE: %c : %d\n",datacode,datacode);
