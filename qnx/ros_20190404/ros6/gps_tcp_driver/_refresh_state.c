@@ -64,6 +64,7 @@ int get_hdw_stat()
     temp = *((uint08*)(BASE1+0x11c));
     temp = temp & 0x0f;
   }
+  // returns zero if there are no hardware errors
 
   return temp;
 }
@@ -402,13 +403,13 @@ void *get_state()
   dstat.lock = get_lock_stat();
 
   if ((dstat.lock & 1) == 1) dstat.gps_lock = 1;
-  else                             dstat.gps_lock = 0; 
+  else                       dstat.gps_lock = 0; 
 
   if ((dstat.lock & 2) == 2) dstat.reference_lock = 1;
-  else                             dstat.reference_lock = 0; 
+  else                       dstat.reference_lock = 0; 
 
   if ((dstat.lock & 4) == 4) dstat.phase_lock = 1;
-  else                             dstat.phase_lock = 0; 
+  else                       dstat.phase_lock = 0; 
 
   //check satellite status
   temp = get_sat_stat(dstat.sv,dstat.signal);
