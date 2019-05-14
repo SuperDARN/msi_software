@@ -35,17 +35,17 @@ int get_event_time(int *sec, int *nsec, int BASE1)
 
   if (BASE1 != NULL) {
     if ((*((uint32_t*)(BASE1+0xfe)) & 0x01) != 0x01) {
-//      if (verbose > 1) printf("something wrong with BASE1, aborting\n");
-//      return -1;
+      if (verbose > 1) printf("something wrong with BASE1, aborting\n");
+      return -1;
 
     // 20190514 SGS 9-pin cable not connected so use software time instead
     //              for testing
-      calendartime = get_software_time(sec, nsec, BASE1);
+//      calendartime = get_software_time(sec, nsec, BASE1);
 
       // output event time, this should be trigger time of each sequence
-      printf("ET  %d %d\n", *sec, *nsec);
+      //printf("ET %10d %9d\n", *sec, *nsec);
 
-      return (calendartime);
+ //     return (calendartime);
     }
 
     if (verbose > 1) printf("Event status flag enabled\n");
@@ -111,7 +111,7 @@ int get_event_time(int *sec, int *nsec, int BASE1)
     *nsec = nsecond;
 
     // output event time, this should be trigger time of each sequence
-    printf("ET  %d %d\n", *sec, *nsec);
+    printf("ET %10d %9d\n", *sec, *nsec);
   } else {
     clock_gettime(CLOCK_REALTIME,&tp);
     *nsec = tp.tv_nsec;
