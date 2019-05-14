@@ -20,7 +20,7 @@ int get_event_time(int *sec, int *nsec, int BASE1)
 {
   struct timespec sleep,tp;
   struct tm localtime;
-  time_t calandertime;
+  time_t calendartime;
   int    temp,temp174,temp178,temp17c;
   int    year,month,day,hour,minute,second,nsecond;
 
@@ -35,8 +35,17 @@ int get_event_time(int *sec, int *nsec, int BASE1)
 
   if (BASE1 != NULL) {
     if ((*((uint32_t*)(BASE1+0xfe)) & 0x01) != 0x01) {
-      if (verbose > 1) printf("something wrong with BASE1, aborting\n");
-      return -1;
+//      if (verbose > 1) printf("something wrong with BASE1, aborting\n");
+//      return -1;
+
+    // 20190514 SGS 9-pin cable not connected so use software time instead
+    //              for testing
+      calendartime = get_software_time(sec, nsec, BASE1);
+
+      // output event time, this should be trigger time of each sequence
+      printf("ET  %d %d\n", *sec, *nsec);
+
+      return (calendartime);
     }
 
     if (verbose > 1) printf("Event status flag enabled\n");
@@ -97,8 +106,8 @@ int get_event_time(int *sec, int *nsec, int BASE1)
     nsecond += ( 100000000*((temp & 0xf00000) >> 20) +
                  10000000*((temp & 0xf0000) >> 16) );
 
-    calandertime = mktime(&localtime);
-    *sec  = calandertime;
+    calendartime = mktime(&localtime);
+    *sec  = calendartime;
     *nsec = nsecond;
 
     // output event time, this should be trigger time of each sequence
@@ -107,10 +116,10 @@ int get_event_time(int *sec, int *nsec, int BASE1)
     clock_gettime(CLOCK_REALTIME,&tp);
     *nsec = tp.tv_nsec;
     *sec  = tp.tv_sec;
-    calandertime = tp.tv_sec;
+    calendartime = tp.tv_sec;
   }
 
-  return calandertime;
+  return calendartime;
 }
 
     /* this is awful code AND wrong */
