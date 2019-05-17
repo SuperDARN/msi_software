@@ -7,7 +7,7 @@ common_libs=-lm -liniparser
 linux_libs=-lm -lpthread -lrt
 qnx_libs=-lsocket
 INCLUDES=-I"../include/" -I"include/" -I"../tsg/include" -I"../iniparser3.0b/src/"
-SOURCES=main.c client_handler.c log_handler.c timeout_handler.c status_handler.c settings_handler.c dio_handler.c timing_handler.c coordination_handler.c dummy_handler.c reciever_handler.c dds_handler.c ../utils.c ../tsg/maketsg.c ../_tcpsocket.c
+SOURCES=main.c client_handler.c timeout_handler.c settings_handler.c dio_handler.c timing_handler.c coordination_handler.c dummy_handler.c RX_handler.c dds_handler.c ../utils.c ../tsg/maketsg.c ../_tcpsocket.c
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=arby_server
 INI_TEST=ini_test

@@ -15,67 +15,71 @@ extern dictionary *Site_INI;
 extern int trigger_type;
 extern int32 gpsrate;
 
-void *settings_parse_ini_file(struct SiteSettings *ros_settings)
+void *settings_parse_ini_file(struct SiteSettings *ros_set)
 {
   char ini_name[80]="/root/test.ini";
   char entry_name[80]="";
   char entry_value[256]="";
   int exists_flag;
 
-     pthread_mutex_unlock(&settings_lock);
+  pthread_mutex_unlock(&settings_lock);
 
-  if (Site_INI!=NULL) {
+  if (Site_INI != NULL) {
     iniparser_freedict(Site_INI);
-    Site_INI=NULL;
+    Site_INI = NULL;
   }
+
   sprintf(ini_name,"%s/site.ini",SITE_DIR);
   fprintf(stderr, "parsing file: %s\n", ini_name);
-  Site_INI=iniparser_load(ini_name);
+  Site_INI = iniparser_load(ini_name);
   if (Site_INI==NULL) {
     fprintf(stderr, "cannot parse file: %s\n", ini_name);
     pthread_mutex_unlock(&settings_lock);
     pthread_exit(NULL);
   }
-  ros_settings->ifmode=iniparser_getboolean(Site_INI,
+  ros_set->ifmode = iniparser_getboolean(Site_INI,
                           "site_settings:ifmode",IF_ENABLED);
-   ros_settings->use_beam_table=iniparser_getboolean(Site_INI,
+  ros_set->use_beam_table = iniparser_getboolean(Site_INI,
                           "beam_lookup_table:use_table",0);
-   sprintf(ros_settings->beam_table_1,iniparser_getstring(Site_INI,
+  sprintf(ros_set->beam_table_1,iniparser_getstring(Site_INI,
                           "beam_lookup_table:beam_table_1",""));
-   sprintf(ros_settings->beam_table_2,iniparser_getstring(Site_INI,
+  sprintf(ros_set->beam_table_2,iniparser_getstring(Site_INI,
                           "beam_lookup_table:beam_table_2",""));
 
-   trigger_type=iniparser_getint(Site_INI,"site_settings:trigger_type",0);
-   fprintf(stdout,"Trigger_type: %d\n",trigger_type);
-   switch (trigger_type) {
-     case 0:
-       gpsrate=0;
-       gpsrate=iniparser_getint(Site_INI,"gps:trigger_rate",GPS_DEFAULT_TRIGRATE);
-       fprintf(stdout,"GPSrate: %d\n",gpsrate);
-       break;
-     case 1:
-     case 2:
-       gpsrate=iniparser_getint(Site_INI,"gps:trigger_rate",
-                                          GPS_DEFAULT_TRIGRATE);
-       fprintf(stdout,"GPSrate: %d\n",gpsrate);
-       break;
-     default:
-       break;
-   }
+  trigger_type = iniparser_getint(Site_INI,"site_settings:trigger_type",0);
+  fprintf(stdout,"Trigger_type: %d\n",trigger_type);
+  /* SGS: this whole thing seems ridiculous */
+  switch (trigger_type) {
+    case 0:
+      gpsrate = 0;
+      gpsrate = iniparser_getint(Site_INI,"gps:trigger_rate",
+                                 GPS_DEFAULT_TRIGRATE);
+      fprintf(stdout,"GPSrate: %d\n", gpsrate);
+      break;
+    case 1:
+    case 2:
+      gpsrate = iniparser_getint(Site_INI,"gps:trigger_rate",
+                                 GPS_DEFAULT_TRIGRATE);
+      fprintf(stdout,"GPSrate: %d\n", gpsrate);
+      break;
+    default:
+      break;
+  }
 
-   sprintf(ros_settings->name,"%s",iniparser_getstring(Site_INI,
+  sprintf(ros_set->name,"%s",iniparser_getstring(Site_INI,
                                     "site_settings:name",SITE_NAME));
-   sprintf(entry_value,"%s",iniparser_getstring(Site_INI,
+  sprintf(entry_value,"%s",iniparser_getstring(Site_INI,
                                     "beam_lookup_table:use_table","ERROR"));
-   printf("beam_lookup: %s\n",entry_value);
-   sprintf(entry_value,"%s",iniparser_getstring(Site_INI,
+  printf("beam_lookup: %s\n",entry_value);
+  sprintf(entry_value,"%s",iniparser_getstring(Site_INI,
                                     "beam_lookup_table:beam_table_1","ERROR"));
-   printf("radar_1: %s\n",entry_value);
-   sprintf(entry_value,"%s",iniparser_getstring(Site_INI,
+  printf("radar_1: %s\n",entry_value);
+  sprintf(entry_value,"%s",iniparser_getstring(Site_INI,
                                     "beam_lookup_table:beam_table_2","ERROR"));
-   printf("radar_2: %s\n",entry_value);
-   pthread_mutex_unlock(&settings_lock);
-   pthread_exit(NULL);
+  printf("radar_2: %s\n",entry_value);
+  pthread_mutex_unlock(&settings_lock);
+
+  pthread_exit(NULL);
 }
 
 void *settings_rxfe_update_rf(struct RXFESettings *rxfe_rf_settings)

@@ -42,7 +42,7 @@ struct timespec timecompare, event;
 int RateSynthInterrupt=0, EventInterrupt=0, TimeCompareInterrupt=0;
 int timecompareupdate=0, eventupdate=0;
 pthread_t int_thread_id, refresh_thread_id;
-int verbose = 0;
+int verbose = 10;
 int wait_for_lock=0;
 pthread_mutex_t gps_state_lock;
 

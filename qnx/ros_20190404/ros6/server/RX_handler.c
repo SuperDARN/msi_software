@@ -18,7 +18,7 @@ extern int recvsock;
 extern int verbose;
 extern pthread_mutex_t recv_comm_lock, thread_list_lock;
 extern int *ready_state_pointer;
-extern struct Thread_List_Item *controlprogram_threads;
+extern struct Thread_List_Item *cp_threads;
 extern struct BlackList *blacklist;
 extern int *blacklist_count_pointer;
 extern struct ClrPwr *latest_clr_fft[MAX_RADARS];
@@ -42,7 +42,7 @@ int compare_structs(const void *a, const void *b)
   else return -1;
 }
 
-void *receiver_rxfe_settings(void *arg)
+void *rx_rxfe_settings(void *arg)
 {
   struct DriverMsg msg;
   struct SiteSettings *site_settings;
@@ -66,7 +66,7 @@ void *receiver_rxfe_settings(void *arg)
   pthread_mutex_unlock(&recv_comm_lock);
 }
 
-void receiver_assign_frequency(struct ControlProgram *arg)
+void rx_assign_freq(struct ControlProgram *arg)
 {
   struct Thread_List_Item *thread_list;
   struct ControlProgram *controlprogram;
@@ -197,9 +197,9 @@ void receiver_assign_frequency(struct ControlProgram *arg)
   /* Note here from Jeff, the FFT is typically performed on N = 2^n samples
    * so the size of the FFT window is typically larger than the band from
    * which we are selecting frequencies from.  This is however not a garuntee.
-   * Each reciever driver is responsible for handling the details of how the
+   * Each receiver driver is responsible for handling the details of how the
    * fft is performed based on the bandwidth limitation imposed on the
-   * reciever hardware. It cannot be assumed that the reciever driver was able
+   * receiver hardware. It cannot be assumed that the receiver driver was able
    * to return a clear frequency search encompassing the requested band.  
    * 
    * For current operational purposes a receiver driver is required to send 
@@ -287,7 +287,7 @@ void receiver_assign_frequency(struct ControlProgram *arg)
   /* Now do a less agressive narrow band smoothing over the optionally
    * detrended data */
 
-  /* Calculate power over reciever bandwidth */
+  /* Calculate power over receiver bandwidth */
   /* Take a running average of power using 2*padded_rx_bandwith+1
                                             number of points.*/
 
@@ -416,7 +416,7 @@ void receiver_assign_frequency(struct ControlProgram *arg)
      * First add all other control program's assigned frequencies to the
      * blacklist priority is like golf: lower number wins
      */
-    thread_list=controlprogram_threads;
+    thread_list=cp_threads;
     while (thread_list != NULL) {
       controlprogram=thread_list->data;
       if (controlprogram != arg) {                   
@@ -643,7 +643,7 @@ void receiver_assign_frequency(struct ControlProgram *arg)
   pthread_exit(NULL);
 }
 
-void receiver_exit(void *arg)
+void rx_exit(void *arg)
 {
   int *sockfd = (int *)arg;
 
@@ -653,7 +653,7 @@ void receiver_exit(void *arg)
   /* print where the thread was in its search when it was cancelled */
 }
 
-void *receiver_end_controlprogram(struct ControlProgram *arg)
+void *rx_end_cp(struct ControlProgram *arg)
 {
   struct DriverMsg msg;
 
@@ -671,7 +671,7 @@ void *receiver_end_controlprogram(struct ControlProgram *arg)
   pthread_exit(NULL);
 }
 
-void *receiver_ready_controlprogram(struct ControlProgram *arg)
+void *rx_ready_cp(struct ControlProgram *arg)
 {
   struct DriverMsg msg;
 
@@ -690,7 +690,7 @@ void *receiver_ready_controlprogram(struct ControlProgram *arg)
   pthread_exit(NULL);
 }
 
-void *receiver_pretrigger(void *arg)
+void *rx_pretrigger(void *arg)
 {
   struct DriverMsg msg;
 
@@ -704,7 +704,7 @@ void *receiver_pretrigger(void *arg)
   pthread_exit(NULL);
 }
 
-void *receiver_posttrigger(void *arg)
+void *rx_posttrigger(void *arg)
 {
   struct DriverMsg msg;
 
@@ -718,7 +718,7 @@ void *receiver_posttrigger(void *arg)
   pthread_exit(NULL);
 }
 
-void *receiver_controlprogram_get_data(struct ControlProgram *arg)
+void *rx_cp_get_data(struct ControlProgram *arg)
 {
   struct DriverMsg msg;
   struct timeval t0,t1,t3;
@@ -870,7 +870,7 @@ void *receiver_controlprogram_get_data(struct ControlProgram *arg)
   pthread_exit(NULL);
 }
 
-void *receiver_clrfreq(struct ControlProgram *arg)
+void *rx_clrfreq(struct ControlProgram *arg)
 {
   struct DriverMsg msg;
   struct timeval t0;

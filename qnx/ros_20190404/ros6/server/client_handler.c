@@ -10,7 +10,7 @@
 #include "utils.h"
 #include "coordination_handler.h"
 #include "dio_handler.h"
-#include "reciever_handler.h"
+#include "RX_handler.h"
 #include "timing_handler.h"
 #include "dds_handler.h"
 #include "log_handler.h"
@@ -19,29 +19,29 @@
 #include "rtypes.h"
 #include "iniparser.h"
 
-extern pthread_mutex_t ctrlprog_list_lock,exit_lock,clr_lock;
-extern char *ctrlprog_list_lock_buff,*exit_lock_buffer;
+extern pthread_mutex_t cp_list_lock,exit_lock,clr_lock;
+extern char *cp_list_lock_buff,*exit_lock_buffer;
 extern void *radar_channels[MAX_RADARS*MAX_CHANNELS];
-extern struct Thread_List_Item *controlprogram_threads;
+extern struct Thread_List_Item *cp_threads;
 extern struct TRTimes bad_transmit_times;
 extern int verbose;
 extern struct tx_status txstatus[MAX_RADARS];
 extern struct SiteSettings site_settings;
 extern dictionary *Site_INI;
 
-int unregister_radar_channel(struct ControlProgram *ctrl_prog)
+int unregister_radar_channel(struct ControlProgram *cp)
 {
   int i;
   int status=0;
 
-  if (ctrl_prog != NULL) {
+  if (cp != NULL) {
     for (i=0; i<MAX_RADARS*MAX_CHANNELS; i++) {
-      if (radar_channels[i] == (void *)ctrl_prog) {
-        printf("Unregistering: %d :: cp: %p\n", i,ctrl_prog);
+      if (radar_channels[i] == (void *)cp) {
+        printf("Unregistering: %d :: cp: %p\n", i,cp);
         status++;
         radar_channels[i] = NULL;
-        ctrl_prog->parameters->radar   = 0;
-        ctrl_prog->parameters->channel = 0;
+        cp->parameters->radar   = 0;
+        cp->parameters->channel = 0;
       }
     }
   }
@@ -49,29 +49,27 @@ int unregister_radar_channel(struct ControlProgram *ctrl_prog)
   return status;
 }
 
-struct ControlProgram* find_registered_controlprogram_by_radar_channel(
-                                                        int radar,int channel)
+struct ControlProgram* find_reg_cp_by_rchan(int rad, int chan)
 {
   int i,r,c;
-  struct ControlProgram *ctrl_prog=NULL;
+  struct ControlProgram *cp=NULL;
 
   for (i=0; i<MAX_RADARS*MAX_CHANNELS; i++) {
     r = (i / MAX_CHANNELS) + 1;
     c = (i % MAX_CHANNELS) + 1;
-    if (radar==r && channel==c) {
-      ctrl_prog = radar_channels[i]; 
+    if (rad==r && chan==c) {
+      cp = radar_channels[i]; 
       break;
     }
   }
 
-  return ctrl_prog;
+  return cp;
 }
 
-struct ControlPRM controlprogram_fill_parameters(
-                                    struct ControlProgram *ctrl_prog)
+struct ControlPRM cp_fill_params(struct ControlProgram *cp)
 {
   struct ControlPRM ctrl_params;      
-  struct ControlProgram *cp,*best[MAX_RADARS];      
+  struct ControlProgram *cp, *best[MAX_RADARS];      
   int priority=99; //Lowest priority wins-- its like golf
   int r,c;
 
@@ -81,7 +79,7 @@ struct ControlPRM controlprogram_fill_parameters(
       priority = 99;
       best[r-1] = NULL; 
       for (c=1; c<=MAX_CHANNELS; c++) {
-        cp = find_registered_controlprogram_by_radar_channel(r,c);
+        cp = find_reg_cp_by_rchan(r,c);
         if (cp != NULL) {
           if (cp->active != 0) {
             if (cp->parameters != NULL) {
@@ -96,124 +94,126 @@ struct ControlPRM controlprogram_fill_parameters(
     }
   }
 
-  if (ctrl_prog != NULL) {
-    if (ctrl_prog->parameters != NULL) {
-       //strcpy(ctrl_params.name, ctrl_prog->parameters->name);
-       //strcpy(ctrl_params.description, ctrl_prog->parameters->description);
-       ctrl_params.radar = ctrl_prog->radarinfo->radar;
-       ctrl_params.channel = ctrl_prog->radarinfo->channel;
+  if (cp != NULL) {
+    if (cp->parameters != NULL) {
+       //strcpy(ctrl_params.name, cp->parameters->name);
+       //strcpy(ctrl_params.description, cp->parameters->description);
+       ctrl_params.radar = cp->radarinfo->radar;
+       ctrl_params.channel = cp->radarinfo->channel;
        r = ctrl_params.radar-1;
        ctrl_params.current_pulseseq_index =
-                      ctrl_prog->parameters->current_pulseseq_index;
-       ctrl_params.priority = ctrl_prog->parameters->priority;
+                      cp->parameters->current_pulseseq_index;
+       ctrl_params.priority = cp->parameters->priority;
+
        if (TX_BEAM_PRIORITY) {
          ctrl_params.tbeam = best[r]->parameters->tbeam;
          ctrl_params.tbeamcode = best[r]->parameters->tbeamcode;
          ctrl_params.tbeamwidth = best[r]->parameters->tbeamwidth;
          ctrl_params.tbeamazm = best[r]->parameters->tbeamazm;
        } else {
-         ctrl_params.tbeam = ctrl_prog->parameters->tbeam;
-         ctrl_params.tbeamcode = ctrl_prog->parameters->tbeamcode;
-         ctrl_params.tbeamwidth = ctrl_prog->parameters->tbeamwidth;
-         ctrl_params.tbeamazm = ctrl_prog->parameters->tbeamazm;
+         ctrl_params.tbeam = cp->parameters->tbeam;
+         ctrl_params.tbeamcode = cp->parameters->tbeamcode;
+         ctrl_params.tbeamwidth = cp->parameters->tbeamwidth;
+         ctrl_params.tbeamazm = cp->parameters->tbeamazm;
        }
+
        if (TX_FREQ_PRIORITY) {
          ctrl_params.tfreq = best[r]->parameters->tfreq;
          ctrl_params.trise = best[r]->parameters->trise;
        } else {
-         ctrl_params.tfreq = ctrl_prog->parameters->tfreq;
-         ctrl_params.trise = ctrl_prog->parameters->trise;
+         ctrl_params.tfreq = cp->parameters->tfreq;
+         ctrl_params.trise = cp->parameters->trise;
        }
+
        if (RX_BEAM_PRIORITY) {
          ctrl_params.rbeam = best[r]->parameters->rbeam;
          ctrl_params.rbeamcode = best[r]->parameters->rbeamcode;
          ctrl_params.rbeamwidth = best[r]->parameters->rbeamwidth;
          ctrl_params.rbeamazm = best[r]->parameters->rbeamazm;
        } else {
-         ctrl_params.rbeam = ctrl_prog->parameters->rbeam;
-         ctrl_params.rbeamcode = ctrl_prog->parameters->rbeamcode;
-         ctrl_params.rbeamwidth = ctrl_prog->parameters->rbeamwidth;
-         ctrl_params.rbeamazm = ctrl_prog->parameters->rbeamazm;
+         ctrl_params.rbeam = cp->parameters->rbeam;
+         ctrl_params.rbeamcode = cp->parameters->rbeamcode;
+         ctrl_params.rbeamwidth = cp->parameters->rbeamwidth;
+         ctrl_params.rbeamazm = cp->parameters->rbeamazm;
        }
+
        if (RX_FREQ_PRIORITY) {
          ctrl_params.rfreq = best[r]->parameters->rfreq;
          ctrl_params.number_of_samples = best[r]->parameters->number_of_samples;
        } else {
-         ctrl_params.rfreq = ctrl_prog->parameters->rfreq;
+         ctrl_params.rfreq = cp->parameters->rfreq;
          ctrl_params.number_of_samples =
-                            ctrl_prog->parameters->number_of_samples;
+                            cp->parameters->number_of_samples;
        }
-       ctrl_params.buffer_index = ctrl_prog->parameters->buffer_index;
+
+       ctrl_params.buffer_index = cp->parameters->buffer_index;
        ctrl_params.baseband_samplerate =
-                            ctrl_prog->parameters->baseband_samplerate;
-       ctrl_params.filter_bandwidth = ctrl_prog->parameters->filter_bandwidth;
-       ctrl_params.match_filter = ctrl_prog->parameters->match_filter;
-       ctrl_params.status = ctrl_prog->parameters->status;
+                            cp->parameters->baseband_samplerate;
+       ctrl_params.filter_bandwidth = cp->parameters->filter_bandwidth;
+       ctrl_params.match_filter = cp->parameters->match_filter;
+       ctrl_params.status = cp->parameters->status;
     }
   }
 
   return ctrl_params;
 }
 
-struct ControlPRM* controlprogram_link_parameters(
-                                              struct ControlPRM *ctrl_params)
+struct ControlPRM* cp_link_params(struct ControlPRM *ctrl_params)
 {
   return ctrl_params;
 }
 
-struct ControlPRM* controlprogram_verify_parameters(
-                                              struct ControlPRM *ctrl_params)
+struct ControlPRM* cp_verify_params(struct ControlPRM *ctrl_params)
 {
 /*
-       ctrl_params.name=ctrl_prog->parameters->name;
-       ctrl_params.description=ctrl_prog->parameters->description;
-       ctrl_params.radar=ctrl_prog->radarinfo->radar;
-       ctrl_params.channel=ctrl_prog->radarinfo->channel;
-       ctrl_params.current_pulseseq_index=ctrl_prog->parameters->current_pulseseq_index;
-       ctrl_params.priority=ctrl_prog->parameters->priority;
-       ctrl_params.tbeam=ctrl_prog->parameters->tbeam;
-       ctrl_params.tbeamcode=ctrl_prog->parameters->tbeamcode;
-       ctrl_params.tbeamwidth=ctrl_prog->parameters->tbeamwidth;
-       ctrl_params.tbeamazm=ctrl_prog->parameters->tbeamazm;
-       ctrl_params.tfreq=ctrl_prog->parameters->tfreq;
-       ctrl_params.trise=ctrl_prog->parameters->trise;
-       ctrl_params.rbeam=ctrl_prog->parameters->rbeam;
-       ctrl_params.rbeamcode=ctrl_prog->parameters->rbeamcode;
-       ctrl_params.rbeamwidth=ctrl_prog->parameters->rbeamwidth;
-       ctrl_params.rbeamazm=ctrl_prog->parameters->rbeamazm;
-       ctrl_params.rfreq=ctrl_prog->parameters->rfreq;
-       ctrl_params.number_of_samples=ctrl_prog->parameters->number_of_samples;
-       ctrl_params.buffer_index=ctrl_prog->parameters->buffer_index;
-       ctrl_params.baseband_samplerate=ctrl_prog->parameters->baseband_samplerate;
-       ctrl_params.filter_bandwidth=ctrl_prog->parameters->filter_bandwidth;
-       ctrl_params.match_filter=ctrl_prog->parameters->match_filter;
-       ctrl_params.status=ctrl_prog->parameters->status;
+       ctrl_params.name=cp->parameters->name;
+       ctrl_params.description=cp->parameters->description;
+       ctrl_params.radar=cp->radarinfo->radar;
+       ctrl_params.channel=cp->radarinfo->channel;
+       ctrl_params.current_pulseseq_index=cp->parameters->current_pulseseq_index;
+       ctrl_params.priority=cp->parameters->priority;
+       ctrl_params.tbeam=cp->parameters->tbeam;
+       ctrl_params.tbeamcode=cp->parameters->tbeamcode;
+       ctrl_params.tbeamwidth=cp->parameters->tbeamwidth;
+       ctrl_params.tbeamazm=cp->parameters->tbeamazm;
+       ctrl_params.tfreq=cp->parameters->tfreq;
+       ctrl_params.trise=cp->parameters->trise;
+       ctrl_params.rbeam=cp->parameters->rbeam;
+       ctrl_params.rbeamcode=cp->parameters->rbeamcode;
+       ctrl_params.rbeamwidth=cp->parameters->rbeamwidth;
+       ctrl_params.rbeamazm=cp->parameters->rbeamazm;
+       ctrl_params.rfreq=cp->parameters->rfreq;
+       ctrl_params.number_of_samples=cp->parameters->number_of_samples;
+       ctrl_params.buffer_index=cp->parameters->buffer_index;
+       ctrl_params.baseband_samplerate=cp->parameters->baseband_samplerate;
+       ctrl_params.filter_bandwidth=cp->parameters->filter_bandwidth;
+       ctrl_params.match_filter=cp->parameters->match_filter;
+       ctrl_params.status=cp->parameters->status;
 */
   return ctrl_params;
 }
 
-int register_radar_channel(struct ControlProgram *ctrl_prog, int radar,
-                          int channel)
+int register_radar_channel(struct ControlProgram *cp, int radar, int chan)
 {
   int i,r,c,status;
 
-  if (ctrl_prog != NULL) unregister_radar_channel(ctrl_prog);
+  if (cp != NULL) unregister_radar_channel(cp);
   status=-1;
   for (i=0; i<MAX_RADARS*MAX_CHANNELS; i++) {
     r = (i / MAX_CHANNELS) + 1;
     c = (i % MAX_CHANNELS) + 1;
     if (radar_channels[i] == NULL) {
       if (radar <= 0) radar=r;
-      if (channel <= 0) channel=c;
-      if (radar==r && channel==c) {
+      if (chan <= 0) chan=c;
+      if (radar==r && chan==c) {
         printf("Registering: %d :: radar: %d channel: %d cp: %p\n",
-                i,radar,channel,ctrl_prog);
+                i,radar,chan,cp);
         status = 1;
-        ctrl_prog->parameters->radar=radar; 
-        ctrl_prog->parameters->channel=channel; 
-        ctrl_prog->radarinfo->radar=radar; 
-        ctrl_prog->radarinfo->channel=channel; 
-        radar_channels[i]=ctrl_prog;
+        cp->parameters->radar=radar; 
+        cp->parameters->channel=chan; 
+        cp->radarinfo->radar=radar; 
+        cp->radarinfo->channel=chan; 
+        radar_channels[i]=cp;
         break;
       }
     }
@@ -225,72 +225,72 @@ int register_radar_channel(struct ControlProgram *ctrl_prog, int radar,
 struct ControlProgram *control_init(void) {
 
   int i;
-  struct ControlProgram *ctrl_prog;
+  struct ControlProgram *cp;
 
-  ctrl_prog=malloc(sizeof(struct ControlProgram));
-  ctrl_prog->active=1;
-  ctrl_prog->clrfreqsearch.start=0;
-  ctrl_prog->clrfreqsearch.end=0;
-  ctrl_prog->parameters=malloc(sizeof(struct ControlPRM));
-  ctrl_prog->state=malloc(sizeof(struct ControlState));
-  ctrl_prog->radarinfo=malloc(sizeof(struct RadarPRM));
-  ctrl_prog->data=malloc(sizeof(struct DataPRM));
-  ctrl_prog->main=NULL;
-  ctrl_prog->back=NULL;
-  ctrl_prog->main_address=NULL;
-  ctrl_prog->back_address=NULL;
-  strcpy(ctrl_prog->parameters->name,"Generic Control Program Name - 80");
-  strcpy(ctrl_prog->parameters->description,
+  cp=malloc(sizeof(struct ControlProgram));
+  cp->active=1;
+  cp->clrfreqsearch.start=0;
+  cp->clrfreqsearch.end=0;
+  cp->parameters=malloc(sizeof(struct ControlPRM));
+  cp->state=malloc(sizeof(struct ControlState));
+  cp->radarinfo=malloc(sizeof(struct RadarPRM));
+  cp->data=malloc(sizeof(struct DataPRM));
+  cp->main=NULL;
+  cp->back=NULL;
+  cp->main_address=NULL;
+  cp->back_address=NULL;
+  strcpy(cp->parameters->name,"Generic Control Program Name - 80");
+  strcpy(cp->parameters->description,
           "Generic  Control Program  Description - 120");
-  ctrl_prog->parameters->radar=-1;
-  ctrl_prog->parameters->channel=-1;
-  ctrl_prog->parameters->current_pulseseq_index=-1;
-  ctrl_prog->parameters->priority=50;
-  ctrl_prog->parameters->tbeam=-1;
-  ctrl_prog->parameters->tbeamcode=-1;
-  ctrl_prog->parameters->tbeamwidth=-1;
-  ctrl_prog->parameters->tbeamazm=-1;
-  ctrl_prog->parameters->tfreq=-1;
-  ctrl_prog->parameters->trise=10;
-  ctrl_prog->parameters->rbeam=-1;
-  ctrl_prog->parameters->rbeamcode=-1;
-  ctrl_prog->parameters->rbeamwidth=-1;
-  ctrl_prog->parameters->rbeamazm=-1;
-  ctrl_prog->parameters->rfreq=-1;
-  ctrl_prog->parameters->number_of_samples=-1;
-  ctrl_prog->parameters->buffer_index=-1;
-  ctrl_prog->parameters->baseband_samplerate=-1;
-  ctrl_prog->parameters->filter_bandwidth=-1;
-  ctrl_prog->parameters->match_filter=-1;
-  ctrl_prog->parameters->status=-1;
+  cp->parameters->radar=-1;
+  cp->parameters->channel=-1;
+  cp->parameters->current_pulseseq_index=-1;
+  cp->parameters->priority=50;
+  cp->parameters->tbeam=-1;
+  cp->parameters->tbeamcode=-1;
+  cp->parameters->tbeamwidth=-1;
+  cp->parameters->tbeamazm=-1;
+  cp->parameters->tfreq=-1;
+  cp->parameters->trise=10;
+  cp->parameters->rbeam=-1;
+  cp->parameters->rbeamcode=-1;
+  cp->parameters->rbeamwidth=-1;
+  cp->parameters->rbeamazm=-1;
+  cp->parameters->rfreq=-1;
+  cp->parameters->number_of_samples=-1;
+  cp->parameters->buffer_index=-1;
+  cp->parameters->baseband_samplerate=-1;
+  cp->parameters->filter_bandwidth=-1;
+  cp->parameters->match_filter=-1;
+  cp->parameters->status=-1;
 
-//       ctrl_prog->parameters->phased=-1;
-//       ctrl_prog->parameters->filter=-1;
-//       ctrl_prog->parameters->gain=-1;
-//       ctrl_prog->parameters->seq_no=-1;
-//       ctrl_prog->parameters->seq_id=-1;
-//       ctrl_prog->parameters->fstatus=-1;
-//       ctrl_prog->parameters->center_freq=-1;
+//       cp->parameters->phased=-1;
+//       cp->parameters->filter=-1;
+//       cp->parameters->gain=-1;
+//       cp->parameters->seq_no=-1;
+//       cp->parameters->seq_id=-1;
+//       cp->parameters->fstatus=-1;
+//       cp->parameters->center_freq=-1;
 
-  ctrl_prog->state->cancelled=0;
-  ctrl_prog->state->ready=0;
-  ctrl_prog->state->linked=0;
-  ctrl_prog->state->processing=0;
-  ctrl_prog->state->best_assigned_freq=0;
-  ctrl_prog->state->current_assigned_freq=0;
-  ctrl_prog->state->freq_change_needed=0;
-  ctrl_prog->state->thread=NULL;
-  ctrl_prog->state->fft_array=NULL;
-  ctrl_prog->radarinfo->site=-1;
-  ctrl_prog->radarinfo->radar=-1;
-  ctrl_prog->radarinfo->channel=-1;
+  cp->state->cancelled=0;
+  cp->state->ready=0;
+  cp->state->linked=0;
+  cp->state->processing=0;
+  cp->state->best_assigned_freq=0;
+  cp->state->current_assigned_freq=0;
+  cp->state->freq_change_needed=0;
+  cp->state->thread=NULL;
+  cp->state->fft_array=NULL;
+  cp->radarinfo->site=-1;
+  cp->radarinfo->radar=-1;
+  cp->radarinfo->channel=-1;
 
-  for (i=0;i<MAX_SEQS;i++) ctrl_prog->state->pulseseqs[i]=NULL;
+  for (i=0;i<MAX_SEQS;i++) cp->state->pulseseqs[i]=NULL;
 
-  return ctrl_prog;
+  return cp;
 }
 
-void controlprogram_exit(struct ControlProgram *ctrl_prog)
+void controlprogram_exit(struct ControlProgram *cp)
 {
   pthread_t tid;
   pthread_t thread;
@@ -301,21 +301,21 @@ void controlprogram_exit(struct ControlProgram *ctrl_prog)
   int r,c;
 
   pthread_t threads[10];
-  if (ctrl_prog!=NULL) {
+  if (cp != NULL) {
     fprintf(stderr,"Client: Exit Command\n");
-    ctrl_prog->state->cancelled=1;
-    r = ctrl_prog->radarinfo->radar-1;
-    c = ctrl_prog->radarinfo->channel-1;
+    cp->state->cancelled=1;
+    r = cp->radarinfo->radar-1;
+    c = cp->radarinfo->channel-1;
 
     //logger(&exit_lock_buffer,PRE,LOCK,"client_exit_init",r,c,0); 
     pthread_mutex_lock(&exit_lock);
     //logger(&exit_lock_buffer,POST,LOCK,"client_exit_init",r,c,0); 
 
-    thread_list=controlprogram_threads;
+    thread_list=cp_threads;
     tid = pthread_self();
-    ctrl_prog->active=0;
+    cp->active=0;
     rc = pthread_create(&thread, NULL,
-                        (void *)&coordination_handler, (void *)ctrl_prog);
+                        (void *)&coordination_handler, (void *)cp);
     pthread_join(thread,NULL);
     i=0;
     rc = pthread_create(&threads[i], NULL,(void *) &timing_wait, NULL);
@@ -330,21 +330,20 @@ void controlprogram_exit(struct ControlProgram *ctrl_prog)
     //rc = pthread_create(&threads[i], NULL, (void *)&DIO_end_controlprogram,
     //                    NULL);
     i++;
-    rc = pthread_create(&threads[i], NULL,
-                        (void *)&receiver_end_controlprogram, NULL);
+    rc = pthread_create(&threads[i], NULL, (void *)&rx_end_cp, NULL);
     for (;i>=0;i--) pthread_join(threads[i], NULL);
 
-    fprintf(stderr,"Closing Client Socket: %d\n", ctrl_prog->state->socket);
-    close(ctrl_prog->state->socket);
-    unregister_radar_channel(ctrl_prog);
+    fprintf(stderr,"Closing Client Socket: %d\n", cp->state->socket);
+    close(cp->state->socket);
+    unregister_radar_channel(cp);
 /*
-    if (verbose>0) printf("Checking for programs linked to %p\n",ctrl_prog); 
+    if (verbose>0) printf("Checking for programs linked to %p\n",cp); 
     while (thread_list!=NULL) {
       linker_program=thread_list->data;
       if (verbose>0)
         printf("%p  %p %p\n",linker_program,
-                        linker_program->state->linked_program,ctrl_prog); 
-      if (linker_program->state->linked_program==ctrl_prog) {
+                        linker_program->state->linked_program,cp); 
+      if (linker_program->state->linked_program==cp) {
         if (verbose>0)
           printf("Found linked program %p that need to also die\n",
                   linker_program); 
@@ -354,7 +353,7 @@ void controlprogram_exit(struct ControlProgram *ctrl_prog)
         thread_next=thread_item->next;
         thread_list=thread_item->prev;
         if (thread_next != NULL) thread_next->prev=thread_list;
-        else controlprogram_threads=thread_list;
+        else cp_threads=thread_list;
         if (thread_list != NULL) thread_list->next=thread_item->next;
         if(thread_item!=NULL) {
           free(thread_item);
@@ -366,51 +365,49 @@ void controlprogram_exit(struct ControlProgram *ctrl_prog)
    }
 */
     if (verbose>1)
-      fprintf(stderr,"Client Exit: Freeing internal structures for %p\n",
-                      ctrl_prog); 
+      fprintf(stderr,"Client Exit: Freeing internal structures for %p\n", cp); 
     for (i=0;i<MAX_SEQS;i++) {
-      if (ctrl_prog->state->pulseseqs[i]!=NULL)
-        TSGFree(ctrl_prog->state->pulseseqs[i]);
+      if (cp->state->pulseseqs[i]!=NULL)
+        TSGFree(cp->state->pulseseqs[i]);
     }
     if (verbose>1)
       fprintf(stderr,"Client Exit: Freeing controlprogram state %p\n",
-                      ctrl_prog->state); 
-    if (ctrl_prog->state!=NULL) {
-      if (ctrl_prog->state->fft_array!=NULL) {
-        free(ctrl_prog->state->fft_array);
-        ctrl_prog->state->fft_array=NULL;
+                      cp->state); 
+    if (cp->state!=NULL) {
+      if (cp->state->fft_array!=NULL) {
+        free(cp->state->fft_array);
+        cp->state->fft_array=NULL;
       }
-      free(ctrl_prog->state);
-      ctrl_prog->state=NULL;
+      free(cp->state);
+      cp->state=NULL;
     }
     if (verbose>1) {
-      fprintf(stderr,"Client Exit: Freed controlprogram state %p\n",
-                ctrl_prog->state);
+      fprintf(stderr,"Client Exit: Freed controlprogram state %p\n", cp->state);
       fprintf(stderr,"Client Exit: Freeing controlprogram parameters %p ",
-                ctrl_prog->parameters); 
+                cp->parameters); 
     }
-    if (ctrl_prog->parameters!=NULL) {
-       free(ctrl_prog->parameters);
-       ctrl_prog->parameters=NULL;
+    if (cp->parameters!=NULL) {
+       free(cp->parameters);
+       cp->parameters=NULL;
     }
     if (verbose>1) {
-      fprintf(stderr," %p\n",ctrl_prog->parameters); 
+      fprintf(stderr," %p\n",cp->parameters); 
       fprintf(stderr,"Client Exit: Freeing controlprogram data %p\n",
-                ctrl_prog->data); 
+                cp->data); 
     }
-    if (ctrl_prog->main!=NULL) munmap(ctrl_prog->main);
-    if (ctrl_prog->back!=NULL) munmap(ctrl_prog->back);
-    ctrl_prog->main=NULL;
-    ctrl_prog->back=NULL;
-    ctrl_prog->main_address=NULL;
-    ctrl_prog->back_address=NULL;
-    if (ctrl_prog->data!=NULL) {
-      free(ctrl_prog->data);
-      ctrl_prog->data=NULL;
+    if (cp->main!=NULL) munmap(cp->main);
+    if (cp->back!=NULL) munmap(cp->back);
+    cp->main=NULL;
+    cp->back=NULL;
+    cp->main_address=NULL;
+    cp->back_address=NULL;
+    if (cp->data!=NULL) {
+      free(cp->data);
+      cp->data=NULL;
     }
-    ctrl_prog->active=0;
+    cp->active=0;
     if (verbose>1)
-      fprintf(stderr,"Client Exit: Done with control program %p\n",ctrl_prog); 
+      fprintf(stderr,"Client Exit: Done with control program %p\n",cp); 
   } 
 
   if (verbose>1) {
@@ -423,11 +420,11 @@ void controlprogram_exit(struct ControlProgram *ctrl_prog)
   //logger(&exit_lock_buffer,POST,UNLOCK,"client_exit_init",r,c,0); 
 
   //printf("Client Exit: List UnLock\n");
-  //pthread_mutex_unlock(&ctrlprog_list_lock);
+  //pthread_mutex_unlock(&cp_list_lock);
   if (verbose>1) fprintf(stderr,"Client Exit: Done\n");
 }
 
-void *control_handler(struct ControlProgram *ctrl_prog)
+void *control_handler(struct ControlProgram *cp)
 {
   int i,tid,status,rc,tmp;
   int r=-1,c=-1;
@@ -463,18 +460,18 @@ void *control_handler(struct ControlProgram *ctrl_prog)
 
   /* Init the Control Program state */
 
-  r = ctrl_prog->radarinfo->radar-1;
-  c = ctrl_prog->radarinfo->channel-1;
+  r = cp->radarinfo->radar-1;
+  c = cp->radarinfo->channel-1;
   //logger(&exit_lock_buffer,PRE,LOCK,"client_handler_init",r,c,0); 
 
   pthread_mutex_lock(&exit_lock);
   //logger(&exit_lock_buffer,POST,LOCK,"client_handler_init",r,c,0); 
-  //printf("control_list_buffer %p\n",ctrlprog_list_lock_buff);
-  //logger(&ctrlprog_list_lock_buff,PRE,LOCK,"client_handler_init",r,c,1); 
-  //printf("control_list_buffer %p\n",ctrlprog_list_lock_buff);
+  //printf("control_list_buffer %p\n",cp_list_lock_buff);
+  //logger(&cp_list_lock_buff,PRE,LOCK,"client_handler_init",r,c,1); 
+  //printf("control_list_buffer %p\n",cp_list_lock_buff);
 
-  pthread_mutex_lock(&ctrlprog_list_lock);
-  //logger(&ctrlprog_list_lock_buff,POST,LOCK,"client_handler_init",r,c,1); 
+  pthread_mutex_lock(&cp_list_lock);
+  //logger(&cp_list_lock_buff,POST,LOCK,"client_handler_init",r,c,1); 
 
   setbuf(stdout, 0);
   setbuf(stderr, 0);
@@ -486,13 +483,13 @@ void *control_handler(struct ControlProgram *ctrl_prog)
   */
   pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
   pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, NULL);
-  pthread_cleanup_push((void *)&controlprogram_exit,(void *)ctrl_prog);
-  if (ctrl_prog != NULL)
-    socket=ctrl_prog->state->socket;
-  //logger(&ctrlprog_list_lock_buff,PRE,UNLOCK,"client_handler_init",r,c,0); 
+  pthread_cleanup_push((void *)&controlprogram_exit,(void *)cp);
+  if (cp != NULL)
+    socket=cp->state->socket;
+  //logger(&cp_list_lock_buff,PRE,UNLOCK,"client_handler_init",r,c,0); 
 
-  pthread_mutex_unlock(&ctrlprog_list_lock);
-  //logger(&ctrlprog_list_lock_buff,POST,UNLOCK,"client_handler_init",r,c,0); 
+  pthread_mutex_unlock(&cp_list_lock);
+  //logger(&cp_list_lock_buff,POST,UNLOCK,"client_handler_init",r,c,0); 
   //logger(&exit_lock_buffer,PRE,UNLOCK,"client_handler_init",r,c,0); 
 
   pthread_mutex_unlock(&exit_lock);
@@ -500,7 +497,7 @@ void *control_handler(struct ControlProgram *ctrl_prog)
 
   gettimeofday(&last_report,NULL);
   while (1) {
-    if (ctrl_prog == NULL) break;
+    if (cp == NULL) break;
     retval = getsockopt(socket, SOL_SOCKET, SO_ERROR, &socket_err, &length);
     if ((retval!=0) || (socket_err!=0)) {
       printf("Error: socket error: %d : %d %d\n",socket,retval,socket_err);
@@ -519,16 +516,16 @@ void *control_handler(struct ControlProgram *ctrl_prog)
     /* Don’t rely on the value of tv now! */
     if (retval == -1) perror("select()");
     else if (retval) {
-      r = ctrl_prog->radarinfo->radar-1;
-      c = ctrl_prog->radarinfo->channel-1;
-      //logger(&ctrlprog_list_lock_buff,PRE,LOCK,"client_command_init",r,c,1); 
+      r = cp->radarinfo->radar-1;
+      c = cp->radarinfo->channel-1;
+      //logger(&cp_list_lock_buff,PRE,LOCK,"client_command_init",r,c,1); 
 
-      pthread_mutex_lock(&ctrlprog_list_lock);
-      //logger(&ctrlprog_list_lock_buff,POST,LOCK,"client_command_init",r,c,1); 
+      pthread_mutex_lock(&cp_list_lock);
+      //logger(&cp_list_lock_buff,POST,LOCK,"client_command_init",r,c,1); 
 
-      r = ctrl_prog->radarinfo->radar-1;
-      c = ctrl_prog->radarinfo->channel-1;
-      if ((r<0) || (c<0)) ctrl_prog->data->status=-1;
+      r = cp->radarinfo->radar-1;
+      c = cp->radarinfo->channel-1;
+      if ((r<0) || (c<0)) cp->data->status=-1;
  
       /* Read controlprogram msg */
       recv_data(socket, &msg, sizeof(struct ROSMsg));
@@ -537,10 +534,10 @@ void *control_handler(struct ControlProgram *ctrl_prog)
         system("date -t > /tmp/server_cmd_time");
         last_report=current_time;
       }
-      ctrl_prog->state->thread->last_seen = current_time;
-      //logger(&ctrlprog_list_lock_buff,PRE,UNLOCK,"client_command_init",r,c,1); 
-      pthread_mutex_unlock(&ctrlprog_list_lock);
-      //logger(&ctrlprog_list_lock_buff,POST,UNLOCK,"client_command_init",r,c,1); 
+      cp->state->thread->last_seen = current_time;
+      //logger(&cp_list_lock_buff,PRE,UNLOCK,"client_command_init",r,c,1); 
+      pthread_mutex_unlock(&cp_list_lock);
+      //logger(&cp_list_lock_buff,POST,UNLOCK,"client_command_init",r,c,1); 
       /* Process controlprogram msg */
       switch(msg.type) {
 
@@ -560,15 +557,15 @@ void *control_handler(struct ControlProgram *ctrl_prog)
             msg.status=-1;
             send_data(socket, &msg, sizeof(struct ROSMsg));
           } else {
-            pthread_mutex_lock(&ctrlprog_list_lock);
-            if (ctrl_prog->active!=0) {
-              ctrl_prog->active=-1;
+            pthread_mutex_lock(&cp_list_lock);
+            if (cp->active!=0) {
+              cp->active=-1;
               rc = pthread_create(&thread, NULL, (void *)&coordination_handler,
-                                  (void *)ctrl_prog);
+                                  (void *)cp);
               pthread_join(thread,NULL);
             }
 
-            pthread_mutex_unlock(&ctrlprog_list_lock);
+            pthread_mutex_unlock(&cp_list_lock);
             msg.status=1;
             send_data(socket, &msg, sizeof(struct ROSMsg));
           }
@@ -583,14 +580,14 @@ void *control_handler(struct ControlProgram *ctrl_prog)
             msg.status=-1;
             send_data(socket, &msg, sizeof(struct ROSMsg));
           } else {
-            pthread_mutex_lock(&ctrlprog_list_lock);
-            if (ctrl_prog->active!=0) {
-              ctrl_prog->active=1;
+            pthread_mutex_lock(&cp_list_lock);
+            if (cp->active!=0) {
+              cp->active=1;
               rc = pthread_create(&thread, NULL, (void *)&coordination_handler,
-                                  (void *)ctrl_prog);
+                                  (void *)cp);
               pthread_join(thread,NULL);
             }
-            pthread_mutex_unlock(&ctrlprog_list_lock);
+            pthread_mutex_unlock(&cp_list_lock);
             msg.status=1;
             send_data(socket, &msg, sizeof(struct ROSMsg));
           }
@@ -677,15 +674,15 @@ void *control_handler(struct ControlProgram *ctrl_prog)
           recv_data(socket, &radar, sizeof(int32)); //requested radar
           recv_data(socket, &channel, sizeof(int32)); //requested channel
           if (verbose > 1) printf("Radar: %d Chan: %d\n",radar,channel);
-          pthread_mutex_lock(&ctrlprog_list_lock);
-          status=register_radar_channel(ctrl_prog,radar,channel);
+          pthread_mutex_lock(&cp_list_lock);
+          status=register_radar_channel(cp,radar,channel);
           if (!status) {
             if (verbose > -1)
               fprintf(stderr,"Control Program thread %p Bad status %d no "
                               "radar channel registered\n", tid,status);
           }
           msg.status=status;
-          pthread_mutex_unlock(&ctrlprog_list_lock);
+          pthread_mutex_unlock(&cp_list_lock);
           send_data(socket, &msg, sizeof(struct ROSMsg));
           if (verbose > 1) printf("end SET_RADAR_CHAN\n");
           break;
@@ -696,15 +693,14 @@ void *control_handler(struct ControlProgram *ctrl_prog)
           msg.status=1;
           recv_data(socket, &r, sizeof(r)); //requested radar
           recv_data(socket, &c, sizeof(c)); //requested channel
-          pthread_mutex_lock(&ctrlprog_list_lock);
-          ctrl_prog->state->linked_program =
-            find_registered_controlprogram_by_radar_channel(r,c);
-          ctrl_prog->state->linked=1;
-          if (ctrl_prog->state->linked_program!=NULL) status=1;
+          pthread_mutex_lock(&cp_list_lock);
+          cp->state->linked_program = find_reg_cp_by_rchan(r,c);
+          cp->state->linked=1;
+          if (cp->state->linked_program!=NULL) status=1;
           else status=0;
 
           msg.status=status;
-          pthread_mutex_unlock(&ctrlprog_list_lock);
+          pthread_mutex_unlock(&cp_list_lock);
           send_data(socket, &msg, sizeof(struct ROSMsg));
           if (verbose > 1) printf("end LINK_RADAR_CHAN\n");
           break;
@@ -718,10 +714,10 @@ void *control_handler(struct ControlProgram *ctrl_prog)
             msg.status=-1;
             send_data(socket, &msg, sizeof(struct ROSMsg));
           } else {
-            pthread_mutex_lock(&ctrlprog_list_lock);
+            pthread_mutex_lock(&cp_list_lock);
             msg.status=status;
-            ctrl_params=controlprogram_fill_parameters(ctrl_prog);
-            pthread_mutex_unlock(&ctrlprog_list_lock);
+            ctrl_params = cp_fill_params(cp);
+            pthread_mutex_unlock(&cp_list_lock);
             send_data(socket, &ctrl_params, sizeof(struct ControlPRM));
             send_data(socket, &msg, sizeof(struct ROSMsg));
           }
@@ -733,30 +729,29 @@ void *control_handler(struct ControlProgram *ctrl_prog)
           gettimeofday(&t0,NULL);
           if ((r < 0) || (c < 0)) {
             if (verbose > 1) printf("  status -1: r: %d  c: %d\n", r,c);
-            ctrl_prog->data->status=-1;
-            send_data(socket, ctrl_prog->data, sizeof(struct DataPRM));
+            cp->data->status=-1;
+            send_data(socket, cp->data, sizeof(struct DataPRM));
             msg.status=-1;
             send_data(socket, &msg, sizeof(struct ROSMsg));
           } else {
             msg.status=status;
-            rc = pthread_create(&thread, NULL,
-                                (void *)&receiver_controlprogram_get_data,
-                                (void *) ctrl_prog);
+            rc = pthread_create(&thread, NULL, (void *)&rx_cp_get_data,
+                                (void *) cp);
             pthread_join(thread,NULL);
 
             //JDS: TODO do some GPS timestamp checking here
-            pthread_mutex_lock(&ctrlprog_list_lock);
-            ctrl_prog->data->event_secs=ctrl_prog->state->gpssecond;
-            ctrl_prog->data->event_nsecs=ctrl_prog->state->gpsnsecond;
-            send_data(socket, ctrl_prog->data, sizeof(struct DataPRM));
-            if (ctrl_prog->data->status==0) {
+            pthread_mutex_lock(&cp_list_lock);
+            cp->data->event_secs=cp->state->gpssecond;
+            cp->data->event_nsecs=cp->state->gpsnsecond;
+            send_data(socket, cp->data, sizeof(struct DataPRM));
+            if (cp->data->status==0) {
               if (verbose > 1)
                 printf("GET_DATA: main: %d %d\n",sizeof(uint32),
-                        sizeof(uint32)*ctrl_prog->data->samples);
-              send_data(socket, ctrl_prog->main,
-                        sizeof(uint32)*ctrl_prog->data->samples);
-              send_data(socket, ctrl_prog->back,
-                        sizeof(uint32)*ctrl_prog->data->samples);
+                        sizeof(uint32)*cp->data->samples);
+              send_data(socket, cp->main,
+                        sizeof(uint32)*cp->data->samples);
+              send_data(socket, cp->back,
+                        sizeof(uint32)*cp->data->samples);
               send_data(socket, &bad_transmit_times.length,
                         sizeof(bad_transmit_times.length));
               if (verbose > 1)
@@ -772,10 +767,10 @@ void *control_handler(struct ControlProgram *ctrl_prog)
               send_data(socket,&txstatus[r].LOWPWR,sizeof(int)*tmp);
             } else {
               if (verbose > 1) printf("GET_DATA: Bad status %d\n",
-                        ctrl_prog->data->status);
+                        cp->data->status);
             } 
             send_data(socket, &msg, sizeof(struct ROSMsg));
-            pthread_mutex_unlock(&ctrlprog_list_lock);
+            pthread_mutex_unlock(&cp_list_lock);
           }
 
           gettimeofday(&t1,NULL);
@@ -793,20 +788,19 @@ void *control_handler(struct ControlProgram *ctrl_prog)
           gettimeofday(&t0,NULL);
           if ((r < 0) || (c < 0)) {
             if (verbose > 1) printf("  status -1: r: %d  c: %d\n", r,c);
-            recv_data(socket, ctrl_prog->parameters,
+            recv_data(socket, cp->parameters,
                       sizeof(struct ControlPRM));
             msg.status=-1;
             send_data(socket, &msg, sizeof(struct ROSMsg));
           } else {
             msg.status=1;
-            pthread_mutex_lock(&ctrlprog_list_lock);
-            recv_data(socket, ctrl_prog->parameters,
+            pthread_mutex_lock(&cp_list_lock);
+            recv_data(socket, cp->parameters,
                       sizeof(struct ControlPRM));
-            if (ctrl_prog->parameters->rfreq<0)
-              ctrl_prog->parameters->rfreq =
-                                      ctrl_prog->parameters->tfreq;
+            if (cp->parameters->rfreq<0)
+              cp->parameters->rfreq = cp->parameters->tfreq;
             send_data(socket, &msg, sizeof(struct ROSMsg));
-            pthread_mutex_unlock(&ctrlprog_list_lock);
+            pthread_mutex_unlock(&cp_list_lock);
           }
           if (verbose > 1) printf("SET_PARAMETERS: END\n");
           break;
@@ -816,31 +810,30 @@ void *control_handler(struct ControlProgram *ctrl_prog)
           gettimeofday(&t0,NULL);
           msg.status=1;
           recv_data(socket,&tprm, sizeof(struct SeqPRM)); // requested pulseseq
-          pthread_mutex_lock(&ctrlprog_list_lock);
-          ctrl_prog->state->pulseseqs[tprm.index] =
-                                          malloc(sizeof(struct TSGbuf));
-          ctrl_prog->parameters->current_pulseseq_index=tprm.index;
-          ctrl_prog->state->pulseseqs[tprm.index]->len=tprm.len;
-          ctrl_prog->state->pulseseqs[tprm.index]->step=tprm.step;
-          ctrl_prog->state->pulseseqs[tprm.index]->index=tprm.index;
-          ctrl_prog->state->pulseseqs[tprm.index]->prm=NULL;
-          ctrl_prog->state->pulseseqs[tprm.index]->rep=
+          pthread_mutex_lock(&cp_list_lock);
+          cp->state->pulseseqs[tprm.index] = malloc(sizeof(struct TSGbuf));
+          cp->parameters->current_pulseseq_index=tprm.index;
+          cp->state->pulseseqs[tprm.index]->len=tprm.len;
+          cp->state->pulseseqs[tprm.index]->step=tprm.step;
+          cp->state->pulseseqs[tprm.index]->index=tprm.index;
+          cp->state->pulseseqs[tprm.index]->prm=NULL;
+          cp->state->pulseseqs[tprm.index]->rep=
                 malloc(sizeof(unsigned char)*
-                        ctrl_prog->state->pulseseqs[tprm.index]->len);
-          ctrl_prog->state->pulseseqs[tprm.index]->code=
+                        cp->state->pulseseqs[tprm.index]->len);
+          cp->state->pulseseqs[tprm.index]->code=
                 malloc(sizeof(unsigned char)*
-                        ctrl_prog->state->pulseseqs[tprm.index]->len);
+                        cp->state->pulseseqs[tprm.index]->len);
           /* JDS: 20121017 : TSGprm structure is deprecated and should not be
                               allocated */
-          /* ctrl_prog->state->pulseseqs[tprm.index]->prm=
+          /* cp->state->pulseseqs[tprm.index]->prm=
                             malloc(sizeof(struct TSGprm)); */
-          recv_data(socket,ctrl_prog->state->pulseseqs[tprm.index]->rep, 
+          recv_data(socket,cp->state->pulseseqs[tprm.index]->rep, 
                       sizeof(unsigned char)*
-                      ctrl_prog->state->pulseseqs[tprm.index]->len);
+                      cp->state->pulseseqs[tprm.index]->len);
                       // requested pulseseq
-          recv_data(socket,ctrl_prog->state->pulseseqs[tprm.index]->code, 
+          recv_data(socket,cp->state->pulseseqs[tprm.index]->code, 
                       sizeof(unsigned char)*
-                      ctrl_prog->state->pulseseqs[tprm.index]->len);
+                      cp->state->pulseseqs[tprm.index]->len);
                       // requested pulseseq
           if ((r < 0) || (c < 0)) {
             if (verbose > 1) printf("  status -1: r: %d  c: %d\n", r,c);
@@ -849,18 +842,18 @@ void *control_handler(struct ControlProgram *ctrl_prog)
             //send on to timing socket
             rc = pthread_create(&threads[0], NULL,
                                 (void *)&timing_register_seq,
-                                (void *)ctrl_prog);
+                                (void *)cp);
             //send on to dds socket
             rc = pthread_create(&threads[1], NULL,
                                 (void *)&dds_register_seq,
-                                (void *)ctrl_prog);
+                                (void *)cp);
             //printf("Waiting on Timing Thread\n");
             pthread_join(threads[0],NULL);
             //printf("Waiting on DDS\n"); 
             pthread_join(threads[1],NULL);
           }
 
-          pthread_mutex_unlock(&ctrlprog_list_lock);
+          pthread_mutex_unlock(&cp_list_lock);
           if (verbose > 1) printf("REGISTER_SEQ: SEND ROSMsg\n");
           send_data(socket, &msg, sizeof(struct ROSMsg));
           gettimeofday(&t1,NULL);
@@ -882,31 +875,23 @@ void *control_handler(struct ControlProgram *ctrl_prog)
           } else {
             if (verbose > 1) printf("0\n");
             msg.status=0;
-            pthread_mutex_lock(&ctrlprog_list_lock);
-            if (ctrl_prog->active!=0) ctrl_prog->active=1;
-            pthread_mutex_unlock(&ctrlprog_list_lock);
+            pthread_mutex_lock(&cp_list_lock);
+            if (cp->active!=0) cp->active=1;
+            pthread_mutex_unlock(&cp_list_lock);
             i=0;
             rc = pthread_create(&threads[i], NULL,
                                 (void *)&timing_wait, NULL);
             pthread_join(threads[0],NULL);
-            pthread_mutex_lock(&ctrlprog_list_lock);
-            //ctrl_prog->state->ready=1;
+            pthread_mutex_lock(&cp_list_lock);
+            //cp->state->ready=1;
             i=0;
-            rc = pthread_create(&threads[i], NULL,
-                                (void *)&DIO_ready_controlprogram,
-                                ctrl_prog);
+            rc = pthread_create(&threads[i],NULL, (void *)&DIO_ready_cp, cp);
             i++;
-            rc = pthread_create(&threads[i], NULL,
-                                (void *) &timing_ready_controlprogram,
-                                ctrl_prog);
+            rc = pthread_create(&threads[i],NULL, (void *)&timing_ready_cp, cp);
             i++;
-            rc = pthread_create(&threads[i], NULL,
-                                (void *) &dds_ready_controlprogram,
-                                ctrl_prog);
+            rc = pthread_create(&threads[i], NULL, (void *)&dds_ready_cp, cp);
             i++;
-            rc = pthread_create(&threads[i], NULL,
-                                (void *) &receiver_ready_controlprogram,
-                                ctrl_prog);
+            rc = pthread_create(&threads[i], NULL, (void *) &rx_ready_cp, cp);
             for (;i>=0;i--) {
               gettimeofday(&t2,NULL);
               pthread_join(threads[i],NULL);
@@ -923,7 +908,7 @@ void *control_handler(struct ControlProgram *ctrl_prog)
             gettimeofday(&t2,NULL);
             rc = pthread_create(&thread, NULL,
                                 (void *)&coordination_handler,
-                                (void *)ctrl_prog);
+                                (void *)cp);
             pthread_join(thread,NULL);
             gettimeofday(&t3,NULL);
             if (verbose > 1) {
@@ -933,7 +918,7 @@ void *control_handler(struct ControlProgram *ctrl_prog)
                 printf("Client:Set Ready: Coord Elapsed Microseconds: %ld\n",
                         elapsed);
             }
-            pthread_mutex_unlock(&ctrlprog_list_lock);
+            pthread_mutex_unlock(&cp_list_lock);
           }
 
           send_data(socket, &msg, sizeof(struct ROSMsg));
@@ -961,32 +946,31 @@ void *control_handler(struct ControlProgram *ctrl_prog)
   	      fprintf(stdout,"  usecs: %d\n",usecs_to_sleep);
 
           gettimeofday(&t0,NULL);
-          pthread_mutex_lock(&ctrlprog_list_lock);
-          recv_data(socket,&ctrl_prog->clrfreqsearch,
+          pthread_mutex_lock(&cp_list_lock);
+          recv_data(socket,&cp->clrfreqsearch,
                     sizeof(struct CLRFreqPRM)); // requested search parameters
           //printf("Client: Requst CLRSearch: %d %d\n",
-                  //ctrl_prog->clrfreqsearch.start,
-                  //ctrl_prog->clrfreqsearch.end);
+                  //cp->clrfreqsearch.start,
+                  //cp->clrfreqsearch.end);
           if ((r < 0) || (c < 0)) {
             if (verbose > 1) printf("  status -1: r: %d  c: %d\n", r,c);
             msg.status=-1;
           } else {
             rc = pthread_create(&threads[0], NULL,
-                                (void *)&DIO_clrfreq,ctrl_prog);
+                                (void *)&DIO_clrfreq,cp);
             pthread_join(threads[0],NULL);
             usleep(usecs_to_sleep);
-            rc = pthread_create(&threads[0], NULL,
-                                (void *)&receiver_clrfreq,ctrl_prog);
+            rc = pthread_create(&threads[0], NULL, (void *)&rx_clrfreq,cp);
             pthread_join(threads[0],NULL);
             rc = pthread_create(&threads[0], NULL,
                                 (void *)&DIO_rxfe_reset,NULL);
             pthread_join(threads[0],NULL);
             usleep(usecs_to_sleep);
-            msg.status=ctrl_prog->state->freq_change_needed;
+            msg.status=cp->state->freq_change_needed;
           }
 
           send_data(socket, &msg, sizeof(struct ROSMsg));
-          pthread_mutex_unlock(&ctrlprog_list_lock);
+          pthread_mutex_unlock(&cp_list_lock);
           gettimeofday(&t1,NULL);
           if (verbose > 1) {
             elapsed=(t1.tv_sec-t0.tv_sec)*1E6;
@@ -1001,28 +985,27 @@ void *control_handler(struct ControlProgram *ctrl_prog)
         case REQUEST_ASSIGNED_FREQ:
           if (verbose > 1) printf("REQUEST_ASSIGNED_FREQ\n");
           gettimeofday(&t0,NULL);
-          pthread_mutex_lock(&ctrlprog_list_lock);
+          pthread_mutex_lock(&cp_list_lock);
           if ( (r < 0) || (c < 0)) {
             if (verbose > 1) printf("  status -1: r: %d  c: %d\n", r,c);
             msg.status=-1;
-            ctrl_prog->state->current_assigned_freq=0;
-            ctrl_prog->state->current_assigned_noise=0;
+            cp->state->current_assigned_freq=0;
+            cp->state->current_assigned_noise=0;
           } else {
-            rc = pthread_create(&threads[0], NULL,
-                                (void *)&receiver_assign_frequency,
-                                (void *)ctrl_prog);
+            rc = pthread_create(&threads[0], NULL, (void *)&rx_assign_freq,
+                                (void *)cp);
             pthread_join(threads[0],NULL);
-            msg.status = ctrl_prog->state->best_assigned_freq !=
-                          ctrl_prog->state->current_assigned_freq;
+            msg.status = cp->state->best_assigned_freq !=
+                          cp->state->current_assigned_freq;
           }
 
-          //ctrl_prog->state->current_assigned_noise=1;
-          current_freq=ctrl_prog->state->current_assigned_freq; 
+          //cp->state->current_assigned_noise=1;
+          current_freq=cp->state->current_assigned_freq; 
           send_data(socket, &current_freq, sizeof(int32));
-          send_data(socket, &ctrl_prog->state->current_assigned_noise,
+          send_data(socket, &cp->state->current_assigned_noise,
                     sizeof(float));
           send_data(socket, &msg, sizeof(struct ROSMsg));
-          pthread_mutex_unlock(&ctrlprog_list_lock);
+          pthread_mutex_unlock(&cp_list_lock);
           if (verbose > 1) {
             gettimeofday(&t1,NULL);
             elapsed=(t1.tv_sec-t0.tv_sec)*1E6;
@@ -1037,7 +1020,7 @@ void *control_handler(struct ControlProgram *ctrl_prog)
           printf("Client QUIT\n");
           msg.status=0;
           send_data(socket, &msg, sizeof(struct ROSMsg));
-          //controlprogram_exit(ctrl_prog);
+          //controlprogram_exit(cp);
           pthread_exit(NULL);
           break;
 
@@ -1057,11 +1040,11 @@ void *control_handler(struct ControlProgram *ctrl_prog)
 
   pthread_testcancel();
   pthread_cleanup_pop(0);
-  controlprogram_exit(ctrl_prog);
+  controlprogram_exit(cp);
   pthread_exit(NULL);
 }
 
-void *controlprogram_free(struct ControlProgram *ctrl_prog)
+void *controlprogram_free(struct ControlProgram *cp)
 {
 
 }
