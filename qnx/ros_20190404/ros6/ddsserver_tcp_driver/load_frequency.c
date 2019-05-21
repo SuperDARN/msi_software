@@ -23,12 +23,18 @@ extern int verbose;
 void load_frequency(FILE *ics660, uint32_t chip, int channel, double fr)
 {
   struct ICS660_FREQ freq_str;
-  if (verbose > 1) printf("  In Load frequency file:%d chip:%d channel:%d freq:%lf\n",ics660,chip,channel,fr);	
+
+  if (verbose > 1)
+    printf("  In Load frequency file:%d chip:%d channel:%d freq:%lf\n",
+            ics660, chip, channel, fr);	
+
   freq_str.chip = chip;
   freq_str.channel = channel;
   freq_str.freq = fr;
 #ifdef __QNX__  
-  ics660_set_parameter(ics660,(int)ICS660_LOAD_FREQUENCY,&freq_str,sizeof(freq_str));
+  ics660_set_parameter(ics660, (int)ICS660_LOAD_FREQUENCY, &freq_str,
+                       sizeof(freq_str));
 #endif
 
 }
+

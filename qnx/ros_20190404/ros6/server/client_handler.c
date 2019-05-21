@@ -66,7 +66,7 @@ struct ControlProgram* find_reg_cp_by_rchan(int rad, int chan)
   return cp;
 }
 
-struct ControlPRM cp_fill_params(struct ControlProgram *cp)
+struct ControlPRM cp_fill_params(struct ControlProgram *ctrlprog)
 {
   struct ControlPRM ctrl_params;      
   struct ControlProgram *cp, *best[MAX_RADARS];      
@@ -81,29 +81,29 @@ struct ControlPRM cp_fill_params(struct ControlProgram *cp)
       for (c=1; c<=MAX_CHANNELS; c++) {
         cp = find_reg_cp_by_rchan(r,c);
         if (cp != NULL) {
-          if (cp->active != 0) {
+          //if (cp->active != 0) {    // SGS commented out in FH code
             if (cp->parameters != NULL) {
               if (cp->parameters->priority < priority) {
                 best[r-1] = cp;
                 priority = cp->parameters->priority;
               }
             }
-          }
+          //}   // SGS commented out in FH code
         }
       }
     }
   }
 
-  if (cp != NULL) {
-    if (cp->parameters != NULL) {
+  if (ctrlprog != NULL) {
+    if (ctrlprog->parameters != NULL) {
        //strcpy(ctrl_params.name, cp->parameters->name);
        //strcpy(ctrl_params.description, cp->parameters->description);
-       ctrl_params.radar = cp->radarinfo->radar;
-       ctrl_params.channel = cp->radarinfo->channel;
+       ctrl_params.radar = ctrlprog->radarinfo->radar;
+       ctrl_params.channel = ctrlprog->radarinfo->channel;
        r = ctrl_params.radar-1;
        ctrl_params.current_pulseseq_index =
-                      cp->parameters->current_pulseseq_index;
-       ctrl_params.priority = cp->parameters->priority;
+                      ctrlprog->parameters->current_pulseseq_index;
+       ctrl_params.priority = ctrlprog->parameters->priority;
 
        if (TX_BEAM_PRIORITY) {
          ctrl_params.tbeam = best[r]->parameters->tbeam;
@@ -111,18 +111,18 @@ struct ControlPRM cp_fill_params(struct ControlProgram *cp)
          ctrl_params.tbeamwidth = best[r]->parameters->tbeamwidth;
          ctrl_params.tbeamazm = best[r]->parameters->tbeamazm;
        } else {
-         ctrl_params.tbeam = cp->parameters->tbeam;
-         ctrl_params.tbeamcode = cp->parameters->tbeamcode;
-         ctrl_params.tbeamwidth = cp->parameters->tbeamwidth;
-         ctrl_params.tbeamazm = cp->parameters->tbeamazm;
+         ctrl_params.tbeam = ctrlprog->parameters->tbeam;
+         ctrl_params.tbeamcode = ctrlprog->parameters->tbeamcode;
+         ctrl_params.tbeamwidth = ctrlprog->parameters->tbeamwidth;
+         ctrl_params.tbeamazm = ctrlprog->parameters->tbeamazm;
        }
 
        if (TX_FREQ_PRIORITY) {
          ctrl_params.tfreq = best[r]->parameters->tfreq;
          ctrl_params.trise = best[r]->parameters->trise;
        } else {
-         ctrl_params.tfreq = cp->parameters->tfreq;
-         ctrl_params.trise = cp->parameters->trise;
+         ctrl_params.tfreq = ctrlprog->parameters->tfreq;
+         ctrl_params.trise = ctrlprog->parameters->trise;
        }
 
        if (RX_BEAM_PRIORITY) {
@@ -131,27 +131,27 @@ struct ControlPRM cp_fill_params(struct ControlProgram *cp)
          ctrl_params.rbeamwidth = best[r]->parameters->rbeamwidth;
          ctrl_params.rbeamazm = best[r]->parameters->rbeamazm;
        } else {
-         ctrl_params.rbeam = cp->parameters->rbeam;
-         ctrl_params.rbeamcode = cp->parameters->rbeamcode;
-         ctrl_params.rbeamwidth = cp->parameters->rbeamwidth;
-         ctrl_params.rbeamazm = cp->parameters->rbeamazm;
+         ctrl_params.rbeam = ctrlprog->parameters->rbeam;
+         ctrl_params.rbeamcode = ctrlprog->parameters->rbeamcode;
+         ctrl_params.rbeamwidth = ctrlprog->parameters->rbeamwidth;
+         ctrl_params.rbeamazm = ctrlprog->parameters->rbeamazm;
        }
 
        if (RX_FREQ_PRIORITY) {
          ctrl_params.rfreq = best[r]->parameters->rfreq;
          ctrl_params.number_of_samples = best[r]->parameters->number_of_samples;
        } else {
-         ctrl_params.rfreq = cp->parameters->rfreq;
+         ctrl_params.rfreq = ctrlprog->parameters->rfreq;
          ctrl_params.number_of_samples =
-                            cp->parameters->number_of_samples;
+                            ctrlprog->parameters->number_of_samples;
        }
 
-       ctrl_params.buffer_index = cp->parameters->buffer_index;
+       ctrl_params.buffer_index = ctrlprog->parameters->buffer_index;
        ctrl_params.baseband_samplerate =
-                            cp->parameters->baseband_samplerate;
-       ctrl_params.filter_bandwidth = cp->parameters->filter_bandwidth;
-       ctrl_params.match_filter = cp->parameters->match_filter;
-       ctrl_params.status = cp->parameters->status;
+                            ctrlprog->parameters->baseband_samplerate;
+       ctrl_params.filter_bandwidth = ctrlprog->parameters->filter_bandwidth;
+       ctrl_params.match_filter = ctrlprog->parameters->match_filter;
+       ctrl_params.status = ctrlprog->parameters->status;
     }
   }
 
@@ -290,7 +290,7 @@ struct ControlProgram *control_init(void) {
   return cp;
 }
 
-void controlprogram_exit(struct ControlProgram *cp)
+void cp_exit(struct ControlProgram *cp)
 {
   pthread_t tid;
   pthread_t thread;
@@ -321,11 +321,9 @@ void controlprogram_exit(struct ControlProgram *cp)
     rc = pthread_create(&threads[i], NULL,(void *) &timing_wait, NULL);
     pthread_join(threads[0],NULL);
     i=0;
-    rc = pthread_create(&threads[i], NULL,
-                        (void *)&dds_end_controlprogram, NULL);
+    rc = pthread_create(&threads[i], NULL, (void *)&dds_end_cp, NULL);
     i++;
-    rc = pthread_create(&threads[i], NULL,
-                        (void *)&timing_end_controlprogram, NULL);
+    rc = pthread_create(&threads[i], NULL, (void *)&timing_end_cp, NULL);
     //i++;
     //rc = pthread_create(&threads[i], NULL, (void *)&DIO_end_controlprogram,
     //                    NULL);
@@ -483,7 +481,7 @@ void *control_handler(struct ControlProgram *cp)
   */
   pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
   pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, NULL);
-  pthread_cleanup_push((void *)&controlprogram_exit,(void *)cp);
+  pthread_cleanup_push((void *)&cp_exit,(void *)cp);
   if (cp != NULL)
     socket=cp->state->socket;
   //logger(&cp_list_lock_buff,PRE,UNLOCK,"client_handler_init",r,c,0); 
@@ -1020,7 +1018,7 @@ void *control_handler(struct ControlProgram *cp)
           printf("Client QUIT\n");
           msg.status=0;
           send_data(socket, &msg, sizeof(struct ROSMsg));
-          //controlprogram_exit(cp);
+          //cp_exit(cp);
           pthread_exit(NULL);
           break;
 
@@ -1040,7 +1038,7 @@ void *control_handler(struct ControlProgram *cp)
 
   pthread_testcancel();
   pthread_cleanup_pop(0);
-  controlprogram_exit(cp);
+  cp_exit(cp);
   pthread_exit(NULL);
 }
 

@@ -11,7 +11,7 @@ extern pthread_mutex_t timing_comm_lock;
 extern int verbose;
 extern struct TRTimes bad_transmit_times;
 
-void *timing_ready_controlprogram(struct ControlProgram *cp)
+void *timing_ready_cp(struct ControlProgram *cp)
 {
   struct DriverMsg msg;
 
@@ -29,7 +29,7 @@ void *timing_ready_controlprogram(struct ControlProgram *cp)
   pthread_exit(NULL);
 }
 
-void *timing_end_controlprogram(void *arg)
+void *timing_end_cp(void *arg)
 {
   struct DriverMsg msg;
 

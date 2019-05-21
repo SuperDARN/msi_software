@@ -50,10 +50,10 @@
 
 int sock,msgsock;
 int verbose=2;
-uint32 ifmode=IF_ENABLED;
+uint32_t ifmode=IF_ENABLED;
 struct  RXFESettings rf_settings;
 struct  RXFESettings if_settings;
-double d=ANTENNA_SEPARATION;
+double d=ANTENNA_SEPARATION;    /* Only for IMAGING but check value!! */
 unsigned int transmitters[16][2] = {
    /* pci index:0-?, chip:1-4 */
      {0,1},
@@ -92,7 +92,7 @@ float  test_freqs[16]= {
      16E6,
    };
 float dp=0.41887902;
-float  test_phase[16];
+float test_phase[16];
  
 void graceful_cleanup(int signum)
 {
@@ -106,15 +106,15 @@ int main()
   // DECLARE AND INITIALIZE ANY NECESSARY VARIABLES
 
   // socket and message passing variables
-  char  datacode;
+  char datacode;
   int rval;
   fd_set rfds,efds;
   int status;
 
   // counter and temporary variables
   int i,ant,j,k,r,c,cc,count;
-  int     configured,buf,ratio,index,numclients=0;
-  int tempcode;
+  int configured,buf,ratio,index,numclients=0;
+  int tcode;
   double microseconds;
   // ics660 variables
   int pci_ind,pci_min;
@@ -129,10 +129,11 @@ int main()
   struct  timespec  start, stop, sleep, now;
   int clockresolution;
 
-  int  maxclients=MAX_RADARS*MAX_CHANNELS;
+  int  maxclients=MAX_RADARS*MAX_CHANNELS+1;
   int  max_seq_count;
   int  seq_count[MAX_RADARS][MAX_CHANNELS];
-  int  old_pulse_index[MAX_RADARS][MAX_CHANNELS];
+//  int  old_pulse_index[MAX_RADARS][MAX_CHANNELS];
+  int32_t current_pulse_index[MAX_RADARS][MAX_CHANNELS];
   int  ready_index[MAX_RADARS][MAX_CHANNELS];
   int  *seq_buf[MAX_RADARS][MAX_CHANNELS];
   int  active[MAX_RADARS][DDS_MAX_CHANNELS];
@@ -140,6 +141,7 @@ int main()
   struct  TSGbuf *pulseseqs[MAX_RADARS][MAX_CHANNELS][MAX_SEQS];
 /* JDS : 20121017 : TSGprm structure is deprecated and should not be used */
 /*        struct  TSGprm *tsgprm; */
+  int new_seq_flag=0;
   struct timeval t0,t1,t2,t3;
   unsigned long elapsed;
 
@@ -227,9 +229,9 @@ int main()
   
   /* initial the ics660 and dc60m card */
   if (verbose > 0) printf("Init ics660 and dc60m chips\n");
-  for ( pci_ind=pci_min; pci_ind<DDS_MAX_CARDS; pci_ind++) {
-    status=ics660_init(ics660[pci_ind],pci_ind);
-    if (verbose > 1) printf("%d Status: %d\n",pci_ind,status);
+  for (pci_ind=pci_min; pci_ind<DDS_MAX_CARDS; pci_ind++) {
+    status = ics660_init(ics660[pci_ind],pci_ind);
+    if (verbose > 1) printf("%d Status: %d\n", pci_ind, status);
   }
   
   /* Set DAC enable bit in control register */
@@ -255,128 +257,140 @@ int main()
   sock=tcpsocket(DDS_HOST_PORT);
   listen(sock, 5);
   while (1) {
-    rval=1;
-    msgsock=accept(sock, 0, 0);
+
+    rval = 1;
+    msgsock = accept(sock, 0, 0);
     if (verbose > 0) printf("accepting socket!!!!!\n");
     if (msgsock==-1) {
       perror("accept FAILED!");
       return EXIT_FAILURE;
     }
-    else
-      while (rval>=0) {
-        /* Look for messages from external client process */
-        FD_ZERO(&rfds);
-        FD_SET(msgsock, &rfds); //Add msgsock to the read watch
-        FD_ZERO(&efds);
-        FD_SET(msgsock, &efds);  //Add msgsock to the exception watch
-        /* Wait up to five seconds. */
-        tv.tv_sec = 5;
-        tv.tv_usec = 0;
-        if (verbose > 1) printf("%d Entering Select\n",msgsock);
-        rval = select(msgsock+1, &rfds, NULL, &efds, &tv);
-        if (verbose > 1) printf("%d Leaving Select %d\n",msgsock,rval);
 
-        /* Don’t rely on the value of tv now! */
-        if (FD_ISSET(msgsock,&efds)) {
-          if (verbose > 1)
-            printf("Exception on msgsock %d ...closing\n",msgsock);
-          break;
-        }
+    while (rval >= 0) {
+      /* Look for messages from external client process */
+      FD_ZERO(&rfds);
+      FD_SET(msgsock, &rfds); //Add msgsock to the read watch
+      FD_ZERO(&efds);
+      FD_SET(msgsock, &efds);  //Add msgsock to the exception watch
 
-        if (rval == -1) perror("select()");
-        rval=recv(msgsock, &buf, sizeof(int), MSG_PEEK); 
-        if (verbose>1) printf("%d PEEK Recv Msg %d\n",msgsock,rval);
+      /* Wait up to five seconds. */
+      tv.tv_sec = 5;
+      tv.tv_usec = 0;
 
-        if (rval==0) {
-          if (verbose > 1) printf("Remote Msgsock %d client disconnected "
-                                  "...closing\n",msgsock);
-          break;
-        } 
+      if (verbose > 1) printf("%d Entering Select\n",msgsock);
+      rval = select(msgsock+1, &rfds, NULL, &efds, &tv);
+      if (verbose > 1) printf("%d Leaving Select %d\n",msgsock,rval);
 
-        if (rval<0) {
-          if (verbose > 0) printf("Msgsock %d Error ...closing\n",msgsock);
-          break;
-        } 
+      /* Don’t rely on the value of tv now! */
+      if (FD_ISSET(msgsock,&efds)) {
+        if (verbose > 1)
+          printf("Exception on msgsock %d ...closing\n",msgsock);
+        break;
+      }
 
-        if (FD_ISSET(msgsock,&rfds) && rval>0 ) {
-          if (verbose>1) printf("Data is ready to be read\n"
-                                "%d Recv Msg\n",msgsock);
-          rval=recv_data(msgsock,&msg,sizeof(struct DriverMsg));
-          datacode=msg.type;
-          if (verbose > 1) printf("\nmsg code is %c\n", datacode);
+      if (rval == -1) perror("select()");
+      rval = recv(msgsock, &buf, sizeof(int), MSG_PEEK); 
+      if (verbose > 1) printf("%d PEEK Recv Msg %d\n",msgsock,rval);
 
-          switch (datacode) {
+      if (rval == 0) {
+        if (verbose > 1) printf("Remote Msgsock %d client disconnected "
+                                "...closing\n",msgsock);
+        break;
+      } 
 
-            /*---------------------------------------------------------------*/
-            case DDS_REGISTER_SEQ:
+      if (rval < 0) {
+        if (verbose > 0) printf("Msgsock %d Error ...closing\n",msgsock);
+        break;
+      } 
 
-              if (verbose > -1)
-                printf("\nRegister new timing sequence for timing card\n"); 
+      if (FD_ISSET(msgsock,&rfds) && rval > 0 ) {
+        if (verbose>1) printf("Data is ready to be read\n"
+                              "%d Recv Msg\n",msgsock);
+        rval = recv_data(msgsock,&msg,sizeof(struct DriverMsg));
+        datacode = msg.type;
+        if (verbose > 1) printf("\nmsg code is %c\n", datacode);
 
-              rval=recv_data(msgsock,&client,sizeof(struct ControlPRM));
-              r=client.radar-1; 
-              c=client.channel-1; 
-              if (verbose > -1)
-                printf("  Radar: %d, Channel: %d Beamnum: %d Status %d\n",
-                        client.radar,client.channel,client.tbeam,msg.status); 
+        switch (datacode) {
 
-              rval=recv_data(msgsock,&index,sizeof(index));
-              if (pulseseqs[r][c][index]!=NULL) {
-                if (verbose > -1) printf("  Pulse index %d exists %p\n",
-                                          index,pulseseqs[r][c][index]);
-                if (pulseseqs[r][c][index]->rep!=NULL)
-                  free(pulseseqs[r][c][index]->rep);
-                pulseseqs[r][c][index]->rep=NULL;
-                if (pulseseqs[r][c][index]->code!=NULL)
-                  free(pulseseqs[r][c][index]->code);
-                pulseseqs[r][c][index]->code=NULL;
-                free(pulseseqs[r][c][index]);
-                pulseseqs[r][c][index]=NULL;
-                if (verbose > -1) printf("  Freed Pulse index %d %p\n",
-                                          index,pulseseqs[r][c][index]);
-              }
+          /*---------------------------------------------------------------*/
+          case DDS_REGISTER_SEQ:
 
-              pulseseqs[r][c][index]=malloc(sizeof(struct TSGbuf));
-              rval=recv_data(msgsock,pulseseqs[r][c][index],
-                              sizeof(struct TSGbuf)); // requested pulseseq
+            if (verbose > -1)
+              printf("\nRegister new timing sequence for timing card\n"); 
+
+            rval = recv_data(msgsock,&client,sizeof(struct ControlPRM));
+            r = client.radar-1; 
+            c = client.channel-1; 
+            ready_index[r][c] = -1;
+            active[r][c] = -1;
+            current_pulse_index[r][c] = -10;
+
+            if (verbose > -1)
+              printf("  Radar: %d, Channel: %d Beamnum: %d Status %d\n",
+                      client.radar,client.channel,client.tbeam,msg.status); 
+
+            rval = recv_data(msgsock,&index,sizeof(index));
+            if (pulseseqs[r][c][index] != NULL) {
+              if (verbose > -1) printf("  Pulse index %d exists %p\n",
+                                        index,pulseseqs[r][c][index]);
+              if (pulseseqs[r][c][index]->rep != NULL)
+                free(pulseseqs[r][c][index]->rep);
+              pulseseqs[r][c][index]->rep = NULL;
+
+              if (pulseseqs[r][c][index]->code != NULL)
+                free(pulseseqs[r][c][index]->code);
+              pulseseqs[r][c][index]->code = NULL;
+
+              free(pulseseqs[r][c][index]);
+              pulseseqs[r][c][index] = NULL;
+              if (verbose > -1) printf("  Freed Pulse index %d %p\n",
+                                        index,pulseseqs[r][c][index]);
+            }
+
+            pulseseqs[r][c][index] = malloc(sizeof(struct TSGbuf));
+            rval = recv_data(msgsock,pulseseqs[r][c][index],
+                             sizeof(struct TSGbuf)); // requested pulseseq
+
 /* JDS : 10121017 : TSGprm structure is deprecated and should not be used */
 /*
 * pulseseqs[r][c][index]->prm=malloc(sizeof(struct TSGprm)); 
 * rval=recv_data(msgsock,pulseseqs[r][c][index]->prm, sizeof(struct TSGprm)); // requested pulseseq
 */
-              pulseseqs[r][c][index]->rep =
+            pulseseqs[r][c][index]->rep =
                      malloc(sizeof(unsigned char)*pulseseqs[r][c][index]->len);
-              pulseseqs[r][c][index]->code =
+            pulseseqs[r][c][index]->code =
                      malloc(sizeof(unsigned char)*pulseseqs[r][c][index]->len);
-              rval=recv_data(msgsock,pulseseqs[r][c][index]->rep, 
+            rval = recv_data(msgsock,pulseseqs[r][c][index]->rep, 
                           sizeof(unsigned char)*pulseseqs[r][c][index]->len);
-              rval=recv_data(msgsock,pulseseqs[r][c][index]->code, 
+            rval = recv_data(msgsock,pulseseqs[r][c][index]->code, 
                           sizeof(unsigned char)*pulseseqs[r][c][index]->len);
 
-              if (verbose > -1) {
-                printf("  New Pulse index %d : %p\n",
-                        index,pulseseqs[r][c][index]);
-                printf("    Pulseseq length: %d\n",
-                        pulseseqs[r][c][index]->len);  
+            if (verbose > -1) {
+              printf("  New Pulse index %d : %p\n",
+                      index,pulseseqs[r][c][index]);
+              printf("    Pulseseq length: %d\n",
+                      pulseseqs[r][c][index]->len);  
+
 /* JDS : 10121017 : TSGprm structure is deprecated and should not be used */
 /*
 *  tsgprm=pulseseqs[r][c][index]->prm;
 *  printf("    Stdelay: %d\n",tsgprm->stdelay); 
 */
-              }
-              old_pulse_index[r][c]=-1; 
-              old_seq_id=-10;
-              new_seq_id=-1;
-              rval=send_data(msgsock, &msg, sizeof(struct DriverMsg));
-              break;
+            }
+
+            //old_pulse_index[r][c]=-1; 
+            //old_seq_id = -10;
+            //new_seq_id = -1;
+            rval = send_data(msgsock, &msg, sizeof(struct DriverMsg));
+            break;
 
             /*---------------------------------------------------------------*/
             case DDS_CtrlProg_END:
 
               if (verbose > 1)
                 printf("DDS driver: Closing a control program\n");
-              old_seq_id=-10;
-              new_seq_id=-1;
+              //old_seq_id=-10;
+              //new_seq_id=-1;
               break;
 
             /*---------------------------------------------------------------*/
@@ -384,9 +398,11 @@ int main()
 
               if (verbose > -1) printf("DDS driver: Configuring for IF Mode\n");
               rval=recv_data(msgsock,&ifmode,sizeof(ifmode)); 
+
               if (verbose > -1) printf("DDS driver: IF Mode %d \n",ifmode);
               rval=recv_data(msgsock,&rf_settings,sizeof(struct RXFESettings)); 
               rval=recv_data(msgsock,&if_settings,sizeof(struct RXFESettings)); 
+
               if (ifmode && IMAGING ) fprintf(stderr,"WARNING: RF Mode can not"
                                                   " be enabled with IMAGING\n");
               rval=send_data(msgsock, &msg, sizeof(struct DriverMsg));
@@ -397,48 +413,47 @@ int main()
 
               if (verbose > 1) printf("Asking to set up dds timing info for "
                                       "client that is ready\n"); 
-              rval=recv_data(msgsock,&client,sizeof(struct ControlPRM));
-              r=client.radar-1; 
-              c=client.channel-1; 
-              index=client.current_pulseseq_index; 
-              if ((ready_index[r][c]>=0) && (ready_index[r][c] <maxclients) ) {
-                clients[ready_index[r][c]]=client;
-              } else {
-                clients[numclients]=client;
-                ready_index[r][c]=numclients;
-                numclients=(numclients+1);
-              }
+              rval = recv_data(msgsock,&client,sizeof(struct ControlPRM));
+              r = client.radar-1; 
+              c = client.channel-1; 
+              index = client.current_pulseseq_index; 
+              clients[numclients] = client;
+              numclients = numclients+1;
+
               if (verbose > 1)
                 printf("Radar: %d, Channel: %d Beamnum: %d Numclients %d\n",
                         client.radar,client.channel,client.tbeam,numclients); 
-              index=client.current_pulseseq_index; 
-              if (index!=old_pulse_index[r][c]) {
+              
+              if ( (index != current_pulse_index[r][c]) && (index >= 0) ) {
                 if (verbose > 1) printf("Need to unpack pulseseq\n"
                                         "Pulseseq length: %d\n",
                                         pulseseqs[r][c][index]->len); 
 
+                ready_index[r][c] = 1;
+                active[r][c] = c;
+
                 // unpack the timing sequence
-                seq_count[r][c]=0;
-                microseconds=0.0; 
-                tempcode=0;
+                seq_count[r][c] = 0;
+                microseconds = 0.0; 
+                tcode = 0;
                 if (verbose > 1)
                   printf("microstep: %d state: %lf ratio: %d\n",
                           pulseseqs[r][c][index]->step,STATE_TIME,ratio);
-                ratio=(int)((pulseseqs[r][c][index]->step*1E-6)/STATE_TIME +
+                ratio = (int)((pulseseqs[r][c][index]->step*1E-6)/STATE_TIME +
                               .49999999);
                 for (i=0;i<pulseseqs[r][c][index]->len;i++) {
-                  tempcode=_decodestate(r,c,(pulseseqs[r][c][index]->code)[i]); 
+                  tcode = _decodestate(r,c,(pulseseqs[r][c][index]->code)[i]); 
                   //JDS TODO chop off first STATE_DELAY microseconds
-                  for (j=0;j<ratio*(pulseseqs[r][c][index]->rep)[i];j++) {
-                    microseconds+=STATE_TIME/1E-6;
+                  for (j=0; j<ratio*(pulseseqs[r][c][index]->rep)[i]; j++) {
+                    microseconds += STATE_TIME/1E-6;
                     if (microseconds > STATE_DELAY) {
-                      seq_buf[r][c][seq_count[r][c]]=tempcode;
+                      seq_buf[r][c][seq_count[r][c]] = tcode;
                       seq_count[r][c]++;
                     }
                   }
                 }
-
               }
+
               if (verbose > 1)
                 printf("seq length: %d state step: %lf time: %lf\n",
                         seq_count[r][c],STATE_TIME,STATE_TIME*seq_count[r][c]);
@@ -446,9 +461,8 @@ int main()
               if (verbose > 1)
                 printf("client %d ready done %d %d \n",
                         numclients,client.radar,client.channel);  
-              numclients=numclients % maxclients;
-              old_pulse_index[r][c]=index;
-              rval=send_data(msgsock, &msg, sizeof(struct DriverMsg));
+              numclients %= maxclients;
+              rval = send_data(msgsock, &msg, sizeof(struct DriverMsg));
               break; 
 
             /*---------------------------------------------------------------*/
@@ -458,84 +472,105 @@ int main()
               gettimeofday(&t0,NULL);
               if (verbose > 0) printf("Setup DDS Card for PRE-trigger\n"
                                       "Numclients %d\n",numclients);  
-              new_seq_id=-1;
-              max_seq_count=0;
-              for (i=0; i<numclients; i++) {
-                r=clients[i].radar-1; 
-                c=clients[i].channel-1; 
-                if (seq_count[r][c] >= max_seq_count)
-                  max_seq_count=seq_count[r][c];
-                if (verbose > 0) printf("Max Seq length %d\n",max_seq_count); 
 
-                new_seq_id += r*1000 + c*100 +
-                             clients[i].current_pulseseq_index+1;
-                if (verbose > 1)
-                  printf("%d %d %d\n", i,new_seq_id,
-                                       clients[i].current_pulseseq_index); 
+              if (numclients > 0) {
+              //new_seq_id=-1;
+                max_seq_count = 0;
+                for (i=0; i<numclients; i++) {
+                  r = clients[i].radar-1; 
+                  c = clients[i].channel-1; 
+                  if (seq_count[r][c] >= max_seq_count)
+                    max_seq_count = seq_count[r][c];
+                  if (verbose > 0)
+                    printf("Max Seq length %d\n", max_seq_count); 
+
+                  if (clients[i].current_pulseseq_index !=
+                      current_pulse_index[r][c])
+                        current_pulse_index[r][c] =
+                          clients[i].current_pulseseq_index;
+                }
               }
 
-              if (verbose > 1) printf("Time Seq ID: New: %d Old:%d\n",
-                                      new_seq_id,old_seq_id); 
-
               /* send the seqence to timing_seqence function */
-              if (IMAGING==0) {
-                /* SET freq and filter for MSI */
-                if (new_seq_id!=old_seq_id) { 
-                  if (verbose > -1) printf("Setting the TX timing sequence "
-                                           "%d %d\n",old_seq_id,new_seq_id); 
-                  gettimeofday(&t2,NULL);
-                  msi_timing_sequence(numclients,max_seq_count,clients,
-                                      &seq_count,seq_buf,active,ics660);
-                  //printf("DDS:: %d %d :: msi_timing : \n",t2.tv_sec,t2.tv_usec);
-                  if (verbose > 0) {
-                    gettimeofday(&t3,NULL);
-                    elapsed=(t3.tv_sec-t2.tv_sec)*1E6;
-                    elapsed+=(t3.tv_usec-t2.tv_usec);
-                    printf("  DDS MSI Timing Elapsed Microseconds: %ld\n",
-                                                                  elapsed);
-                  }
-                  /* Required one shot */
-                } else {
-                  /* Use old timing sequence */                          
-                } 
-                gettimeofday(&t2,NULL);
-                pci_ind=0;
+              if (IMAGING == 0) {
 
-                for (r=1;r<=MAX_RADARS;r++) {
-                  for (cc=1;cc<=DDS_MAX_CHANNELS;cc++) {
+                gettimeofday(&t2,NULL);
+                /* SET freq and filter for MSI */
+                new_seq_flag = 0;
+                for (r=0; r<MAX_RADARS; r++) {
+                  for (c=0; c<MAX_CHANNELS; c++) {
+                    if (ready_index[r][c] > 0) {
+                      new_seq_flag++;
+                      ready_index[r][c] = 0;
+                    }
+                  }
+                }
+
+                if (verbose > 0)
+                  fprintf(stdout," %d :: New seq flag: %d\n",
+                                  numclients,new_seq_flag);
+
+                if (numclients > 0) {
+                  if (new_seq_flag > 0) {
+                    new_seq_flag = 0;
+                    if (verbose > -1) {
+                      fprintf(stdout,"DDS:: %d.%06d :: msi_timing : \n",
+                                      (int)t2.tv_sec,(int)t2.tv_usec);
+                      fprintf(stdout,"  Numclients %d\n",numclients);
+                    }
+
+                    msi_timing_sequence(numclients,max_seq_count,clients,
+                                        &seq_count,seq_buf,active,ics660);
+                    if (verbose > 0) {
+                      gettimeofday(&t3,NULL);
+                      elapsed = (t3.tv_sec-t2.tv_sec)*1E6;
+                      elapsed += (t3.tv_usec-t2.tv_usec);
+                      fprintf(stdout, "  DDS MSI Timing Elapsed Microseconds: "
+                                      "%ld\n", elapsed);
+                    }
+                  } /* else use old timing sequence */                          
+                }
+
+                gettimeofday(&t2,NULL);
+                pci_ind = 0;
+
+                for (r=1; r<=MAX_RADARS; r++) {
+                  for (cc=1; cc<=DDS_MAX_CHANNELS; cc++) {
                     load_frequency(ics660[pci_ind], r, cc, 0.0);
                     load_phase(ics660[pci_ind],r,cc,0.0);
                   }
                 }
 
+                if (verbose > 1)
+                  fprintf(stdout,"DDS:: %d.%06d :: parameter_load : \n",
+                                  (int)t2.tv_sec,(int)t2.tv_usec);
+
                 for (i=0; i<numclients; i++) {
                   freq_in = (double)clients[i].tfreq * 1000.; // in Hz
-                  T_rise=clients[i].trise;
-                  r= clients[i].radar;
-                  c= clients[i].channel;
-                  if (verbose>2)
-                    printf(" Loading %d freq: %lf chip: %d channel: %d\n",
-                            i,freq_in,r,c);
+                  T_rise  = clients[i].trise;
+                  r = clients[i].radar;
+                  c = clients[i].channel;
 
-                  for (cc=1;cc<=DDS_MAX_CHANNELS;cc++) {
-                    if (active[r-1][cc-1] == (c-1)) {
-//                    printf("Active channel r: %d c: %d cc: %d active: %d\n",
-//                                    r,c,cc,active[r-1][cc-1]);
-                      gettimeofday(&t3,NULL);
-                      load_frequency(ics660[pci_ind], r, cc, freq_in);
-                      //printf("DDS:: %d %d :: %d %d :: Load freq: %lf\n",
-                               //t3.tv_sec,t3.tv_usec,r,cc,freq_in);
-                      load_phase(ics660[pci_ind],r,cc,0.0);
-                      load_filter_taps(ics660[pci_ind],r,cc,T_rise,state_time);
-                    }
+                  if (verbose > 1) {
+                    fprintf(stdout,"  Client:: r: %d c: %d\n",r,c); 
+                    fprintf(stdout,"  Client:: freq: %lf\n",freq_in);
                   }
 
-                  if ((ifmode==1) && (IMAGING==0)) {                   
-                    r=clients[i].radar+2;
-                    // in Hz
-                    freq_in= ((double)(IF_FREQ-clients[i].tfreq))*1000./2.0;
-                    //freq_in = 29.5*1E6;
-                    printf("IF Out Freq:  %d %lf\n",clients[i].tfreq,freq_in);
+                  load_frequency(ics660[pci_ind], r, c, freq_in);
+                  load_phase(ics660[pci_ind],r,c,0.0);
+                  load_filter_taps(ics660[pci_ind],r,c,T_rise,state_time);
+
+                  if (verbose > 2)
+                    fprintf(stdout, " Loading %d freq: %lf chip: %d "
+                                    "channel: %d\n",i,freq_in,r,c);
+
+                  if ((ifmode == 1) && (IMAGING == 0)) {
+                    r = clients[i].radar+2;
+                    freq_in = ((double)(IF_FREQ-clients[i].tfreq))*1000./2; //Hz
+
+                    if (verbose > 0)
+                      fprintf(stdout, "IF Out Freq:  %d %lf\n",
+                                      clients[i].tfreq,freq_in);
                     load_frequency(ics660[pci_ind], r, c, freq_in);
                     load_filter_taps(ics660[pci_ind],r,c,T_rise,state_time);
                     load_phase(ics660[pci_ind],r,c,0.0);
@@ -543,45 +578,40 @@ int main()
                 }
 
                 one_shot_b(ics660[pci_master]);
-                gettimeofday(&t3,NULL);
-                elapsed=(t3.tv_sec-t2.tv_sec)*1E6;
-                elapsed+=(t3.tv_usec-t2.tv_usec);
-                if (verbose > 0)
-                  printf("  DDS Set Filter and Freq  Elapsed Microseconds:"
-                         " %ld\n",elapsed);
-                if (verbose > 1) printf("Done setting the beam\n"); 
 
-              } else { // imaging
+                gettimeofday(&t3,NULL);
+                elapsed = (t3.tv_sec-t2.tv_sec)*1E6;
+                elapsed += (t3.tv_usec-t2.tv_usec);
+                if (verbose > 0)
+                  fprintf(stdout, "  DDS Set Filter and Freq  Elapsed "
+                                  "Microseconds: %ld\n",elapsed);
+                if (verbose > 1) fprintf(stdout,"Done setting the beam\n");
+              } else {  // IMAGING
                 /* SET freq, filter and BEAM CODE for IMAGING */
                 /* SET freq and filter for IMAGING */
-                if (new_seq_id!=old_seq_id) { 
-                  if (verbose > -1)
-                    printf("Setting the TX timing sequence %d %d\n",
-                            old_seq_id,new_seq_id); 
-
+                if (new_seq_flag) {
                   gettimeofday(&t2,NULL);
                   msi_timing_sequence(numclients,max_seq_count,clients,
                                       &seq_count,seq_buf,active,ics660);
-                //printf("DDS:: %d %d :: msi_timing : \n",t2.tv_sec,t2.tv_usec);
+
                   if (verbose > 0) {
                     gettimeofday(&t3,NULL);
-                    elapsed=(t3.tv_sec-t2.tv_sec)*1E6;
-                    elapsed+=(t3.tv_usec-t2.tv_usec);
-                    printf("  DDS IMAGING Timing Elapsed Microseconds: %ld\n",
-                            elapsed);
+                    elapsed = (t3.tv_sec-t2.tv_sec)*1E6;
+                    elapsed += (t3.tv_usec-t2.tv_usec);
+                    fprintf(stdout, "  DDS IMAGING Timing Elapsed "
+                                    "Microseconds: %ld\n",elapsed);
                   }
+
                   /* Required one shot */
                   //one_shot_b(ics660[pci_master]);
-                } else {
-                  /* Use old timing sequence */                          
-                } 
-                          
+                } /* else use old timing sequence */                      
+
                 gettimeofday(&t2,NULL);
-                pci_ind=0;
-                for (ant=0;ant<MAX_TRANSMITTERS;ant++) {
-                  pci_ind=transmitters[ant][0];
-                  chip=transmitters[ant][1];
-                  for (cc=1;cc<=DDS_MAX_CHANNELS;cc++) {
+                pci_ind = 0;
+                for (ant=0; ant<MAX_TRANSMITTERS; ant++) {
+                  pci_ind = transmitters[ant][0];
+                  chip = transmitters[ant][1];
+                  for (cc=1; cc<=DDS_MAX_CHANNELS; cc++) {
                     load_frequency(ics660[pci_ind], chip, cc, 0.0);
                     //one_shot_b(ics660[pci_master]);
                     //load_phase(ics660[pci_ind],chip,cc,0.0);
@@ -590,32 +620,32 @@ int main()
                 }
 
                 for (i=0; i<numclients; i++) {
-                  freq_in= (double)clients[i].tfreq * 1000.; // in Hz
-                  T_rise=clients[i].trise;
-                  r= clients[i].radar;
-                  c= clients[i].channel;
-                  if (verbose>2)
-                    printf(" Loading %d freq: %lf chip: %d channel: %d\n",
-                            i,freq_in,r,c);
+                  freq_in = (double)clients[i].tfreq * 1000.; // in Hz
+                  T_rise = clients[i].trise;
+                  r = clients[i].radar;
+                  c = clients[i].channel;
+                  if (verbose > 2)
+                    fprintf(stdout, " Loading %d freq: %lf chip: %d channel: "
+                                    "%d\n",i,freq_in,r,c);
 
-                  if ((clients[i].tbeam >=0) && (clients[i].tbeam < 16)) { 
+                  if ((clients[i].tbeam >=0) && (clients[i].tbeam < 16)) {
                     delta = calculate_delta(freq_in,
                                             beamdirs_rad[clients[i].tbeam],d);
-                  } else delta=0.0;
+                  } else delta = 0.0;
 
-                  for (ant=0;ant<MAX_TRANSMITTERS;ant++) {
-                    phase=delta*((double)ant-7.5);
-                    pci_ind=transmitters[ant][0];
-                    chip=transmitters[ant][1];
-                    for (cc=1;cc<=DDS_MAX_CHANNELS;cc++) {
-                      if (active[r-1][cc-1]==(c-1)) {
+                  for (ant=0; ant<MAX_TRANSMITTERS; ant++) {
+                    phase = delta*((double)ant-7.5);
+                    pci_ind = transmitters[ant][0];
+                    chip = transmitters[ant][1];
+                    for (cc=1; cc<=DDS_MAX_CHANNELS; cc++) {
+                      if (active[r-1][cc-1] == (c-1)) {
                         gettimeofday(&t3,NULL);
                         load_frequency(ics660[pci_ind], chip, cc, freq_in);
                         //one_shot_b(ics660[pci_master]);
                         load_phase(ics660[pci_ind],chip,cc,phase);
                         //one_shot_b(ics660[pci_master]);
-                        load_filter_taps(ics660[pci_ind],chip,cc,T_rise,
-                                          state_time);
+                        load_filter_taps(ics660[pci_ind],chip,cc,
+                                         T_rise,state_time);
                         //one_shot_b(ics660[pci_master]);
                       }
                     }
@@ -624,32 +654,28 @@ int main()
 
                 one_shot_b(ics660[pci_master]);
                 gettimeofday(&t3,NULL);
-                elapsed=(t3.tv_sec-t2.tv_sec)*1E6;
-                elapsed+=(t3.tv_usec-t2.tv_usec);
+                elapsed = (t3.tv_sec-t2.tv_sec)*1E6;
+                elapsed += (t3.tv_usec-t2.tv_usec);
                 if (verbose > 0)
-                  printf("  DDS Set Filter and Freq  Elapsed "
-                        "Microseconds: %ld\n",elapsed);
-                if (verbose > 1) printf("Done setting the beam\n"); 
-              } // done imaging
+                  fprintf(stdout, "  DDS Set Filter and Freq  Elapsed "
+                                  "Microseconds: %ld\n",elapsed);
+                if (verbose > 1) fprintf(stdout,"Done setting the beam\n");
+              }
 
-              msg.status=0;
-              numclients=0;
-              for (r=0;r<MAX_RADARS;r++)
-                for (c=0;c<MAX_CHANNELS;c++)
-                  ready_index[r][c]=-1;
+              msg.status = 0;
+              numclients = 0;
+              max_seq_count = 0;
 
-              max_seq_count=0;
-              if (new_seq_id < 0 ) old_seq_id=-10;
-              else                 old_seq_id=new_seq_id;
-              new_seq_id=-1;
-              rval=send_data(msgsock, &msg, sizeof(struct DriverMsg));
+              rval = send_data(msgsock, &msg, sizeof(struct DriverMsg));
               gettimeofday(&t1,NULL);
-              elapsed=(t1.tv_sec-t0.tv_sec)*1E6;
-              elapsed+=(t1.tv_usec-t0.tv_usec);
-              if (verbose > 1)
-                printf("  DDS Pretrigger Elapsed Microseconds: %ld\n"
-                      "Ending Pretrigger Setup\n", elapsed);
-              break; 
+              elapsed = (t1.tv_sec-t0.tv_sec)*1E6;
+              elapsed += (t1.tv_usec-t0.tv_usec);
+              if (verbose > 1) {
+                fprintf(stdout, "  DDS Pretrigger Elapsed "
+                                "Microseconds: %ld\n",elapsed);
+                  fprintf(stdout,"Ending Pretrigger Setup\n");
+              }
+              break;
 
             /*---------------------------------------------------------------*/
 /*          case DDS_TRIGGER:
