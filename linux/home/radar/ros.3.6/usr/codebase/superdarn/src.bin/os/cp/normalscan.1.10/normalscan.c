@@ -151,6 +151,8 @@ int main(int argc,char *argv[]) {
   int total_scan_usecs=0;
   int total_integration_usecs=0;
   int fixfrq=-1;
+  /* Flag to override auto-calc of integration time */
+  int setintt=0;
 
   printf("Size of int %d\n",(int)sizeof(int));
   printf("Size of long %d\n",(int)sizeof(long));
@@ -206,7 +208,11 @@ int main(int argc,char *argv[]) {
   OptionAdd( &opt, "nowait", 'x', &scannowait);
   OptionAdd(&opt,"sb",'i',&sbm);
   OptionAdd(&opt,"eb",'i',&ebm);
-  OptionAdd(&opt,"c",'i',&cnum);
+  OptionAdd(&opt,"c",'i',&cnum);  /* Unsure of where this comes in as not used elsewhere */
+
+  OptionAdd(&opt,"intsc",'i',&intsc);
+  OptionAdd(&opt,"intus",'i',&intus);
+  OptionAdd(&opt,"setintt",'x',&setintt);
 
 
   arg=OptionProcess(1,argc,argv,&opt,NULL);
@@ -246,12 +252,12 @@ int main(int argc,char *argv[]) {
   OpsSetupCommand(argc,argv);
   OpsSetupShell();
 
-  RadarShellParse(&rstable,"sbm l ebm l dfrq l nfrq l dfrang l nfrang l dmpinc l nmpinc l frqrng l xcnt l",                        
+  RadarShellParse(&rstable,"sbm l ebm l dfrq l nfrq l dfrang l nfrang l dmpinc l nmpinc l frqrng l xcnt l intsc l intus l",
                   &sbm,&ebm,
                   &dfrq,&nfrq,
                   &dfrang,&nfrang,
                   &dmpinc,&nmpinc,
-                  &frqrng,&xcnt);
+                  &frqrng,&xcnt,&intsc,&intus);
 
 
   status=SiteSetupRadar();
@@ -273,7 +279,7 @@ int main(int argc,char *argv[]) {
   }
 
   beams=abs(ebm-sbm)+1;
-  if (scannowait==0) {
+  if ((scannowait==0) && (setintt==0)) {
     total_scan_usecs=(scnsc-3)*1E6+scnus;
     total_integration_usecs=total_scan_usecs/beams;
     intsc=total_integration_usecs/1E6;
