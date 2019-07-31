@@ -1,9 +1,0 @@
-make.version /home/radar2/rst-new-20110324/codebase/base/src.lib/graphic/ps.1.8/src/..
-make.hdr /home/radar2/rst-new-20110324/codebase/base/src.lib/graphic/ps.1.8/src/../include /home/radar2/rst-new-20110324/include/base 
-/home/radar2/rst-new-20110324/codebase/base/src.lib/graphic/ps.1.8/src/../include/rps.h
-`/home/radar2/rst-new-20110324/codebase/base/src.lib/graphic/ps.1.8/src/../include/rps.h' -> `/home/radar2/rst-new-20110324/include/base/rps.h'
-cc -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -I/home/radar2/rst-new-20110324/include/base -c matrix.c    
-cc -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -I/home/radar2/rst-new-20110324/include/base -c color.c    
-cc -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -I/home/radar2/rst-new-20110324/include/base -c dash.c    
-cc -fPIC -Wall -O3 -ansi -D_GNU_SOURCE -D_LINUX -I/home/radar2/rst-new-20110324/include/base -c clip.c    
-make: *** [clip.o] Interrupt
