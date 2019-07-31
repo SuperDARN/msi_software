@@ -1,15 +1,20 @@
-set_plot, 'X'
-device, retain=2
-device, true_color=24
-device, decomposed=0
+;set_plot, 'X'
+;device, retain=2
+;device, true_color=24
+;device, decomposed=0
 
+; for AACGM-v2
+.run genmag
+.run astalg
+.run igrflib_v2
+.run aacgmlib_v2
+.run aacgm_v2
+.run time
+.run mlt_v2
 
 .run datamap.pro
-.run time.pro
-.run astalg.pro
 .run aacgmdefault.pro
 .run aacgm.pro
-.run mlt.pro
 .run radar.pro
 .run rprm.pro
 .run iq.pro
@@ -24,11 +29,9 @@ device, decomposed=0
 .run oldgrd.pro
 .run oldcnvmap.pro
 .run fitacf.pro
-
 .run efield.pro
 
 ; Legacy interfaces
-
 .run genlib.pro
 .run acflib.pro
 .run rawlib.pro
@@ -41,7 +44,4 @@ device, decomposed=0
 .run rbposlib.pro
 .run istplib.pro
 .run global.pro
-
-
-
 
