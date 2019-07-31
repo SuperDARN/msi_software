@@ -6,23 +6,11 @@
 
 # Linux (GCC)
 #
-CC=gcc			# SGS
 
-CFLAGS = -fPIC -Wall -O3 -ansi \
-         -D_GNU_SOURCE -D_LINUX $(INCLUDE) -fno-stack-protector
+CFLAGS += -fPIC -Wall -O3 -ansi \
+         -D_GNU_SOURCE -D_LINUX $(INCLUDE)
 
-LFLAGS = -shared -lm -lz 
-
-ifndef ARCH
-  ARCH=$(shell arch)
-endif
-
-ifeq ($(ARCH),i686)
-    CFLAGS += -m32
-#    LFLAGS += -m elf_i386		# SGS
-endif
-
-
+LFLAGS += -shared -lm -lz 
 SUF=so
   
 VSTR=$(shell get.version ${CURDIR}/..)
@@ -35,7 +23,7 @@ $(OUTPUT): version hdr $(OBJS)
 	mkdir -p $(DSTPATH)
 	ar -r $(DSTPATH)/lib$(OUTPUT).$(VSTR).a $(OBJS)
 	$(LD) $(LFLAGS) -o $(DSTPATH)/lib$(OUTPUT).$(VSTR).$(SUF) \
-              $(OBJS) $(LNK) -L$(LIBPATH) $(SLIB)
+              $(OBJS) $(LNK) -L$(LIBPATH) $(LIBS) $(SLIB)
 	cd $(DSTPATH); ln -sf lib$(OUTPUT).$(VSTR).a \
                lib$(OUTPUT).$(LINK).a 
 	cd $(DSTPATH); ln -sf lib$(OUTPUT).$(VSTR).so \

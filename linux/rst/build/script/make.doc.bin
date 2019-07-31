@@ -66,7 +66,7 @@ mkdir ${TMPFILE}.d
 chmod a+w ${TMPFILE}.d
 tmp=${TMPFILE}.d
 
-build=${BUILD}/base/doc
+build=${BUILD}/doc
 
 ############################################################################
 

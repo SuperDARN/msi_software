@@ -9,8 +9,6 @@
 
 </div>
 
-</div>
-
 <div id="location">
 <table width=100% class="location"><tr>
 <td><a href="<!--URLBASE-->/index.html">Home</a><td>|</td>
@@ -45,9 +43,6 @@
 </div>
 
 <div id="tail">
-    <center><p>
-    &copy; Johns Hopkins Applied Physics Laboratory 2010
-    </p></center>
 </div>
 
 </div>

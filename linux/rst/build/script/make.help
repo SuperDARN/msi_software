@@ -18,7 +18,7 @@
 
 ##############################################################################
 
-help=${BUILD}/base/help
+help=${BUILD}/help
 
 hlpcfg="${help}/cfg/help.cfg.xml"
 errcfg="${help}/cfg/error.cfg.xml"
@@ -40,13 +40,13 @@ do
   echo ${doc}
   rm -f ${module}/hlpstr.h
   rm -f ${module}/errstr.h
-  if test -s ${BUILD}/base/bin/xmldoc
+  if test -s ${BUILD}/bin/xmldoc
   then
    
-    ${BUILD}/base/bin/xmldoc -ilf ${help} ${hlpcfg} ${doc} \
+    ${BUILD}/bin/xmldoc -ilf ${help} ${hlpcfg} ${doc} \
                        > hlpstr.h
 
-    ${BUILD}/base/bin/xmldoc -ilf ${help} ${errcfg} ${doc} \
+    ${BUILD}/bin/xmldoc -ilf ${help} ${errcfg} ${doc} \
                        > errstr.h
   else
      cat ${hlpdft} > hlpstr.h

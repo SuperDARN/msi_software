@@ -47,7 +47,7 @@ for arg in ${*}
 
    if test "${arg}" = "-w"
    then
-      type="-w"
+      type="www"
    else
       if test ${c} -eq 0
       then 
@@ -84,7 +84,7 @@ mkdir ${TMPFILE}.d
 chmod a+w ${TMPFILE}.d
 tmp=${TMPFILE}.d
 
-build=${BUILD}/base/doc
+build=${BUILD}/doc
 
 ############################################################################
 
@@ -207,7 +207,6 @@ scdoc ${removeinx} ${tail} ${nmexml} ${rfcinxsc} >> \
                ${wwwpath}/${project}/src.doc/rfc/index.html
 
 chmod a+x ${wwwpath}/${project}/src.doc/rfc/index.html
-date > ${wwwpath}/${project}/src.doc/rfc/.ignore
 
 
 ############################################################################

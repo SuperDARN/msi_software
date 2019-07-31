@@ -1,9 +1,9 @@
 # makecfg.linux
 # ==============
-#ARCH=i686
 
 DFL=-Bdynamic
 ARC=-Bstatic
 SHR=-Bdynamic
+
 LNK=$(ARC)
 

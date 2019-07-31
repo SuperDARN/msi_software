@@ -16,15 +16,20 @@ set -e
 #
 # Description:
 #
-# Make the buld software.
+# Make the build software.
 #
 
 ############################################################################
 
-export LD_LIBRARY_PATH=${BUILD}/base/lib
-export BINPATH=${BUILD}/base/bin
-export LIBPATH=${BUILD}/base/lib
-export IPATH=${BUILD}/base/include
+if [ -z "$BUILD" ]; then
+    echo "BUILD environment variable is empty, please set"
+    exit 1
+fi
+
+export LD_LIBRARY_PATH=${BUILD}/lib
+export BINPATH=${BUILD}/bin
+export LIBPATH=${BUILD}/lib
+export IPATH=${BUILD}/include
 mkdir -p ${LIBPATH}
 mkdir -p ${BINPATH}
 mkdir -p ${IPATH}
@@ -52,19 +57,18 @@ makebuild() {
   return 0
 }
 
-#liblist="xml/xml xml/xmldb xml/tagdb xml/xmldoclib \
-#         task/option httpd/rscript"
-#binlist="xmldoc/xmldoc xmldoc/xmldoc xmldoc/scdoc \
-#         build/addtext build/maketree build/makeall"
-binlist="build/makeall"
+liblist="xml/xml xml/xmldb xml/tagdb xml/xmldoclib \
+         task/option httpd/rscript"
+binlist="xmldoc/xmldoc xmldoc/scdoc \
+         build/addtext build/maketree build/makeall"
 
 rm -f ${LIBPATH}/*
 rm -f ${BINPATH}/*
 
-#for libname in ${liblist}
-#do
-#  makebuild ${libname} lib
-#done
+for libname in ${liblist}
+do
+  makebuild ${libname} lib
+done
 for binname in ${binlist}
 do
   makebuild ${binname} bin
