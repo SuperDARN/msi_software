@@ -28,7 +28,7 @@ export CODEBASE="${HOMEPATH}/codebase"
 export LOGPATH="${HOMEPATH}/log"
 export DOCPATH="${HOMEPATH}/doc"
 
-export WWWPATH="/www/superdarn/htdocs/doc"
+export WWWPATH="${DOCPATH}/www"
 export URLBASE="/doc"
 
 export LIBPATH="${HOMEPATH}/lib"
@@ -130,6 +130,11 @@ export SD_RADAR="${HOMEPATH}/tables/superdarn/radar.dat"
 export AACGM_DAT_PREFIX=${HOMEPATH}"/tables/analysis/aacgm/aacgm_coeffs"
 export IGRF_PATH=${HOMEPATH}"/tables/analysis/mag/"
 export SD_MODEL_TABLE=${HOMEPATH}"/tables/superdarn/model"
+
+export AACGM_v2_DAT_PREFIX="${HOMEPATH}/tables/analysis/aacgm/aacgm_coeffs-12-"
+export IGRF_COEFFS="${IGRF_PATH}magmodel_1590-2015.txt"
+
+export COLOR_TABLE_PATH=${HOMEPATH}"/tables/base/key/"
 
 #####################################################################
 #                                                                   #
