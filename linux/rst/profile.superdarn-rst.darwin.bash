@@ -7,13 +7,13 @@ export EDITOR="emacs -nw"
 
 #####################################################################
 #                                                                   #
-# Set HOMEPATH Directory if missing                                 #
+# Set RSTPATH Directory if missing                                  #
 #                                                                   #
 #####################################################################
 
-if [ -z "${HOMEPATH}" ]
+if [ -z "${RSTPATH}" ]
 then
-  export HOMEPATH="/Applications/rst"
+  export RSTPATH="/Applications/rst"
 fi
 
 #####################################################################
@@ -22,24 +22,24 @@ fi
 #                                                                   #
 #####################################################################
 
-export BUILD="${HOMEPATH}/build"
-export CODEBASE="${HOMEPATH}/codebase"
-export LOGPATH="${HOMEPATH}/log"
-export DOCPATH="${HOMEPATH}/doc"
+export BUILD="${RSTPATH}/build"
+export CODEBASE="${RSTPATH}/codebase"
+export LOGPATH="${RSTPATH}/log"
+export DOCPATH="${RSTPATH}/doc"
 
 export WWWPATH="/www/doc"
 export URLBASE="/doc"
 
-export LIBPATH="${HOMEPATH}/lib"
-export BINPATH="${HOMEPATH}/bin"
-export IPATH="${HOMEPATH}/include"
+export LIBPATH="${RSTPATH}/lib"
+export BINPATH="${RSTPATH}/bin"
+export IPATH="${RSTPATH}/include"
 
-export USR_CODEBASE="${HOMEPATH}/usr/codebase"
-export USR_LIBPATH="${HOMEPATH}/usr/lib"
-export USR_BINPATH="${HOMEPATH}/usr/bin"
-export USR_IPATH="${HOMEPATH}/usr/include"
+export USR_CODEBASE="${RSTPATH}/usr/codebase"
+export USR_LIBPATH="${RSTPATH}/usr/lib"
+export USR_BINPATH="${RSTPATH}/usr/bin"
+export USR_IPATH="${RSTPATH}/usr/include"
 
-export PATH="${PATH}:/opt/local/bin:${BUILD}/bin:${BUILD}/script:${HOMEPATH}/bin:${HOMEPATH}/usr/bin:${HOMEPATH}/script:${HOME}/bin:${HOME}/script:/Applications/itt/idl/bin:${CDF_PATH}/bin"
+export PATH="${PATH}:/opt/local/bin:${BUILD}/bin:${BUILD}/script:${RSTPATH}/bin:${RSTPATH}/usr/bin:${RSTPATH}/script:${HOME}/bin:${HOME}/script:/Applications/itt/idl/bin:${CDF_PATH}/bin"
 
 #####################################################################
 #                                                                   #
@@ -100,8 +100,8 @@ export DYLD_LIBRARY_PATH=.:/Applications/cdf/lib
 #####################################################################
 
 
-export IDL_PATH="+/${HOMEPATH}/idl/lib:+/Applications/itt"
-export IDL_STARTUP="${HOMEPATH}/idl/startup.pro"
+export IDL_PATH="+/${RSTPATH}/idl/lib:+/Applications/itt"
+export IDL_STARTUP="${RSTPATH}/idl/startup.pro"
 
 #####################################################################
 #                                                                   #
@@ -109,8 +109,8 @@ export IDL_STARTUP="${HOMEPATH}/idl/startup.pro"
 #                                                                   #
 #####################################################################
 
-export FONTPATH=${HOMEPATH}"/tables/base/fonts"
-export FONTDB=${HOMEPATH}"/tables/base/fonts/fontdb.xml"
+export FONTPATH=${RSTPATH}"/tables/base/fonts"
+export FONTDB=${RSTPATH}"/tables/base/fonts/fontdb.xml"
 
 #####################################################################
 #                                                                   #
@@ -118,9 +118,8 @@ export FONTDB=${HOMEPATH}"/tables/base/fonts/fontdb.xml"
 #                                                                   #
 #####################################################################
 
-export MAPDATA=${HOMEPATH}"/tables/general/map_data"
-export BNDDATA=${HOMEPATH}"/tables/general/bnd_data"
-export MAPOVERLAY=${HOMEPATH}"/tables/general/overlay.dat"
+export MAPDATA=${RSTPATH}"/tables/general/map_data"
+export BNDDATA=${RSTPATH}"/tables/general/bnd_data"
 
 #####################################################################
 #                                                                   #
@@ -130,12 +129,12 @@ export MAPOVERLAY=${HOMEPATH}"/tables/general/overlay.dat"
 
 export ISTP_PATH="/data/istp"
 
-export SD_HDWPATH="${HOMEPATH}/tables/superdarn/hdw/"
-export SD_RADAR="${HOMEPATH}/tables/superdarn/radar.dat"
+export SD_HDWPATH="${RSTPATH}/tables/superdarn/hdw/"
+export SD_RADAR="${RSTPATH}/tables/superdarn/radar.dat"
 
-export AACGM_DAT_PREFIX=${HOMEPATH}"/tables/analysis/aacgm/aacgm_coeffs"
-export IGRF_PATH=${HOMEPATH}"/tables/analysis/mag/"
-export SD_MODEL_TABLE=${HOMEPATH}"/tables/superdarn/model"
+export AACGM_DAT_PREFIX=${RSTPATH}"/tables/analysis/aacgm/aacgm_coeffs"
+export IGRF_PATH=${RSTPATH}"/tables/analysis/mag/"
+export SD_MODEL_TABLE=${RSTPATH}"/tables/superdarn/model"
 
 #####################################################################
 #                                                                   #
