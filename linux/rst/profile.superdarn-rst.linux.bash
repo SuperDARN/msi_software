@@ -40,7 +40,7 @@ export USR_LIBPATH="${HOMEPATH}/usr/lib"
 export USR_BINPATH="${HOMEPATH}/usr/bin"
 export USR_IPATH="${HOMEPATH}/usr/include"
 
-export PATH="${PATH}:${BUILD}/base/bin:${BUILD}/base/script:${HOMEPATH}/bin:${HOMEPATH}/usr/bin:${HOMEPATH}/script"
+export PATH="${PATH}:${BUILD}/bin:${BUILD}/script:${HOMEPATH}/bin:${HOMEPATH}/usr/bin:${HOMEPATH}/script"
 
 export LD_LIBRARY_PATH="${LIBPATH}:${USR_LIBPATH}"
 
