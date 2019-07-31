@@ -1,12 +1,14 @@
-# SD_BEGIN> 
-# This file defines all the hardware parameters for all the radars
-# the format of the file is:
-# station_id, year, yr_sec, lat, long, altitude, boresite, bm_sep,
-#   vdir, atten, tdiff, phidiff, interfer_pos[3], rec_rise
+#  Hardware parameters for Falkland Islands radar.
 #
+# **********************************************************************
+# ==Notes==
 #
-# This set of data is for Halley
+# **********************************************************************
 #
-
-21 2999 25786801 -51.82  -58.96     35.0 +178.20 -3.24 +1.0 10.0  0.0   0.0 0.0    0.0  0.0 100.0 7 75 16
-
+#  1   2      3        4         5       6      7      8    9   10   11   12  13(1)  13(2)  13(3)  14   15  16 17
+#
+# UNTIL 1/Nov/2011 00:00:00.0
+   21 2011 26265600  -51.831  -58.979    8.0  178.3  -3.24  1   10  0.000  0    0.0    0.0    0.0 100.0  7 110 16
+# UNTIL 26/Oct/2999 11:00:01.0
+   21 2999 25786801  -51.831  -58.979    8.0  178.3  -3.24  1    0  0.000  0    0.0    0.0    0.0   0.0  0 110 16
+# EOF

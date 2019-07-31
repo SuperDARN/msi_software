@@ -1,16 +1,12 @@
-# SD_BEGIN> 
-# This file defines all the hardware parameters for all the radars
-# the format of the file is:
-# station_id, year, yr_sec, lat, long, altitude, boresite, bm_sep,
-#   vdir, atten, tdiff, phidiff, interfer_pos[3], rec_rise
+#  Hardware parameters for Test Radar radar.
 #
-# This set of data is for Goose Bay
+# **********************************************************************
+# ==Notes==
 #
-
- 0 2999 31556736 +53.32  -60.46    50.0  +5.00 +3.24 +1.0 10.0 +0.4778 +1.0  +1.5 +100.0 +0.0 100.0 2 75 16
-
-
-
-
-
-
+# **********************************************************************
+#
+#  1   2      3        4         5       6      7      8    9   10   11   12  13(1)  13(2)  13(3)  14   15  16 17
+#
+# UNTIL 01/Jan/3000 05:45:36.0
+    0 2999 31556736   53.320  -60.460    50.0    5.0  3.24  1   10  0.478  1    1.5  100.0    0.0 100.0  2  75 16
+# EOF

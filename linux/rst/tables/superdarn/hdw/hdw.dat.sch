@@ -1,9 +1,12 @@
-# SD_BEGIN> 
-# This file defines all the hardware parameters for all the radars
-# the format of the file is:
-# station_id, year, yr_sec, lat, long, altitude, boresite, bm_sep,
-#   vdir, atten, tdiff, phidiff, interfer_pos[3], rec_rise
+#  Hardware parameters for Schefferville radar.
 #
-# This set of data is for Schefferville
+# **********************************************************************
+# ==Notes==
 #
- 2 2999 31556736 +54.80  -66.80  1500.0 +15.00 +3.20 +1.0 10.0  0.0     0.0   0.0  0.0    0.0 170. 2 75 16
+# **********************************************************************
+#
+#  1   2      3        4         5       6      7      8    9   10   11   12  13(1)  13(2)  13(3)  14   15  16 17
+#
+# UNTIL 01/Jan/3000 05:45:36.0
+    2 2999 31556736   54.800  -66.800  1500.0   15.0  3.20  1   10  0.000  0    0.0    0.0    0.0 170.0  2  75 16
+# EOF
