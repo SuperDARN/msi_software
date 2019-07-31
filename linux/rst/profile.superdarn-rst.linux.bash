@@ -58,9 +58,9 @@ export PNMTOPNG="/usr/bin/pnmtopng"
 #                                                                   #
 #####################################################################
 
-export MAKECFG=${BUILD}/base/make/makecfg
-export MAKEBIN=${BUILD}/base/make/makebin
-export MAKELIB=${BUILD}/base/make/makelib
+export MAKECFG=${BUILD}/make/makecfg
+export MAKEBIN=${BUILD}/make/makebin
+export MAKELIB=${BUILD}/make/makelib
 
 #####################################################################
 #                                                                   #
