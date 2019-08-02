@@ -25,7 +25,7 @@ void load_frequency(FILE *ics660, uint32_t chip, int channel, double fr)
   struct ICS660_FREQ freq_str;
 
   if (verbose > 1)
-    printf("  In Load frequency file:%d chip:%d channel:%d freq:%lf\n",
+    printf("  In Load frequency:   %d chip:%d channel:%d freq:%lf\n",
             ics660, chip, channel, fr);	
 
   freq_str.chip = chip;

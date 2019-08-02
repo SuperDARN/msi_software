@@ -111,7 +111,7 @@ int get_event_time(int *sec, int *nsec, int BASE1)
     *nsec = nsecond;
 
     // output event time, this should be trigger time of each sequence
-    printf("ET %10d %9d\n", *sec, *nsec);
+    if (verbose < -1) printf("ET %10d %9d\n", *sec, *nsec);
   } else {
     clock_gettime(CLOCK_REALTIME,&tp);
     *nsec = tp.tv_nsec;

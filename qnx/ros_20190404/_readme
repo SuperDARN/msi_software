@@ -1,0 +1,6 @@
+Somewhat stable version of ROS based of the merge-in-pieces code that was the
+last that Jeff Spaleta put on this computer.
+
+Many of the files have been reformatted to make them more readable and more
+debugging statements have been added.
+

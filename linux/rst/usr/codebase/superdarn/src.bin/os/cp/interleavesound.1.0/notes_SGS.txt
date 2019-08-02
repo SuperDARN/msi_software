@@ -1,0 +1,21 @@
+
+20197023
+
++ Added the line below to profile.superdarn-rst.linux.bash:
+
+  export SD_SND_PATH="/data/ros/snd"
+
+
++ Created file $SD_SND_PATH/interleave_sounder.dat
+
+8
+10500
+11500
+12500
+13500
+14500
+15500
+16500
+17500
+
+

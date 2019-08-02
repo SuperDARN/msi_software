@@ -337,13 +337,13 @@ int main()
  * 
  */
   if (frq_name != NULL) {
-    fp=fopen(frq_name,"r");
-    if (fp==NULL) {
+    fp = fopen(frq_name,"r");
+    if (fp == NULL) {
       perror("Could not load frequency table");
       exit(1);
     }
-    fptr=FreqLoadTable(fp);
-    dfrq=fptr->dfrq;
+    fptr = FreqLoadTable(fp);
+    dfrq = fptr->dfrq;
     fclose(fp);
   }
 

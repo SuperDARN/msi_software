@@ -15,6 +15,7 @@
 #include "ics660b.h"
 #include "dds_defs.h"
 
+extern int verbose;
 
 void one_shot_b(FILE *ics660){
   struct timespec sl_time,hold_time;
@@ -26,11 +27,27 @@ void one_shot_b(FILE *ics660){
   dc60m_p.chip = (uint32_t)0x02;
   dc60m_p.value = (uint32_t)0xe5;
 #ifdef __QNX__
+  if (verbose > 2) {
+    fprintf(stdout, "In one_shot_b(): before ICS660_SYNC_MODE\n");
+    fflush(stdout);
+  }
   ics660_set_parameter(ics660, (int)ICS660_SYNC_MODE,&dc60m_p,sizeof(dc60m_p));
 
+  if (verbose > 2) {
+    fprintf(stdout, "In one_shot_b(): before nanosleep()\n");
+    fflush(stdout);
+  }
   nanosleep(&sl_time,&hold_time);
 
+  if (verbose > 2) {
+    fprintf(stdout, "In one_shot_b(): before second ICS660_SYNC_MODE\n");
+    fflush(stdout);
+  }
   dc60m_p.value = (uint32_t)0x65;
   ics660_set_parameter(ics660, (int)ICS660_SYNC_MODE,&dc60m_p,sizeof(dc60m_p));
 #endif
+  if (verbose > 2) {
+    fprintf(stdout, "In one_shot_b(): Done with one_shot_b()\n");
+    fflush(stdout);
+  }
 }

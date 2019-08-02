@@ -49,7 +49,7 @@
 #include "ics660b.h"
 
 int sock,msgsock;
-int verbose=2;
+int verbose=10;
 uint32_t ifmode=IF_ENABLED;
 struct  RXFESettings rf_settings;
 struct  RXFESettings if_settings;
@@ -132,7 +132,6 @@ int main()
   int  maxclients=MAX_RADARS*MAX_CHANNELS+1;
   int  max_seq_count;
   int  seq_count[MAX_RADARS][MAX_CHANNELS];
-//  int  old_pulse_index[MAX_RADARS][MAX_CHANNELS];
   int32_t current_pulse_index[MAX_RADARS][MAX_CHANNELS];
   int  ready_index[MAX_RADARS][MAX_CHANNELS];
   int  *seq_buf[MAX_RADARS][MAX_CHANNELS];
@@ -175,21 +174,23 @@ int main()
 //  int time_array[10], intt=200, loopcount=0, fifocnt=0;
 
 //  signal(SIGINT, graceful_cleanup);
-  ifmode=IF_ENABLED;
-  for(ant=0;ant<16;ant++) test_phase[ant]=ant*dp;
+  ifmode = IF_ENABLED;
+  for (ant=0; ant<16; ant++) test_phase[ant] = ant*dp;
   printf("Clock Freq: %lf\n",CLOCK_FREQ);
-  pi=3.1415926;
-  pci_min=0;
-  max_seq_count=0;
+  //pi = 3.1415926;
+  pci_min = 0;
+  max_seq_count = 0;
 
   if (verbose > 1) printf("Zeroing arrays\n");
-  for (r=0;r<MAX_RADARS;r++){
-    for (c=0;c<MAX_CHANNELS;c++){
+  for (r=0; r<MAX_RADARS; r++) {
+    for (c=0; c<MAX_CHANNELS; c++) {
       if (verbose > 1) printf("%d %d\n",r,c);
-      for (i=0;i<MAX_SEQS;i++) pulseseqs[r][c][i]=NULL;
-      old_pulse_index[r][c]=-1; 
-      ready_index[r][c]=-1; 
-      seq_buf[r][c]=malloc(4*MAX_TIME_SEQ_LEN);
+      for (i=0; i<MAX_SEQS; i++) pulseseqs[r][c][i] = NULL;
+
+      current_pulse_index[r][c] = -10;
+      ready_index[r][c] = -1;
+      active[r][c] = -1;
+      seq_buf[r][c] = malloc(4*MAX_TIME_SEQ_LEN);
     } 
   }
 
@@ -554,38 +555,60 @@ int main()
                   if (verbose > 1) {
                     fprintf(stdout,"  Client:: r: %d c: %d\n",r,c); 
                     fprintf(stdout,"  Client:: freq: %lf\n",freq_in);
+                    fflush(stdout);
                   }
 
                   load_frequency(ics660[pci_ind], r, c, freq_in);
                   load_phase(ics660[pci_ind],r,c,0.0);
                   load_filter_taps(ics660[pci_ind],r,c,T_rise,state_time);
 
-                  if (verbose > 2)
+                  if (verbose > 1) {
+                    printf("DONE with loading filter taps\n");
+                    fflush(stdout);
+                  }
+
+                  if (verbose > 2) {
                     fprintf(stdout, " Loading %d freq: %lf chip: %d "
                                     "channel: %d\n",i,freq_in,r,c);
+                    fprintf(stdout, " ifmode = %d; IMAGING = %d\n",
+                                    ifmode, IMAGING);
+                    fflush(stdout);
+                  }
 
                   if ((ifmode == 1) && (IMAGING == 0)) {
                     r = clients[i].radar+2;
                     freq_in = ((double)(IF_FREQ-clients[i].tfreq))*1000./2; //Hz
 
-                    if (verbose > 0)
+                    if (verbose > 0) {
                       fprintf(stdout, "IF Out Freq:  %d %lf\n",
                                       clients[i].tfreq,freq_in);
+                      fflush(stdout);
+                    }
                     load_frequency(ics660[pci_ind], r, c, freq_in);
                     load_filter_taps(ics660[pci_ind],r,c,T_rise,state_time);
                     load_phase(ics660[pci_ind],r,c,0.0);
                   }
                 }
 
+                if (verbose > 0) {
+                  fprintf(stdout, "before one_shot_b()\n");
+                  fflush(stdout);
+                }
                 one_shot_b(ics660[pci_master]);
+                if (verbose > 0) {
+                  fprintf(stdout, "after one_shot_b()\n");
+                  fflush(stdout);
+                }
 
                 gettimeofday(&t3,NULL);
                 elapsed = (t3.tv_sec-t2.tv_sec)*1E6;
                 elapsed += (t3.tv_usec-t2.tv_usec);
-                if (verbose > 0)
+                if (verbose > 0) {
                   fprintf(stdout, "  DDS Set Filter and Freq  Elapsed "
                                   "Microseconds: %ld\n",elapsed);
-                if (verbose > 1) fprintf(stdout,"Done setting the beam\n");
+                  fprintf(stdout,"Done setting the beam\n");
+                  fflush(stdout);
+                }
               } else {  // IMAGING
                 /* SET freq, filter and BEAM CODE for IMAGING */
                 /* SET freq and filter for IMAGING */
@@ -673,7 +696,8 @@ int main()
               if (verbose > 1) {
                 fprintf(stdout, "  DDS Pretrigger Elapsed "
                                 "Microseconds: %ld\n",elapsed);
-                  fprintf(stdout,"Ending Pretrigger Setup\n");
+                fprintf(stdout,"Ending Pretrigger Setup\n");
+                fflush(stdout);
               }
               break;
 

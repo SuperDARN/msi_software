@@ -233,14 +233,8 @@ int msi_timing_sequence(int numclients, int max_seq_length,
     } // end of client loop
   }
 
-
-
-      } // end of client loop
-
-      if (verbose > 1) printf("Inside MSI timing sequence 3\n");	
-    
-    
   if (verbose > 0) printf("timing seq is ready to be sent\n");
+
 #ifdef __QNX__
   for (pci_ind=pci_min; pci_ind < DDS_MAX_CARDS; pci_ind ++) {
     if (verbose > 0) printf("  pci_ind: %d\n", pci_ind);
