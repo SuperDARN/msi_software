@@ -301,7 +301,7 @@ int main(int argc,char *argv[])
   printf("Entering Scan loop Station ID: %s  %d\n",ststr,stid);
   do {
 
-//    if (timed) gettimeofday(&t0,NULL);
+/*    if (timed) gettimeofday(&t0,NULL); */
 
     printf("Entering Site Start Scan Station ID: %s  %d\n",ststr,stid);
     if (SiteStartScan() !=0) continue;
@@ -337,7 +337,7 @@ int main(int argc,char *argv[])
 
     do {
 
-//      if (timed) gettimeofday(&t1,NULL);
+/*      if (timed) gettimeofday(&t1,NULL); */
 
       TimeReadClock(&yr,&mo,&dy,&hr,&mt,&sc,&us);
       
@@ -370,7 +370,7 @@ int main(int argc,char *argv[])
       sprintf(logtxt,"Transmitting on: %d (Noise=%g)",tfreq,noise);
       ErrLog(errlog.sock,progname,logtxt);
     
-//      if (timed) gettimeofday(&t2,NULL);
+/*      if (timed) gettimeofday(&t2,NULL); */
       nave=SiteIntegrate(lags);   
       if (nave < 0) {
         sprintf(logtxt,"Integration error:%d",nave);
@@ -413,10 +413,10 @@ int main(int argc,char *argv[])
       for (n=0;n<tnum;n++) RMsgSndSend(task[n].sock,&msg); 
 
       for (n=0; n<msg.num; n++) {
-        //if (msg.data[n].type == PRM_TYPE) free(msg.ptr[n]);
-        //if (msg.data[n].type == IQ_TYPE) free(msg.ptr[n]);
-        //if (msg.data[n].type == RAW_TYPE) free(msg.ptr[n]);
-        //if (msg.data[n].type == FIT_TYPE) free(msg.ptr[n]); 
+        /*if (msg.data[n].type == PRM_TYPE) free(msg.ptr[n]);
+          if (msg.data[n].type == IQ_TYPE) free(msg.ptr[n]);
+          if (msg.data[n].type == RAW_TYPE) free(msg.ptr[n]);
+          if (msg.data[n].type == FIT_TYPE) free(msg.ptr[n]); */
         if ( (msg.data[n].type == PRM_TYPE) ||
              (msg.data[n].type == IQ_TYPE)  ||
              (msg.data[n].type == RAW_TYPE) ||
