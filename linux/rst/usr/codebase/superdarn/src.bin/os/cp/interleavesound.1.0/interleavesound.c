@@ -46,8 +46,7 @@
 #define SND_NRANG 75
 #define MAX_SND_FREQS 12
 
-/*void write_sounding_record_new(char *progname, struct RadarParm *prm,*/
-void write_sounding_record_new(struct RadarParm *prm, struct FitData *fit);
+void write_sounding_record_new(char *progname, struct RadarParm *prm, struct FitData *fit);
 
 #define RT_TASK 3
 
@@ -124,8 +123,6 @@ int main(int argc,char *argv[]) {
   int *bms;           /* scanning beams                                     */
   int intgt[20];      /* start times of each integration period             */
   int nintgs=20;      /* number of integration periods per scan; SGS 1-min  */
-  int bufsc=0;        /* a buffer at the end of scan; historically this has */
-  int bufus=0;        /*  been set to 3.0s to account for what???           */
   unsigned char hlp=0;
 
   /*
@@ -539,7 +536,7 @@ int main(int argc,char *argv[]) {
         ErrLog(errlog.sock, progname, logtxt);
 
         /* save the sounding mode data */
-        write_sounding_record_new(prm, fit);
+        write_sounding_record_new(progname, prm, fit);
 
         ErrLog(errlog.sock, progname, "Polling SND for exit.");
         if (exitpoll !=0) break;
@@ -609,7 +606,7 @@ void usage(void)
 /************ function write_sounding_record_new() ************************/
 /* changed the data structure */
 
-void write_sounding_record_new(struct RadarParm *prm, struct FitData *fit)
+void write_sounding_record_new(char *progname, struct RadarParm *prm, struct FitData *fit)
 {
   int i;
 
@@ -669,7 +666,7 @@ void write_sounding_record_new(struct RadarParm *prm, struct FitData *fit)
   if (out==NULL) {
     /* crap. might as well go home */
     sprintf(logtxt,"Unable to open sounding file:%s",filename);
-/*    ErrLog(errlog.sock,progname,logtxt);*/
+    ErrLog(errlog.sock,progname,logtxt);
     return;
   }
 
