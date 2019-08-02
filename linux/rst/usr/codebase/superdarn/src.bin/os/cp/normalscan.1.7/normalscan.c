@@ -85,8 +85,8 @@ struct TCPIPMsgHost task[4]={
 };
 
 void usage(void);
-int main(int argc,char *argv[]) {
-
+int main(int argc,char *argv[])
+{
   /*
    * commentary here: SGS
    * It seems that the mode should be decoupled from the pulse sequence.
@@ -301,6 +301,8 @@ int main(int argc,char *argv[]) {
   printf("Entering Scan loop Station ID: %s  %d\n",ststr,stid);
   do {
 
+//    if (timed) gettimeofday(&t0,NULL);
+
     printf("Entering Site Start Scan Station ID: %s  %d\n",ststr,stid);
     if (SiteStartScan() !=0) continue;
     
@@ -335,6 +337,8 @@ int main(int argc,char *argv[]) {
 
     do {
 
+//      if (timed) gettimeofday(&t1,NULL);
+
       TimeReadClock(&yr,&mo,&dy,&hr,&mt,&sc,&us);
       
       if (OpsDayNight()==1) {
@@ -366,8 +370,9 @@ int main(int argc,char *argv[]) {
       sprintf(logtxt,"Transmitting on: %d (Noise=%g)",tfreq,noise);
       ErrLog(errlog.sock,progname,logtxt);
     
+//      if (timed) gettimeofday(&t2,NULL);
       nave=SiteIntegrate(lags);   
-      if (nave<0) {
+      if (nave < 0) {
         sprintf(logtxt,"Integration error:%d",nave);
         ErrLog(errlog.sock,progname,logtxt); 
         continue;
@@ -407,28 +412,34 @@ int main(int argc,char *argv[]) {
 
       for (n=0;n<tnum;n++) RMsgSndSend(task[n].sock,&msg); 
 
-      for (n=0;n<msg.num;n++) {
-        if (msg.data[n].type==PRM_TYPE) free(msg.ptr[n]);
-        if (msg.data[n].type==IQ_TYPE) free(msg.ptr[n]);
-        if (msg.data[n].type==RAW_TYPE) free(msg.ptr[n]);
-        if (msg.data[n].type==FIT_TYPE) free(msg.ptr[n]); 
+      for (n=0; n<msg.num; n++) {
+        //if (msg.data[n].type == PRM_TYPE) free(msg.ptr[n]);
+        //if (msg.data[n].type == IQ_TYPE) free(msg.ptr[n]);
+        //if (msg.data[n].type == RAW_TYPE) free(msg.ptr[n]);
+        //if (msg.data[n].type == FIT_TYPE) free(msg.ptr[n]); 
+        if ( (msg.data[n].type == PRM_TYPE) ||
+             (msg.data[n].type == IQ_TYPE)  ||
+             (msg.data[n].type == RAW_TYPE) ||
+             (msg.data[n].type == FIT_TYPE) )  free(msg.ptr[n]);
       }          
 
       RadarShell(shell.sock,&rstable);
 
-      if (exitpoll !=0) break;
-      scan=0;
-      if (bmnum==ebm) break;
+      if (exitpoll != 0) break;
+
+      scan = 0;
+      if (bmnum == ebm) break;
+
       if (backward) bmnum--;
       else bmnum++;
 
     } while (1);
 
     ErrLog(errlog.sock,progname,"Waiting for scan boundary."); 
-    if ((exitpoll==0) && (scannowait==0)) SiteEndScan(scnsc,scnus);
-  } while (exitpoll==0);
+    if ((exitpoll == 0) && (scannowait == 0)) SiteEndScan(scnsc,scnus);
+  } while (exitpoll == 0);
   
-  for (n=0;n<tnum;n++) RMsgSndClose(task[n].sock);
+  for (n=0; n<tnum; n++) RMsgSndClose(task[n].sock);
 
   ErrLog(errlog.sock,progname,"Ending program.");
 

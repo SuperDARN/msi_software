@@ -413,9 +413,9 @@ int SiteCveIntegrate(int (*lags)[2]) {
   int n,nsamp, *code,   Iout, Qout;
   uint32 uQ32,uI32;
 
-  if (debug) {
+  if (debug)
     fprintf(stderr,"CVE SiteIntegrate: start\n");
-  }
+
   SiteCveExit(0);
   if (nrang>=MAX_RANGE) return -1;
   for (j=0;j<LAG_SIZE;j++) lagsum[j]=0;
@@ -458,18 +458,18 @@ int SiteCveIntegrate(int (*lags)[2]) {
   }
 
   while (1) {
-  if (debug) {
 /*
-  printf("Size of Struct ROSMsg  %ld\n",sizeof(struct ROSMsg));
-  printf("Size of Struct int32  %ld\n",sizeof(int32));
-  printf("Size of Struct float  %ld\n",sizeof(float));
-  printf("Size of Struct unsigned char  %ld\n",sizeof(unsigned char));
-  printf("Size of Struct ControlPRM  %ld\n",sizeof(struct ControlPRM));
-  printf("Size of Struct CLRFreqPRM  %ld\n",sizeof(struct CLRFreqPRM));
-  printf("Size of Struct SeqPRM  %ld\n",sizeof(struct SeqPRM));
-  printf("Size of Struct DataPRM  %ld\n",sizeof(struct DataPRM));
-*/
+  if (debug) {
+    printf("Size of Struct ROSMsg  %ld\n",sizeof(struct ROSMsg));
+    printf("Size of Struct int32  %ld\n",sizeof(int32));
+    printf("Size of Struct float  %ld\n",sizeof(float));
+    printf("Size of Struct unsigned char  %ld\n",sizeof(unsigned char));
+    printf("Size of Struct ControlPRM  %ld\n",sizeof(struct ControlPRM));
+    printf("Size of Struct CLRFreqPRM  %ld\n",sizeof(struct CLRFreqPRM));
+    printf("Size of Struct SeqPRM  %ld\n",sizeof(struct SeqPRM));
+    printf("Size of Struct DataPRM  %ld\n",sizeof(struct DataPRM));
    }
+*/
     seqtval[nave].tv_sec=tick.tv_sec;
     seqtval[nave].tv_nsec=tick.tv_usec*1000;
     seqatten[nave]=0;
@@ -481,19 +481,18 @@ int SiteCveIntegrate(int (*lags)[2]) {
     seqbadtr[nave].start=NULL;
     seqbadtr[nave].length=NULL;
   
-
     tval=(tick.tv_sec+tick.tv_usec/1.0e6)-
          (tack.tv_sec+tack.tv_usec/1.0e6);
 
-    if (nave>0) tavg=tval/nave; 
+    if (nave > 0) tavg=tval/nave; 
      
     tick.tv_sec+=floor(tavg);
     tick.tv_usec+=1.0e6*(tavg-floor(tavg));
+
     time_diff=(tick.tv_sec-tock.tv_sec);
     time_diff+=(tick.tv_usec-tock.tv_usec)/1E6; 
-    if (time_diff > 0.0) {
-				break;
-		}
+    if (time_diff > 0.0) break;
+
     rprm.tbeam=bmnum;   
     rprm.tfreq=tfreq;   
     rprm.rfreq=tfreq;   
@@ -502,6 +501,7 @@ int SiteCveIntegrate(int (*lags)[2]) {
     rprm.filter_bandwidth=rprm.baseband_samplerate; 
     rprm.match_filter=1;
     rprm.number_of_samples=total_samples+nbaud+10; 
+
     smsg.type=SET_PARAMETERS;
     TCPIPMsgSend(sock,&smsg,sizeof(struct ROSMsg));
     TCPIPMsgSend(sock,&rprm,sizeof(struct ControlPRM));
