@@ -1,7 +1,7 @@
 #!/bin/sh
 LOGFILE="/tmp/ros_monitor.log"
-STOP_CMD="/root/merge-in-pieces/stop.ros"
-START_CMD="/root/merge-in-pieces/start.ros"
+STOP_CMD="/root/current_ros/stop.ros"
+START_CMD="/root/current_ros/start.ros"
 
 
 CURRENT_TIME=`date -t`
