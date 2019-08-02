@@ -391,7 +391,7 @@ void *get_state()
   float tempf;
 
   /* Get status of hardware and satellites */
-  if (verbose > 0) printf("Starting GET_STATE()\n");
+  if (verbose > 10) printf("Starting GET_STATE()\n");
 
   //check hardware status
   dstat.hardware = get_hdw_stat();
@@ -447,7 +447,7 @@ void *get_state()
                          dstat.drift ) / ((float)dstat.poscnt+1);
   dstat.poscnt++;
 
-  if (verbose > 0) {
+  if (verbose > 10) {
     printf("  get_state(): %d\n", dstat.poscnt);
     printf("    time diff  %13.9f s\n", timediff);
     printf("    drift      %ld    us\n", (long)dstat.drift);
@@ -478,6 +478,9 @@ void *get_state()
                                     //         selects one based on information
                                     //         provided by the startup)
         if (verbose > 0) printf("System Time Updated Successfully\n");
+        if (verbose < 0)
+          printf("  %s %ld: Update System Time: time diff  %13.9f s\n",
+                  ctime(&now), now.tv_nsec, timediff);
       #endif
       #ifdef __linux__
 //                  printf("Setting hdw clock on linux\n");
@@ -512,7 +515,7 @@ void *get_state()
       printf("  * time diff  %13.9f s\n", timediff);
 
   } else
-    if (verbose > 0) printf("get_state(): No need to update system time\n");
+    if (verbose > 10) printf("get_state(): No need to update system time\n");
 
   if (dstat.timecompareupdate) {
     now.tv_sec = dstat.nextcomparesec;

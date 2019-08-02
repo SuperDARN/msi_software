@@ -24,16 +24,16 @@ int get_software_time(int *sec, int *nsec, int BASE1)
   int temp;
   int year,month,day,hour,minute,second,nsecond;
 
-  if (verbose > 1) printf("get_software_time(): ");
+  if (verbose > 10) printf("get_software_time(): ");
 
   // READ THE TIME
   // poll status reg an wait 10 us
   if (BASE1 != NULL) {
 
-    if (verbose > 1) printf("polling GPS card\n");
+    if (verbose > 10) printf("polling GPS card\n");
 
     *((uint08*)(BASE1+0xfc)) = 0x0; // write any value to update time and pos
-    if (verbose > 1) printf("update time and pos\n");
+    if (verbose > 10) printf("update time and pos\n");
     sleep.tv_sec  = 0;
     sleep.tv_nsec = 10000;
     temp = *((uint32_t*)(BASE1+0x104));

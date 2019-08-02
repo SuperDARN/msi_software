@@ -73,9 +73,6 @@ int main(void)
 
   fprintf(stdout, "Configuring GPS Card\n");
 
-
-  /* Note: generator is the 10 MHz signal that is used to phase lock the
-           output of the PTS-160 - 100 MHz, I think
   // set card for synchronized generator mode, GPS reference enabled
   // Daylight Savings Time Disabled 
   *((uint32_t*)(BASE1+0x118)) = 0x90000021; //x90 to address x11B produced

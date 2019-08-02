@@ -25,7 +25,7 @@ void load_filter_taps(FILE *ics660, uint32_t chip, uint32_t channel,
 {
   struct ICS660_FILTER filter_str;
   if (verbose > 1)
-    printf("  In Load filter taps file:%d chip:%d channel:%d trise:%d"
+    printf("  In Load filter taps: %d chip:%d channel:%d trise:%d"
            " state:%lf\n",ics660, chip, channel, fc, t_in);	
 
   filter_str.chip = chip;
@@ -33,8 +33,12 @@ void load_filter_taps(FILE *ics660, uint32_t chip, uint32_t channel,
   filter_str.f_corner = fc;
   filter_str.state_time = t_in;
 #ifdef __QNX__
+  if (verbose > 1)
+    printf("  In Load filter taps: before ICS660_LOAD_FILTER\n");
   ics660_set_parameter((int)ics660, (int)ICS660_LOAD_FILTER, &filter_str,
                        sizeof(filter_str));
+  if (verbose > 1)
+    printf("  In Load filter taps: after  ICS660_LOAD_FILTER\n");
 #endif
 }
 

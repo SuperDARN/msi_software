@@ -24,7 +24,7 @@ void load_phase(FILE *ics660,uint32_t chip, uint32_t channel, double ph)
   struct ICS660_PHASE phase_str;
 
   if (verbose > 1)
-    printf("  In Load phase file:%d chip:%d channel:%d phase:%lf\n",
+    printf("  In Load phase:       %d chip:%d channel:%d phase:%lf\n",
             ics660, chip, channel, ph);  
 
   phase_str.chip = chip;
