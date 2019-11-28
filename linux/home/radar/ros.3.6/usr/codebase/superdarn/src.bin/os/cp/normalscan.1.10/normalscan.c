@@ -154,6 +154,12 @@ int main(int argc,char *argv[]) {
   /* Flag to override auto-calc of integration time */
   int setintt=0;
 
+  /* Flag and variables to better sync beam soundings */
+  int bm_sync=0;
+  int bmsc=6;
+  int bmus=0;
+
+
   printf("Size of int %d\n",(int)sizeof(int));
   printf("Size of long %d\n",(int)sizeof(long));
   printf("Size of long long %d\n",(int)sizeof(long long));
@@ -213,6 +219,10 @@ int main(int argc,char *argv[]) {
   OptionAdd(&opt,"intsc",'i',&intsc);
   OptionAdd(&opt,"intus",'i',&intus);
   OptionAdd(&opt,"setintt",'x',&setintt);
+
+  OptionAdd(&opt,"bm_sync",'x',&bm_sync);
+  OptionAdd(&opt,"bmsc",'i',&bmsc);
+  OptionAdd(&opt,"bmus",'i',&bmus);
 
 
   arg=OptionProcess(1,argc,argv,&opt,NULL);
@@ -447,6 +457,11 @@ int main(int argc,char *argv[]) {
       if (bmnum==ebm) break;
       if (backward) bmnum--;
       else bmnum++;
+
+      if (bm_sync==1){
+        ErrLog(errlog.sock,progname,"Syncing to beam timing");
+        SiteEndScan(bmsc,bmus);
+      }
 
     } while (1);
 
