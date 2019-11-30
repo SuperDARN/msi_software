@@ -150,6 +150,11 @@ int main(int argc,char *argv[]) {
 	int bufus=0;    /*   been set to 3.0s to account for what???            */
 	unsigned char hlp=0;
 
+  /* Flag and variabels to sync beam soundings */
+  int bm_sync=0;
+  int bmsc=6;
+  int bmus=0;
+
 	if (debug) {
 		printf("Size of int %ld\n",sizeof(int));
 		printf("Size of long %ld\n",sizeof(long));
@@ -199,6 +204,10 @@ int main(int argc,char *argv[]) {
   OptionAdd(&opt, "eb",     'i', &ebm);
 	OptionAdd(&opt, "fixfrq", 'i', &fixfrq);   /* fix the transmit frequency */
 	OptionAdd(&opt, "-help",  'x', &hlp);      /* just dump some parameters */
+  OptionAdd(&opt, "bm_sync", 'x', &bm_sync);   /* flag to enable beam sync */
+  OptionAdd(&opt, "bmsc",   'i', &bmsc);       /* length of beam sync period, seconds */
+  OptionAdd(&opt, "bmus",   'i', &bmus);       /* length of beam sync period, microsec */
+
 
 	/* process the commandline; need this for setting errlog port */
   arg=OptionProcess(1,argc,argv,&opt,NULL);  
@@ -421,6 +430,11 @@ int main(int argc,char *argv[]) {
       if (bmnum==ebm) break;
       if (backward) bmnum--;
       else bmnum++;
+
+      if (bm_sync==1){
+        Errlog(errlog.sock,progname,"Syncing to beam timing");
+        SiteEndScan(bmsc,bmus);
+      }
 
     } while (1);
 
