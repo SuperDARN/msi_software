@@ -339,6 +339,8 @@ int main(int argc,char *argv[]) {
 
   txpl=(rsep*20)/3;
 
+  sprintf(progname,"stepcamp");
+
   OpsLogStart(errlog.sock,progname,argc,argv);
 
   OpsSetupTask(tnum,task,errlog.sock,progname);
@@ -509,7 +511,7 @@ int main(int argc,char *argv[]) {
 
     if (backward) bmnum--;
     else bmnum++;
-    if (bmnum==ebm) bmnum=sbm;
+    if (bmnum<ebm) bmnum=sbm;
 
     ErrLog(errlog.sock,progname,"Waiting for scan boundary.");
     if ((exitpoll==0) && (scannowait==0)) SiteEndScan(scnsc,scnus);
