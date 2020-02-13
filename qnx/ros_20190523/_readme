@@ -1,0 +1,3 @@
+I _think_ this is basically a version copied from ros_20190404 but it has many
+edits to the gc316_tcp_driver code in order to make it more readable. Perhaps
+there are also more significant edits, but I wasn't very good at keeping notes.

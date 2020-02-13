@@ -1,8 +1,10 @@
 #!/bin/sh
-DEV_DIR=/root/merge-in-pieces/ros6/
+#DEV_DIR=/root/merge-in-pieces/ros6/  20190121 SGS
+DEV_DIR=/root/current_ros/ros6/
 slay -f _gc314FS
 slay -f _ics660-drv
 nohup $DEV_DIR/gps_tcp_driver/gps_tcp_driver > /dev/null 2>&1 &
+#nohup $DEV_DIR/gps_tcp_driver/gps_tcp_driver > /tmp/gps.log 2>&1 &
 #/root/merged.old/ros6/phasing-calibration-qnx/phasing_calibration 3 0 0
 sleep 3
 $DEV_DIR/ics660_drv/_ics660-drv 0 > /dev/null 2>&1 &

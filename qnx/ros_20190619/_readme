@@ -1,0 +1,8 @@
+Clone of ros_20190404 on 20190619
+
+The only changes are to compile the following in the Makefile:
+
+gc314FS_driver.1.31
+gc316_tcp_driver
+ics660_drv
+

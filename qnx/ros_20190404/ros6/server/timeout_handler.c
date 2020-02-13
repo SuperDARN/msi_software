@@ -52,7 +52,7 @@ void *timeout_handler(void *arg)
 
       cancelled = 0;
       elapsed = (long)t1.tv_sec - (long)thread_list->last_seen.tv_sec;
-      if (elapsed < 0) elapsed = 0;
+      if (elapsed < 0) elapsed = 0;   /* not possible since unsigned long */
 
       if (verbose > 0) {
         fprintf(stdout, "TIMEOUT: %p elapsed: %ld timeout: %d\n",

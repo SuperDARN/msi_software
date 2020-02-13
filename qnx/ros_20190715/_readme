@@ -1,0 +1,5 @@
+Copy of GPS triggering code branch (ros_20190327) with the DDS drive level
+on CVE turned to "zero" in order to put it into RX-only mode.
+
+ros6/ddsserver_tcp_driver/include/dds_defs.h
+

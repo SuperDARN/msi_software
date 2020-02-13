@@ -1,5 +1,6 @@
 #!/bin/sh
-DEV_DIR=/root/merge-in-pieces/ros6/
+#DEV_DIR=/root/merge-in-pieces/ros6/   20190121 SGS
+DEV_DIR=/root/current_ros/ros6/
 rm -f /tmp/ros_running
 slay -f arby_server 
 slay -f receiver_tcp_driver 
