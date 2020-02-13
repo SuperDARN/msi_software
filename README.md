@@ -8,7 +8,5 @@ Branches:
 - cv_feature-beam_sync_normalscan:
 - cv_ops:
 - cvr-develop
-- fh_dev:
-- fh_ops:
 - forthays-feature_bistatic_logging
 - forthays-operations: Operational radar code that's running at the Fort Hays Radar
