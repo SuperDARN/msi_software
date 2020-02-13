@@ -1,0 +1,7 @@
+*.o
+*.so
+*.so.0
+*.a
+*.la
+*.lo
+qnx/site_data/site.oregon/calibrations
