@@ -28,6 +28,8 @@
 */
 
 
+#include <netinet/in.h>
+#include <netdb.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -90,6 +92,9 @@ int baseport=44100;
 struct TCPIPMsgHost errlog={"127.0.0.1",44100,-1};
 
 struct TCPIPMsgHost shell={"127.0.0.1",44101,-1};
+
+struct TCPIPMsgHost freqcoord={"127.0.0.1",44110,-1};
+
 
 int tnum=4;
 struct TCPIPMsgHost task[4]={
@@ -159,6 +164,18 @@ int main(int argc,char *argv[]) {
   int bmsc=6;
   int bmus=0;
 
+  int arg=0;
+
+  int sockfd;
+/*  int freqport=0; */
+  char freqport;
+  struct addrinfo hints, *res;
+/*  socklen_t clength;
+  struct sockaddr_in server;
+  struct sockaddr_in client;
+  int msgsock=0;
+  int sc_reuseaddr=1;
+  int temp;*/
 
   printf("Size of int %d\n",(int)sizeof(int));
   printf("Size of long %d\n",(int)sizeof(long));
@@ -224,6 +241,7 @@ int main(int argc,char *argv[]) {
   OptionAdd(&opt,"bmsc",'i',&bmsc);
   OptionAdd(&opt,"bmus",'i',&bmus);
 
+  OptionAdd(&opt,"freqport",'t',&freqport);
 
   arg=OptionProcess(1,argc,argv,&opt,NULL);
 
@@ -240,6 +258,10 @@ int main(int argc,char *argv[]) {
     fprintf(stderr,"Error connecting to shell.\n");
   }
 
+/*  if ((freqcoord.sock=TCPIPMsgOpen(freqcoord.host,freqport))==-1 && freqport!=0) {
+    fprintf(stderr,"Error connecting to frequency coord.\n");
+  }
+*/
   for (n=0;n<tnum;n++) task[n].port+=baseport;
 
   OpsStart(ststr);
@@ -256,6 +278,49 @@ int main(int argc,char *argv[]) {
 
   printf("Station ID: %s  %d\n",ststr,stid);
 
+  /* Only do this if wanting to broadcast frequency */
+/*  if (freqport !=0) {
+    memset(&hints, 0, sizeof hints);
+    hints.ai_family=AF_INET;
+    hints.ai_socktype=SOCK_STREAM;
+    hints.ai_flags=AI_PASSIVE;
+
+    getaddrinfo(NULL, freqport, &hints, &res);
+*/    /* Setting up freq coord socket */
+/*    sockfd=socket(res->ai_family,res->ai_socktype,0);
+    if (sockfd < 0) {
+        fprintf(stderr,"ERROR opening stream socket\n");
+        exit(-2);
+    }
+*/
+/*    server.sin_family=AF_INET;
+    server.sin_addr.s_addr=INADDR_ANY;
+    server.sin_port=htons(freqport);*/
+
+    /* Set socket options */
+/*    temp=setsockopt(sock,SOL_SOCKET,SO_REUSEADDR,&sc_reuseaddr,sizeof(sc_reuseaddr));
+*/
+/*    if (bind(sock,(struct sockaddr *) &server,sizeof(server))){
+        fprintf(stderr,"binding stream socket\n");
+        exit(1);
+    }*/
+/*    listen(sock,5); */
+
+/*    fprintf(stderr,"Accepting a new connection....\n"); */
+/*    clength=sizeof(client); */
+/*    msgsock=accept(sock,(struct sockaddr *) &client, &clength); */
+
+    /* Use ROS functions? */
+/*    msgsock=TCPIPMsgOpen(freqcoord,freqport);
+    if (msgsock==-1) {
+        fprintf(stderr,"Error attaching to 127.0.0.1:%d",freqport);
+    } else {
+        fprintf(stderr,"Attached to 127.0.0.1:%d",freqport);
+    }
+*/
+
+/*
+  }*/
 
   strncpy(combf,progid,80);
 
@@ -304,14 +369,13 @@ int main(int argc,char *argv[]) {
   else sprintf(progname,"normalscan");
 
 
-
   OpsLogStart(errlog.sock,progname,argc,argv);
 
   OpsSetupTask(tnum,task,errlog.sock,progname);
 
   for (n=0;n<tnum;n++) {
     RMsgSndReset(task[n].sock);
-    RMsgSndOpen(task[n].sock,strlen( (char *) command),command);
+    status=RMsgSndOpen(task[n].sock,strlen( (char *) command),command);
   }
 
   printf("Preparing OpsFitACFStart Station ID: %s  %d\n",ststr,stid);
@@ -371,6 +435,7 @@ int main(int argc,char *argv[]) {
         mpinc=nmpinc;
         frang=nfrang;
       }
+/* Obsolete with allowing clear freq search to happen later */
       if(fixfrq>0) {
         stfrq=fixfrq;
         tfreq=fixfrq;
@@ -382,7 +447,7 @@ int main(int argc,char *argv[]) {
 
       ErrLog(errlog.sock,progname,"Starting Integration.");
 
-    printf("Entering Site Start Intt Station ID: %s  %d\n",ststr,stid);
+      printf("Entering Site Start Intt Station ID: %s  %d\n",ststr,stid);
       SiteStartIntt(intsc,intus);
 
       ErrLog(errlog.sock,progname,"Doing clear frequency search.");
@@ -390,11 +455,21 @@ int main(int argc,char *argv[]) {
       sprintf(logtxt, "FRQ: %d %d", stfrq, frqrng);
       ErrLog(errlog.sock,progname, logtxt);
 
-      if(fixfrq<0) {
-        tfreq=SiteFCLR(stfrq,stfrq+frqrng);
+      tfreq=SiteFCLR(stfrq,stfrq+frqrng);
+      if(fixfrq>0) {
+        tfreq=fixfrq;
       }
       sprintf(logtxt,"Transmitting on: %d (Noise=%g)",tfreq,noise);
       ErrLog(errlog.sock,progname,logtxt);
+
+      /* Place to actually send out transmit frequency */
+/*      if (freqcoord.sock!=0) {
+          sprintf(logtxt,"Sending out transmit freq to network port %d : %d",freqport,tfreq);
+          ErrLog(errlog.sock,progname, logtxt);
+*/
+/*          TCPIPMsgSend(freqcoord.sock,&tfreq,sizeof(tfreq)); */
+/*          TCPIPMsgSend(sock,&tfreq,sizeof(tfreq));
+      } */
 
       nave=SiteIntegrate(lags);
       if (nave<0) {
@@ -471,8 +546,10 @@ int main(int argc,char *argv[]) {
 
 
   for (n=0;n<tnum;n++) RMsgSndClose(task[n].sock);
-
-
+/*  if (msgsock!=0) {
+    close(msgsock);
+  }
+*/
   ErrLog(errlog.sock,progname,"Ending program.");
 
 
