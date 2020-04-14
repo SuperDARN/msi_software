@@ -8,5 +8,6 @@ Branches:
 - cv_feature-beam_sync_normalscan: Code that support beam syncing addition to cvr, may not be needed.
 - cv_ops:
 - cvr-develop
-- forthays-feature_bistatic_logging
+- forthays-feature_bistatic_logging: Addition of GPS timing logging for fhr
+- forthays-freq_coord_testing: Development branch for writing TX freq to network for frequency coorindation
 - forthays-operations: Operational radar code that's running at the Fort Hays Radar
