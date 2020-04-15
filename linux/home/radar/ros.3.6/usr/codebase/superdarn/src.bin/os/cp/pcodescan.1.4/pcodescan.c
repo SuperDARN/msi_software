@@ -138,8 +138,13 @@ int main(int argc,char *argv[]) {
   int total_scan_usecs=0;
   int total_integration_usecs=0;
   int fixfrq=-1;
+  /* Flag to override auto-calc of integration time */
+  int setintt=0;
 
-
+  /* Flag and variables to better sync beam soundings */
+  int bm_sync=0;
+  int bmsc=0;
+  int bmus=0;
 
   cp=999;
   intsc=7;
@@ -183,6 +188,19 @@ int main(int argc,char *argv[]) {
 
   OptionAdd(&opt,"fast",'x',&fast);
   OptionAdd(&opt,"nowait",'x',&scannowait);
+
+  /* Command line options to change start and end beams */
+  OptionAdd(&opt,"sb",'i',&sbm);
+  OptionAdd(&opt,"eb",'i',&ebm);
+  /* Command line options for changing integration time */
+  OptionAdd(&opt,"intsc",'i',&intsc);
+  OptionAdd(&opt,"intus",'i',&intus);
+  OptionAdd(&opt,"setintt",'x',&setintt);
+  /* Commnad line options for syncing beam soundings */
+  OptionAdd(&opt,"bm_sync",'x',&bm_sync);
+  OptionAdd(&opt,"bmsc",'i',&bmsc);
+  OptionAdd(&opt,"bmus",'i',&bmus);
+
 
   arg=OptionProcess(1,argc,argv,&opt,NULL);
 
@@ -233,7 +251,7 @@ int main(int argc,char *argv[]) {
   OpsSetupCommand(argc,argv);
   OpsSetupShell();
 
-  RadarShellParse(&rstable,"sbm l ebm l dfrq l nfrq l dfrang l nfrang l dmpinc l nmpinc l frqrng l xcnt l",                        
+  RadarShellParse(&rstable,"sbm l ebm l dfrq l nfrq l dfrang l nfrang l dmpinc l nmpinc l frqrng l xcnt l",
                   &sbm,&ebm,
                   &dfrq,&nfrq,
                   &dfrang,&nfrang,
@@ -258,7 +276,7 @@ int main(int argc,char *argv[]) {
   }
   beams=abs(ebm-sbm)+1;
   if(beams > 16) {
-    if (scannowait==0) {
+    if ((scannowait==0) && (setintt==0)) {
       total_scan_usecs=(scnsc-3)*1E6+scnus;
       total_integration_usecs=total_scan_usecs/beams;
       intsc=total_integration_usecs/1E6;
@@ -416,7 +434,6 @@ int main(int argc,char *argv[]) {
         if (msg.data[n].type==FIT_TYPE) free(msg.ptr[n]);
       }
 
-
       RadarShell(shell.sock,&rstable);
 
       if (exitpoll !=0) break;
@@ -424,6 +441,11 @@ int main(int argc,char *argv[]) {
       if (bmnum==ebm) break;
       if (backward) bmnum--;
       else bmnum++;
+
+      if (bm_sync==1){
+        ErrLog(errlog.sock,progname,"Syncing to beam timing");
+        SiteEndScan(bmsc,bmus);
+      }
 
     } while (1);
 
