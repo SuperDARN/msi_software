@@ -1192,7 +1192,7 @@ int SiteFhwEndScan(int bsc,int bus) {
     }
     count++;
     SiteFhwExit(0);
-    usleep(50000);
+    usleep(5000);
     SiteFhwExit(0);
     gettimeofday(&tick,NULL);
   }
