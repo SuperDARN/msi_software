@@ -390,8 +390,9 @@ int main(int argc,char *argv[]) {
       sprintf(logtxt, "FRQ: %d %d", stfrq, frqrng);
       ErrLog(errlog.sock,progname, logtxt);
 
-      if(fixfrq<0) {
-        tfreq=SiteFCLR(stfrq,stfrq+frqrng);
+      tfreq=SiteFCLR(stfrq,stfrq+frqrng);
+      if (!(fixfrq<0)){
+        tfreq=fixfrq;
       }
       sprintf(logtxt,"Transmitting on: %d (Noise=%g)",tfreq,noise);
       ErrLog(errlog.sock,progname,logtxt);
