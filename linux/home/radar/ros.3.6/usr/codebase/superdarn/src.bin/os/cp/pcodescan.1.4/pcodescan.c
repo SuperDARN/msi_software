@@ -163,6 +163,7 @@ int main(int argc,char *argv[]) {
 
   OptionAdd(&opt,"frang",'i',&frang);
   OptionAdd(&opt,"rsep",'i',&rsep);
+  OptionAdd(&opt,"nrang",'i',&nrang);
 
   OptionAdd( &opt, "dt", 'i', &day);
   OptionAdd( &opt, "nt", 'i', &night);
@@ -173,8 +174,8 @@ int main(int argc,char *argv[]) {
   OptionAdd( &opt, "xcf", 'i', &xcnt);
   OptionAdd( &opt, "baud", 'i', &nbaud);
   OptionAdd( &opt, "tau", 'i', &mpinc);
-  OptionAdd( &opt, "rangeres", 'i', &rsep);
-  OptionAdd( &opt, "ranges", 'i', &nrang);
+/*  OptionAdd( &opt, "rangeres", 'i', &rsep);  Duplicated with above */
+/*  OptionAdd( &opt, "ranges", 'i', &nrang); */
 
 
   OptionAdd(&opt,"ep",'i',&errlog.port);
@@ -251,12 +252,12 @@ int main(int argc,char *argv[]) {
   OpsSetupCommand(argc,argv);
   OpsSetupShell();
 
-  RadarShellParse(&rstable,"sbm l ebm l dfrq l nfrq l dfrang l nfrang l dmpinc l nmpinc l frqrng l xcnt l",
+  RadarShellParse(&rstable,"sbm l ebm l dfrq l nfrq l dfrang l nfrang l dmpinc l nmpinc l frqrng l xcnt l nbaud l rsep l nrang l",
                   &sbm,&ebm,
                   &dfrq,&nfrq,
                   &dfrang,&nfrang,
                   &dmpinc,&nmpinc,
-                  &frqrng,&xcnt);
+                  &frqrng,&xcnt,&nbaud,&rsep,&nrang);
 
 
   status=SiteSetupRadar();
