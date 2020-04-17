@@ -272,8 +272,8 @@ int main(int argc,char *argv[]) {
      cp=151;
      scnsc=60;
      scnus=0;
-     intsc=3;
-     intus=500000;
+/*     intsc=3;
+     intus=500000; */
   }
   beams=abs(ebm-sbm)+1;
   if(beams > 16) {
