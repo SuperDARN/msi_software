@@ -322,6 +322,15 @@ int main(int argc,char *argv[]) {
 
   tsgid=SiteTimeSeq(ptab);
 
+  skip=OpsFindSkip(scnsc,scnus);
+  if (backward) {
+      bmnum=sbm-skip-1; /* An extra one to ensure not overruning scan boundary */
+      if (bmnum<ebm) bmnum=sbm;
+  } else {
+      bmnum=sbm+skip+1; /* An extra one to ensure not overruning scan boundary */
+     if (bmnum>ebm) bmnum=sbm;
+  }
+
   printf("Entering Scan loop Station ID: %s  %d\n",ststr,stid);
   do {
 
@@ -347,16 +356,6 @@ int main(int argc,char *argv[]) {
         cnt=0;
       } else xcf=0;
     } else xcf=0;
-
-    skip=OpsFindSkip(scnsc,scnus);
-
-    if (backward) {
-      bmnum=sbm-skip;
-      if (bmnum<ebm) bmnum=sbm;
-    } else {
-      bmnum=sbm+skip;
-      if (bmnum>ebm) bmnum=sbm;
-    }
 
     do {
 
@@ -392,6 +391,7 @@ int main(int argc,char *argv[]) {
 
       tfreq=SiteFCLR(stfrq,stfrq+frqrng);
       if (!(fixfrq<0)){
+        ErrLog(errlog.sock,progname,"Fixing frequency");
         tfreq=fixfrq;
       }
       sprintf(logtxt,"Transmitting on: %d (Noise=%g)",tfreq,noise);
@@ -466,6 +466,7 @@ int main(int argc,char *argv[]) {
 
     } while (1);
 
+    bmnum=sbm;
     ErrLog(errlog.sock,progname,"Waiting for scan boundary.");
     if ((exitpoll==0) && (scannowait==0)) SiteEndScan(scnsc,scnus);
   } while (exitpoll==0);
