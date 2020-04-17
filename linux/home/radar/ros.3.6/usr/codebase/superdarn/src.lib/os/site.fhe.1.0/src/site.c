@@ -1087,12 +1087,10 @@ usleep(usecs);
           ACFCalculate(&tsgprm,(int16 *) dest,rngoff,skpnum!=0,
                     roff,ioff,mplgs,lagtable,xcfd,XCF_PART,2*total_samples,badrng,seqatten[nave]*atstp,NULL);
         }
-        if ((nave>0) && (seqatten[nave] !=seqatten[nave])) {
-        if (debug)
-        fprintf(stderr,"FHE seq %d :: rngoff %d rxchn %d\n",nave,rngoff,rxchn);
-        if (debug)
-          fprintf(stderr,"FHE seq %d :: ACFNormalize\n",nave);
-              ACFNormalize(pwr0,acfd,xcfd,tsgprm.nrang,mplgs,atstp);
+        if ((nave>0) && (seqatten[nave] != seqatten[nave-1])) {
+            if (debug) fprintf(stderr,"FHE seq %d :: rngoff %d rxchn %d\n",nave,rngoff,rxchn);
+            if (debug) fprintf(stderr,"FHE seq %d :: ACFNormalize\n",nave);
+            ACFNormalize(pwr0,acfd,xcfd,tsgprm.nrang,mplgs,atstp);
         }
         if (debug)
         fprintf(stderr,"FHE seq %d :: rngoff %d rxchn %d\n",nave,rngoff,rxchn);
