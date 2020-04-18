@@ -235,7 +235,7 @@ int main(int argc,char *argv[]) {
   OptionAdd(&opt,"bmsc",'i',&bmsc);
   OptionAdd(&opt,"bmus",'i',&bmus);
 
-  OptionAdd(&opt,"fixed",'i',&fixed);
+  OptionAdd(&opt,"fixed",'x',&fixed);
 
   arg=OptionProcess(1,argc,argv,&opt,NULL);
 
@@ -411,7 +411,7 @@ int main(int argc,char *argv[]) {
       ErrLog(errlog.sock,progname, logtxt);
 
       tfreq=SiteFCLR(stfrq,stfrq+frqrng);
-      if(fixed) {
+      if (fixed) {
         tfreq=stfrq;
       }
       sprintf(logtxt,"Transmitting on: %d (Noise=%g)",tfreq,noise);
