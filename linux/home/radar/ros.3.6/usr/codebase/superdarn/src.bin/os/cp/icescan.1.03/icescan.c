@@ -144,6 +144,7 @@ int main(int argc,char *argv[]) {
   int cnt=0;
 
 /*  unsigned char fast=0; */
+  unsigned char slow=0;
   unsigned char discretion=0;
 
   int status=0,n;
@@ -217,6 +218,7 @@ int main(int argc,char *argv[]) {
   OptionAdd(&opt,"stid",'t',&ststr);
 
 /*  OptionAdd(&opt,"fast",'x',&fast);  */
+  OptionAdd(&opt,"slow",'x',&slow);
 
   OptionAdd( &opt, "nowait", 'x', &scannowait);
   OptionAdd(&opt,"sb",'i',&sbm);
@@ -269,7 +271,7 @@ int main(int argc,char *argv[]) {
   OpsSetupCommand(argc,argv);
   OpsSetupShell();
 
-  RadarShellParse(&rstable,"sbm l ebm l dfrq l nfrq l dfrang l nfrang l dmpinc l nmpinc l frqrng l xcnt l",                        
+  RadarShellParse(&rstable,"sbm l ebm l dfrq l nfrq l dfrang l nfrang l dmpinc l nmpinc l frqrng l xcnt l",
                   &sbm,&ebm,
                   &dfrq,&nfrq,
                   &dfrang,&nfrang,
@@ -284,6 +286,12 @@ int main(int argc,char *argv[]) {
   if (status !=0) {
     ErrLog(errlog.sock,progname,"Error locating hardware.");
     exit (1);
+  }
+
+  if (slow) {
+    cp=1201;
+    scnsc=120;
+    scnus=0;
   }
 
   beams=abs(ebm-sbm)+1;
