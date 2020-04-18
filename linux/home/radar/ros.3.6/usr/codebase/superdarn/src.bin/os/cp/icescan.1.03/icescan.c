@@ -146,18 +146,21 @@ int main(int argc,char *argv[]) {
 /*  unsigned char fast=0; */
   unsigned char slow=0;
   unsigned char discretion=0;
+  unsigned char fixed=0;
 
   int status=0,n;
 
   int beams=0;
   int total_scan_usecs=0;
   int total_integration_usecs=0;
-  int fixfrq=-1;
 
   /* Icescan specific parameters  */
-  int icefreqs[3]={10200, 12600, 14400};
+  /*int icefreqs[3]={10200, 12600, 14400};*/
+  int icefreqs[8]={10300,10775,11850,12850,13850,14550,15250,15850};
+  int icefixedfreqs[8]={10250,10725,11800,12800,13800,14500,15200,15800};
 /*  int scancnt=0;  Useful if not wanting to change frequency after more than each scan*/
   int freqcnt=0;
+  int nfreqs=8;
 
   /* Flag to override auto-cal of integration time */
   int setintt=0;
@@ -205,7 +208,6 @@ int main(int argc,char *argv[]) {
   OptionAdd( &opt, "nt", 'i', &night);
   OptionAdd( &opt, "df", 'i', &dfrq);
   OptionAdd( &opt, "nf", 'i', &nfrq);
-  OptionAdd( &opt, "fixfrq", 'i', &fixfrq);
   OptionAdd( &opt, "xcf", 'i', &xcnt);
 
   OptionAdd(&opt,"ep",'i',&errlog.port);
@@ -233,6 +235,7 @@ int main(int argc,char *argv[]) {
   OptionAdd(&opt,"bmsc",'i',&bmsc);
   OptionAdd(&opt,"bmus",'i',&bmus);
 
+  OptionAdd(&opt,"fixed",'i',&fixed);
 
   arg=OptionProcess(1,argc,argv,&opt,NULL);
 
@@ -306,8 +309,11 @@ int main(int argc,char *argv[]) {
 
   txpl=(rsep*20)/3;
 
- sprintf(progname,"icescan");
-
+  if (slow) {
+    sprintf(progname,"icescan (slow)");
+  } else {
+    sprintf(progname,"icescan");
+  }
 
 
   OpsLogStart(errlog.sock,progname,argc,argv);
@@ -364,13 +370,20 @@ int main(int argc,char *argv[]) {
     }
 
     /* Logic to change frequency band on every scan */
-    if (freqcnt<2) {
+/*    if (freqcnt<2) {
         freqcnt++;
         stfrq=icefreqs[freqcnt];
     } else {
         freqcnt=0;
         stfrq=icefreqs[0];
     }
+*/
+    if (fixed) {
+        stfrq=icefixedfreqs[freqcnt];
+    } else {
+        stfrq=icefreqs[freqcnt];
+    }
+    freqcnt=(freqcnt == nfreqs) ? 0 : freqcnt+1;
 
     do {
 
@@ -382,11 +395,6 @@ int main(int argc,char *argv[]) {
       } else {
         mpinc=nmpinc;
         frang=nfrang;
-      }
-      if(fixfrq>0) {
-        stfrq=fixfrq;
-        tfreq=fixfrq;
-        noise=0;
       }
       sprintf(logtxt,"Integrating beam:%d intt:%ds.%dus (%d:%d:%d:%d)",bmnum,
                       intsc,intus,hr,mt,sc,us);
@@ -402,8 +410,9 @@ int main(int argc,char *argv[]) {
       sprintf(logtxt, "FRQ: %d %d", stfrq, frqrng);
       ErrLog(errlog.sock,progname, logtxt);
 
-      if(fixfrq<0) {
-        tfreq=SiteFCLR(stfrq,stfrq+frqrng);
+      tfreq=SiteFCLR(stfrq,stfrq+frqrng);
+      if(fixed) {
+        tfreq=stfrq;
       }
       sprintf(logtxt,"Transmitting on: %d (Noise=%g)",tfreq,noise);
       ErrLog(errlog.sock,progname,logtxt);
