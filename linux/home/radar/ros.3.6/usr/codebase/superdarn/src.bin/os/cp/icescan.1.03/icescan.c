@@ -383,7 +383,7 @@ int main(int argc,char *argv[]) {
     } else {
         stfrq=icefreqs[freqcnt];
     }
-    freqcnt=(freqcnt == nfreqs) ? 0 : freqcnt+1;
+    freqcnt=(freqcnt == nfreqs-1) ? 0 : freqcnt+1;
 
     do {
 
