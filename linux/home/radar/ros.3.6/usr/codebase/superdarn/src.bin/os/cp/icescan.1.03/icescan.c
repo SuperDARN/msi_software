@@ -156,11 +156,11 @@ int main(int argc,char *argv[]) {
 
   /* Icescan specific parameters  */
   /*int icefreqs[3]={10200, 12600, 14400};*/
-  int icefreqs[8]={10300,10775,11850,12850,13850,14550,15250,15850};
-  int icefixedfreqs[8]={10250,10725,11800,12800,13800,14500,15200,15800};
+  int icefreqs[10]={10300,10775,11550,11975,12425,12850,13600,14500,15250,15850};
+  int icefixedfreqs[10]={10250,10725,11500,11925,12375,12800,13550,14450,15200,15800};
 /*  int scancnt=0;  Useful if not wanting to change frequency after more than each scan*/
   int freqcnt=0;
-  int nfreqs=8;
+  int nfreqs=10;
 
   /* Flag to override auto-cal of integration time */
   int setintt=0;
