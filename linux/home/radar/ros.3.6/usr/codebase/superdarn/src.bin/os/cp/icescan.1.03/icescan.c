@@ -71,6 +71,8 @@
 #include "rosmsg.h"
 #include "tsg.h"
 
+#include <math.h>
+
 char *ststr=NULL;
 char *dfststr="tst";
 
@@ -161,6 +163,7 @@ int main(int argc,char *argv[]) {
 /*  int scancnt=0;  Useful if not wanting to change frequency after more than each scan*/
   int freqcnt=0;
   int nfreqs=10;
+  int mod=10;
 
   /* Flag to override auto-cal of integration time */
   int setintt=0;
@@ -295,6 +298,7 @@ int main(int argc,char *argv[]) {
     cp=1201;
     scnsc=120;
     scnus=0;
+    mod=20;
   }
 
   beams=abs(ebm-sbm)+1;
@@ -378,12 +382,19 @@ int main(int argc,char *argv[]) {
         stfrq=icefreqs[0];
     }
 */
+    TimeReadClock(&yr,&mo,&dy,&hr,&mt,&sc,&us);
+    if (slow) {
+        freqcnt=floor((mt%mod)/2);
+    } else {
+        freqcnt=mt%mod;
+    }
     if (fixed) {
         stfrq=icefixedfreqs[freqcnt];
     } else {
         stfrq=icefreqs[freqcnt];
     }
-    freqcnt=(freqcnt == nfreqs-1) ? 0 : freqcnt+1;
+/* Better way to do frequency band index change, but doesn't sync */
+/*    freqcnt=(freqcnt == nfreqs-1) ? 0 : freqcnt+1; */
 
     do {
 
