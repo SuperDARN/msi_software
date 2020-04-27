@@ -497,6 +497,7 @@ int main(int argc,char *argv[]) {
 
     } while (1);
 
+    bmnum=sbm;
     ErrLog(errlog.sock,progname,"Waiting for scan boundary.");
     if ((exitpoll==0) && (scannowait==0)) SiteEndScan(scnsc,scnus);
   } while (exitpoll==0);
