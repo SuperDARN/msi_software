@@ -163,7 +163,6 @@ int main(int argc,char *argv[]) {
 /*  int scancnt=0;  Useful if not wanting to change frequency after more than each scan*/
   int freqcnt=0;
   int nfreqs=10;
-  int mod=10;
 
   /* Flag to override auto-cal of integration time */
   int setintt=0;
@@ -298,7 +297,6 @@ int main(int argc,char *argv[]) {
     cp=1201;
     scnsc=120;
     scnus=0;
-    mod=20;
   }
 
   beams=abs(ebm-sbm)+1;
@@ -382,11 +380,7 @@ int main(int argc,char *argv[]) {
     }
 */
     TimeReadClock(&yr,&mo,&dy,&hr,&mt,&sc,&us);
-    if (slow) {
-        freqcnt=floor((mt%mod)/2);
-    } else {
-        freqcnt=mt%mod;
-    }
+    freqcnt=mt % (scnsc/60*nfreqs);
     if (fixed) {
         stfrq=icefixedfreqs[freqcnt];
     } else {
