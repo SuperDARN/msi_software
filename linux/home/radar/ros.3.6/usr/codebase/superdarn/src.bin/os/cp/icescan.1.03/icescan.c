@@ -337,6 +337,15 @@ int main(int argc,char *argv[]) {
 
   tsgid=SiteTimeSeq(ptab);
 
+    skip=OpsFindSkip(scnsc,scnus);
+    if (backward) {
+      bmnum=sbm-skip-1;  /* An extra one to ensure not overrunning scan boundary */
+      if (bmnum<ebm) bmnum=sbm;
+    } else {
+      bmnum=sbm+skip+1;  /* An extra one to ensure not overrunning scan boundary */
+      if (bmnum>ebm) bmnum=sbm;
+    }
+
   printf("Entering Scan loop Station ID: %s  %d\n",ststr,stid);
   do {
 
@@ -362,16 +371,6 @@ int main(int argc,char *argv[]) {
         cnt=0;
       } else xcf=0;
     } else xcf=0;
-
-    skip=OpsFindSkip(scnsc,scnus);
-
-    if (backward) {
-      bmnum=sbm-skip;
-      if (bmnum<ebm) bmnum=sbm;
-    } else {
-      bmnum=sbm+skip;
-      if (bmnum>ebm) bmnum=sbm;
-    }
 
     /* Logic to change frequency band on every scan */
 /*    if (freqcnt<2) {
