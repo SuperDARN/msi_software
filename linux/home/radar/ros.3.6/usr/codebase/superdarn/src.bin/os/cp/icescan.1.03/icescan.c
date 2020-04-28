@@ -158,8 +158,8 @@ int main(int argc,char *argv[]) {
 
   /* Icescan specific parameters  */
   /*int icefreqs[3]={10200, 12600, 14400};*/
-  int icefreqs[10]={10300,10775,11550,11975,12425,12850,13600,14500,15250,15850};
-  int icefixedfreqs[10]={10250,10725,11500,11925,12375,12800,13550,14450,15200,15800};
+  int icefreqs[10]={10300, 10775, 11550, 11975, 12425, 12850, 13600, 14500, 15250, 15850};
+  int icefixedfreqs[10]={10250, 10725, 11500, 11925, 12375, 12800, 13550, 14450, 15200, 15800};
 /*  int scancnt=0;  Useful if not wanting to change frequency after more than each scan*/
   int freqcnt=0;
   int nfreqs=10;
@@ -335,14 +335,14 @@ int main(int argc,char *argv[]) {
 
   tsgid=SiteTimeSeq(ptab);
 
-    skip=OpsFindSkip(scnsc,scnus);
-    if (backward) {
-      bmnum=sbm-skip-1;  /* An extra one to ensure not overrunning scan boundary */
-      if (bmnum<ebm) bmnum=sbm;
-    } else {
-      bmnum=sbm+skip+1;  /* An extra one to ensure not overrunning scan boundary */
-      if (bmnum>ebm) bmnum=sbm;
-    }
+  skip=OpsFindSkip(scnsc,scnus);
+  if (backward) {
+    bmnum=sbm-skip-1;  /* An extra one to ensure not overrunning scan boundary */
+    if (bmnum<ebm) bmnum=sbm;
+  } else {
+    bmnum=sbm+skip+1;  /* An extra one to ensure not overrunning scan boundary */
+    if (bmnum>ebm) bmnum=sbm;
+  }
 
   printf("Entering Scan loop Station ID: %s  %d\n",ststr,stid);
   do {
@@ -380,7 +380,9 @@ int main(int argc,char *argv[]) {
     }
 */
     TimeReadClock(&yr,&mo,&dy,&hr,&mt,&sc,&us);
-    freqcnt=mt % (scnsc/60*nfreqs);
+/*    freqcnt=mt % (scnsc/60*nfreqs); */
+/*    freqcnt=floor((mt%20)/2; */
+    freqcnt = mt*60/scnsc % nfreqs;
     if (fixed) {
         stfrq=icefixedfreqs[freqcnt];
     } else {
