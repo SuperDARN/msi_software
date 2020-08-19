@@ -1,5 +1,5 @@
-/* interleavesound.c
- ===================
+/* interleavesound_fh.c
+ ======================
  Author: E.G.Thomas
 
  */
@@ -43,6 +43,10 @@
 #include "sitebuild.h"
 #include "siteglobal.h"
 
+/* Additional libraries to include for fhr */
+#include "rosmsg.h"
+#include "tsg.h"
+
 #include "sndwrite.h"
 
 #define MAX_SND_FREQS 12
@@ -60,8 +64,6 @@ char progid[80]={"interleavesound"};
 char progname[256];
 int arg=0;
 struct OptionData opt;
-char *roshost=NULL;
-char *droshost={"127.0.0.1"};
 int baseport=44100;
 struct TCPIPMsgHost errlog={"127.0.0.1",44100,-1};
 struct TCPIPMsgHost shell={"127.0.0.1",44101,-1};
@@ -72,6 +74,9 @@ struct TCPIPMsgHost task[4]={
     {"127.0.0.1",3,-1}, /* fitacfwrite */
     {"127.0.0.1",4,-1}  /* rtserver */
   };
+
+char *roshost=NULL;	
+char *droshost={"127.0.0.1"};
 
 void usage(void);
 int main(int argc,char *argv[]) {
@@ -138,7 +143,7 @@ int main(int argc,char *argv[]) {
   int bmse[20] =
              { 0, 4, 8,12,16, 2, 6,10,14,18, 1, 5, 9,13,17, 3, 7,11,15,19};
   int bmsw[20] =
-             {21,17,13,9, 5,19,15,11, 7, 3,20,16,12,8, 4,18,14,10, 6, 2};
+             {21,17,13, 9, 5,19,15,11, 7, 3,20,16,12, 8, 4,18,14,10, 6, 2};
 
 
   /* ---------------- Variables for sounding --------------- */
@@ -149,8 +154,8 @@ int main(int argc,char *argv[]) {
   int snd_freqs_tot=8;
   int snd_freqs[MAX_SND_FREQS]= {11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000, 0, 0, 0, 0 };
   int *snd_bms;
-  int snd_bmse[]={0,2,4,6,8,10,12,14,16,18};   /* beam sequences for 24-beam MSI radars using only */
-  int snd_bmsw[]={22,20,18,16,14,12,10,8,6,4}; /*  the 20 most meridional beams */
+  int snd_bmse[]={0,2,4,6,8,10,12,14,16,18};   /* beam sequences for 22-beam MSI radars using only */
+  int snd_bmsw[]={20,18,16,14,12,10,8,6,4,2}; /*  the 20 most meridional beams */
   int snd_freq_cnt=0, snd_bm_cnt=0;
   int snd_bms_tot=8, odd_beams=0;
   int snd_freq;
@@ -216,15 +221,12 @@ int main(int argc,char *argv[]) {
   OptionAdd(&opt,"ep",    'i',&errlog.port);
   OptionAdd(&opt,"sp",    'i',&shell.port);
   OptionAdd(&opt,"bp",    'i',&baseport);
-  OptionAdd(&opt,"roshost",'t',&roshost);
   OptionAdd(&opt,"stid",  't',&ststr);
+  OptionAdd(&opt,"ros",   't',&roshost);    /* Change the roshost location? */
   OptionAdd(&opt,"fixfrq",'i',&fixfrq);     /* fix the transmit frequency */
   OptionAdd(&opt,"frqrng",'i',&frqrng);     /* fix the FCLR window [kHz] */
   OptionAdd(&opt,"sfrqrng",'i',&snd_frqrng); /* sounding FCLR window [kHz] */
   OptionAdd(&opt,"-help", 'x',&hlp);        /* just dump some parameters */
-
-  OptionAdd(&opt,"sb",    'i',&sbm);
-  OptionAdd(&opt,"eb",    'i',&ebm);
 
   /* Process all of the command line options
       Important: need to do this here because we need stid and ststr */
@@ -235,15 +237,30 @@ int main(int argc,char *argv[]) {
     return (-1);
   }
 
+  /* Get roshost from environment if not set by command line */
+  if (roshost==NULL) roshost=getenv("ROSHOST");
+  /* If still not set, use default roshost */
+  if (roshost==NULL) roshost=droshost;
+
   /* start time of each integration period */
   for (i=0; i<nintgs; i++)
     intgt[i] = i*(intsc + intus*1e-6);
 
   if (ststr==NULL) ststr=dfststr;
 
-  if (roshost==NULL) roshost=getenv("ROSHOST");
-  if (roshost==NULL) roshost=droshost;
+  /* Point to the beams here */
+  if (strcmp(ststr,"fhe") == 0) {
+    bms = bmse;
+    snd_bms = snd_bmse;
+  } else if (strcmp(ststr,"fhw") == 0) {
+    bms = bmsw;
+    snd_bms = snd_bmsw;
+  } else {
+    printf("Error: Not intended for station %s\n", ststr);
+    return (-1);
+  }
 
+  /* end of main Dartmouth mods */
   /* not sure if -nrang commandline option works */
 
   if ((errlog.sock=TCPIPMsgOpen(errlog.host,errlog.port))==-1) {
@@ -261,7 +278,11 @@ int main(int argc,char *argv[]) {
   /* rst/usr/codebase/superdarn/src.lib/os/site.1.3/src/build.c */
   /* note that stid is a global variable set in the previous function...
       rst/usr/codebase/superdarn/src.lib/os/ops.1.10/src/global.c */
-  status=SiteBuild(ststr,NULL);
+  /* This does not seem to be the case and the code does not compile	
+    with an error of 'makes pointer from integer without a cast' */
+
+  /* status=SiteBuild(stid); */
+  status=SiteBuild(ststr,NULL); /* second argument is version string */
 
   if (status==-1) {
     fprintf(stderr,"Could not identify station.\n");
@@ -272,28 +293,17 @@ int main(int argc,char *argv[]) {
   sprintf(progname,"interleavesound (fast)");
   for (i=0; i<nintgs; i++){
     sprintf(tempLog, "%3d", bms[i]);
-    strcat(logtxt, tempLog);
+    strcat(logtxt, tempLog);	
   }
   ErrLog(errlog.sock,progname,logtxt);
 
   /* IMPORTANT: sbm and ebm are reset by this function */
+  /* For FHR, need to pass in the roshost variable */	
   SiteStart(roshost);
 
   /* Reprocess the command line to restore desired parameters */
   arg=OptionProcess(1,argc,argv,&opt,NULL);
   backward = (sbm > ebm) ? 1 : 0;   /* this almost certainly got reset */
-
-  /* Point to the beams here */
-  if (backward == 0) {
-    bms = bmse;
-    snd_bms = snd_bmse;
-  } else if (backward == 1) {
-    bms = bmsw;
-    snd_bms = snd_bmsw;
-  } else {
-    printf("Error: Not intended for station %s\n", ststr);
-    return (-1);
-  }
 
   strncpy(combf,progid,80);
 
@@ -599,6 +609,7 @@ void usage(void)
     printf("     -sp int : shell port (must be set here for dual radars)\n");
     printf("     -bp int : base port (must be set here for dual radars)\n");
     printf("   -stid char: radar string (must be set here for dual radars)\n");
+    printf("    -ros char: change the roshost location?\n");
     printf(" -fixfrq int : transmit on fixed frequency (kHz)\n");
     printf(" -frqrng int : set the clear frequency search window (kHz)\n");
     printf("-sfrqrng int : set the sounding FCLR search window (kHz)\n");
