@@ -16,7 +16,7 @@
 #include "fitdata.h"
 
 #define SND_MAJOR_REVISION 1
-#define SND_MINOR_REVISION 0
+#define SND_MINOR_REVISION 1
 
 int SndWrite(int fid, struct RadarParm *prm, struct FitData *fit) {
 
@@ -74,6 +74,7 @@ int SndWrite(int fid, struct RadarParm *prm, struct FitData *fit) {
   DataMapAddScalar(ptr,"noise.search",DATAFLOAT,&prm->noise.search);
   DataMapAddScalar(ptr,"noise.mean",DATAFLOAT,&prm->noise.mean);
 
+  DataMapAddScalar(ptr,"channel",DATASHORT,&prm->channel);
   DataMapAddScalar(ptr,"bmnum",DATASHORT,&prm->bmnum);
   DataMapAddScalar(ptr,"bmazm",DATAFLOAT,&prm->bmazm);
 
@@ -92,6 +93,9 @@ int SndWrite(int fid, struct RadarParm *prm, struct FitData *fit) {
   DataMapStoreScalar(ptr,"noise.sky",DATAFLOAT,&sky_noise);
 
   DataMapAddScalar(ptr,"combf",DATASTRING,&prm->combf);
+
+  DataMapAddScalar(ptr,"fitacf.revision.major",DATAINT,&fit->revision.major);
+  DataMapAddScalar(ptr,"fitacf.revision.minor",DATAINT,&fit->revision.minor);
 
   DataMapAddScalar(ptr,"snd.revision.major",DATASHORT,major_rev);
   DataMapAddScalar(ptr,"snd.revision.minor",DATASHORT,minor_rev);
