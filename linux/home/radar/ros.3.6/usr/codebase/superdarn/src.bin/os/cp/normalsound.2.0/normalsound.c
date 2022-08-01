@@ -15,6 +15,7 @@
 #include <time.h>
 #include <unistd.h>
 #include <zlib.h>
+#include <errno.h>
 #include "rtypes.h"
 #include "option.h"
 #include "rtime.h"
@@ -163,7 +164,7 @@ int main(int argc,char *argv[])
   /* If the file $SD_SND_PATH/sounder_[rad].dat exists, the next two parameters are read from it */
   /* the file contains one integer value per line */
   int snd_freqs_tot=8;
-  int snd_freqs[MAX_SND_FREQS]= {11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000, 0, 0, 0, 0 };
+  int snd_freqs[MAX_SND_FREQS]= {11000, 12000, 13000, 14450, 15100, 16000, 17000, 17700, 0, 0, 0, 0 };
   int *snd_bms;
   int snd_bmse[]={0,2,4,6,8,10,12,14,16,18};   /* beam sequences for 22-beam MSI radars using only */
   int snd_bmsw[]={20,18,16,14,12,10,8,6,4,2};  /*  the 20 most meridional beams */
@@ -244,6 +245,13 @@ int main(int argc,char *argv[])
 
   if (ststr==NULL) ststr=dfststr;
 
+  if ((errlog.sock=TCPIPMsgOpen(errlog.host,errlog.port))==-1) {
+    fprintf(stderr,"Error connecting to error log.\n");
+  }
+  if ((shell.sock=TCPIPMsgOpen(shell.host,shell.port))==-1) {
+    fprintf(stderr,"Error connecting to shell.\n");
+  }
+
   /* Point to the beams here */
   if (strcmp(ststr,"fhe") == 0) {
     snd_bms = snd_bmse;
@@ -251,19 +259,26 @@ int main(int argc,char *argv[])
     snd_bms = snd_bmsw;
   } else {
     printf("Error: Not intended for station %s\n", ststr);
+    ErrLog(errlog.sock,progname,"ststr does not matach site id for this system.");
     return (-1);
   }
 
   /* load the sounder frequencies from file if present */
   snd_dir = getenv("SD_SND_PATH");
-  if (snd_dir == NULL)
+  if (snd_dir == NULL) {
     sprintf(data_path,"/data/ros/snd/");
-  else
+    ErrLog(errlog.sock,progname,"Error retrieving SD_SND_PATH, using default /data/ros/snd/.");
+  } else {
     memcpy(data_path,snd_dir,strlen(snd_dir));
+  }
 
-  sprintf(snd_filename,"%s/sounder_%s.dat", data_path, ststr);
+/*  TO DO:  Fix the line below so that it loads based on radar!!!!  -KTS 20220801 */
+
+  /* sprintf(snd_filename,"%s/sounder_%s.dat", data_path, ststr); */
+  sprintf(snd_filename,"/data/ros/snd/sounder_fhe.dat");
   fprintf(stderr,"Checking Sounder File: %s\n",snd_filename);
   snd_dat = fopen(snd_filename, "r");
+  sleep(0.5);
   if (snd_dat != NULL) {
     fscanf(snd_dat, "%d", &snd_freqs_tot);
     if (snd_freqs_tot > 12) snd_freqs_tot = 12;
@@ -272,15 +287,13 @@ int main(int argc,char *argv[])
     snd_freq_cnt = 0;
     fclose(snd_dat);
     fprintf(stderr,"Sounder File: %s read\n",snd_filename);
+    sprintf(logtxt,"Sounder File: %s read\n",snd_filename);
+    ErrLog(errlog.sock,progname,logtxt);
   } else {
     fprintf(stderr,"Sounder File: %s not found\n",snd_filename);
-  }
-
-  if ((errlog.sock=TCPIPMsgOpen(errlog.host,errlog.port))==-1) {
-    fprintf(stderr,"Error connecting to error log.\n");
-  }
-  if ((shell.sock=TCPIPMsgOpen(shell.host,shell.port))==-1) {
-    fprintf(stderr,"Error connecting to shell.\n");
+    fprintf(stderr,"Error %d \n", errno);
+    sprintf(logtxt,"Sounder File: %s not found\n",snd_filename);
+    ErrLog(errlog.sock,progname,logtxt);
   }
 
   for (n=0;n<tnum;n++) task[n].port+=baseport;
